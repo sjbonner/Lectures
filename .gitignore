@@ -4,3 +4,10 @@
 .httr-oauth
 .DS_Store
 .quarto
+*.pdf
+*.log
+*.nav
+*.snm
+*.synctex.gz
+*.toc
+*concordance.tex
