@@ -1,2 +1,0 @@
-\beamer@sectionintoc {1}{Expected Values of Discrete RVs}{3}{0}{1}
-\beamer@sectionintoc {2}{Expected Values of Discrete RVs}{4}{0}{2}

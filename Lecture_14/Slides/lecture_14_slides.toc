@@ -1,2 +1,0 @@
-\beamer@sectionintoc {1}{Discrete Random Variables}{2}{0}{1}
-\beamer@sectionintoc {2}{Continuous Random Variables}{2}{0}{2}
