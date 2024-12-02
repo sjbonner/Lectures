@@ -1,0 +1,115 @@
+---
+title: "STAT 2857A -- Lecture 2 Examples and Exercises"
+subtitle: "Solutions"
+format: 
+  pdf: default
+  docx: default
+knitr: 
+  opts_chunk:
+    fig.align: center
+    echo: false
+    warning: false
+    message: false
+    digits: 2
+prefer-html: true
+---
+
+```{r}
+# Load packages
+library(tidyverse)
+library(patchwork)
+library(knitr)
+library(kableExtra)
+library(broom)
+```
+
+## Example 2.1
+
+Let $A$ be any event in $\mathcal{S}$ such that $N(A)>0$ and $N(A')=N-N(A)>0$. Note that $A$ and $A'$ are disjoint and $A \cup A'= \mathcal{S}$. Then
+$$
+P(A) + P(A')=P(A\cup A')=P(\mathcal{S})=1.
+$$
+Hence
+$$
+\left(\frac{N(A)}{N}\right)^k + \left(\frac{N-N(A)}{N}\right)^k=1.
+$$
+This can be true if and only if $k=1$. 
+
+If
+$$
+    P(A)=\frac{N(A)}{N}
+$$
+for all $A \in \mathcal{S}$ then we say that the outcomes are equally likely. 
+
+## Example 2.2
+
+a) Recall that $N(E_1)=1$, $N(E_2)=12$, and $N(E_3)=132$, and that $N=1728$. Hence, the probabilities of these events are:
+$$
+P(E_1)=1/178=.00058, \quad P(E_2)=12/1728=.0069, \quad \mathrm{and} \quad P(E_2)=132/1728=.076.
+$$
+The property for equally likely outcomes justifies the heuristic calculations from Lecture 1.
+
+b) Let $E_4$ denote the event that only the first and third students are born in the same month and $E_5$ the event that only the second and third students. The event we are interested in is $E_3 \cup E_4 \cup E_5$. Note that
+
+  i) $N(E_4)=N(E_5)=N(E_3)=132$ by the same reasoning,
+  ii) $E_3$, $E_4$, and $E_5$ are disjoint ($E_3 \cap E_4 \cap E_5 = \emptyset$). 
+  
+Then
+$$
+P(E_3 \cup E_4 \cup E_5)=P(E_3) + P(E_4) + P(E_5)=3P(E_3)=.229.
+$$
+The probability that exactly 2 students are born in the same month is .229.
+
+c) There are two possible solutions to this problem. 
+
+First, the event we are interested in is
+$$
+E_2 \cup E_3 \cup E_4 \cup E_5.
+$$
+Since $E_2 \cap (E_3 \cup E_4 \cup E_5) = \emptyset$
+
+so
+$$
+P(E_2 \cup E_3 \cup E_4 \cup E_5 \cup )=P(E_2) + P(E_3 \cup E_4 \cup E_5) =.236.
+$$
+
+Alternatively, let $E_0$ be the event that none of the students are born in the same month. The event we are interested in is $E_0'$. The number of outomces in $E_0$ is
+$$
+N(E_0)=12 \times 11 \times 10=1320.
+$$
+Hence
+$$
+P(E_0')=1-P(E_0)=1-1320/1728=.236.
+$$
+Therefore, the probability that at least two students are born in the same month is .236
+
+d) If we were to take samples of three students over and over again then the proportion of times that at least two of the students share a birth month would be very close to .236 and get closer and closer the more we repeated the experiment. 
+  
+## Example 2.3
+a) If you were to randomly selected number between 1 and 10 over and over again then the proportion of times it is prime would be very close to $.5$ and get closer and closer the more you repeated the experiment. .
+b) If you were to draw a card from a well shuffled deck of cards over and over again then the proportion of times it is a club would be close to $.25$ and get closer and closer the more you repeated the experiment. 
+c) If you were to randomly selected a newborn baby over and over again then the proportion of babies assigned to be male at birth would be very close to $.503$ and get closer and closer the more you repeated the experiment. . 
+d) If you were to repeat days like today over and over again then the proportion of days on which it would rain in the afternoon would be very close to $.70$ and get closer and closer the more you repeated the experiment.
+
+## Exercise 2.1
+
+a) An outcome of the experiment is defined by the pair containing the number your friend chose and your guess: $(1,1),(1,2),\ldots,(10,10)$. Let $A$ be the event that you win. There are 10 outcomes in which the numbers are the same and you win. Hence, the probability of winning is
+$$
+P(A)=10/100=.10.
+$$
+This means that if you were to play over and over again then the proportion of times you win would be very close to .10 and get closer and closer the more times you play.
+
+b) Let $B$ be the even that your number is exactly one away from the number your friend chose. The possible outcomes in this event are $(1,2),(2,1),(2,3),(3,2),(3,4),\ldots,(9,8),(9,10),(10,9)$. There are $1 + 2(8) + 1=18$ outcomes in this event. Hence, the probability is
+$$
+P(B)=18/100=.18. 
+$$
+
+c) Let $C$ be the event that you are within one number. Then $C=A \cup B$ and $A$ and $B$ are disjoint ($A \cap B=\emptyset$). Hence
+$$
+P(C)=.10 + .18 = .28.
+$$
+
+d) Let $D$ be the event that your guess in more than one number away. Then $D=C'$ so
+$$
+P(D)=1-P(C)=.72.
+$$

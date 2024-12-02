@@ -1,0 +1,95 @@
+---
+title: "STAT 2857A -- Lecture 20 Examples and Exercises"
+format: 
+  pdf: default
+  docx: default
+knitr: 
+  opts_chunk:
+    fig.align: center
+    echo: false
+    warning: false
+    message: false
+    digits: 2
+prefer-html: true
+---
+
+```{r}
+# Load packages
+library(tidyverse)
+library(patchwork)
+library(knitr)
+library(kableExtra)
+library(broom)
+```
+
+## Example 20.1
+
+The following data come from a study conducted at UC Berkeley in the 1970's to assess claims of bias in graduate admissions. The data contain records from 4256 applicants to the top six different degrees (Majors). The names of the degrees were kept confidential.
+    
+\begin{center}
+    \begin{tabular}{lcc}
+      & \multicolumn{2}{c}{Applicants by Gender}\\
+        Major & Men & Women\\
+        \hline
+        A & 825 & 108\\
+        B & 560 & 25\\
+        C & 325 & 593\\
+        D & 417 & 375\\
+        E & 191 & 393\\
+      F & 373 & 341\\
+      \end{tabular}
+    \end{center}
+
+Define the random variables
+$$
+X=
+\left\{
+\begin{array}{ll}
+0 & \mbox{an applicant is male}\\
+1 & \mbox{an applicant is female}
+\end{array}
+\right.
+$$
+$$
+    Y=
+    \left\{
+      \begin{array}{ll}
+        1 & \mbox{an applicant applies to Major A}\\
+        \vdots &\\
+        6 & \mbox{an applicant applies to Major F}
+      \end{array}
+    \right.
+$$
+    
+a) Estimate the joint pmf of $X$ and $Y$. 
+b) Compute the marginal distributions of $X$ and $Y$. 
+c) Are $X$ and $Y$ independent? What would this mean?
+    
+## Example 20.2
+
+Suppose that $X$ and $Y$ have the joint pdf
+    $$
+      f(x,y)=
+      \left\{
+        \begin{array}{ll}
+          c(1-x^2)(1-y^2) & -1 < x < 1\mbox{ and } -1 < y < 1\\
+          0 & \mbox{otherwise}
+        \end{array}
+      \right.
+    $$
+    
+a) Find the value of $c$ so that $f(x,y)$ is a proper pdf.
+b) Find the marginal distribution of $X$ and $Y$.
+c) Are $X$ and $Y$ independent? 
+
+## Exercise 20.1
+
+ Suppose that
+  $$
+  f(x,y)=c \min(x,y), 0<x,y<1. 
+  $$
+  
+  a) Find the value $c$ so that $f(x,y)$ is a valid joint pdf.
+  b) Compute $P(X > .5, Y > .5)$.
+  c) Derive the marginal density of $X$ and $Y$.
+  d) Are $X$ and $Y$ independent?

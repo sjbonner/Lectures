@@ -1,0 +1,67 @@
+---
+title: "STAT 2857A -- Lecture 1 Examples and Exercises"
+subtitle: "Solutions"
+format: 
+  pdf: default
+  docx: default
+knitr: 
+  opts_chunk:
+    fig.align: center
+    echo: false
+    warning: false
+    message: false
+    digits: 2
+prefer-html: true
+---
+
+```{r}
+# Load packages
+library(tidyverse)
+library(patchwork)
+library(knitr)
+library(kableExtra)
+library(broom)
+```
+
+## Example 1.1: Happy Birthmonth!
+
+a) Each outcome is a triplet of possible months from January through December. For example, "March, November, May" or "December, February, April". Months may be repeated, as in "January, May, May" or "November, April, November". Note that the order matters because it associates the month with an individaul. The outcomes "January, February, March" and "March, February, January" are not the same.
+
+b) Each student may have 1 of 12 birth months and any combination is possible. Hence, there are $12^3=1728$ possible outcomes in the sample space.
+
+c) One simple event is that all of the students are born in January (the outcome is "January, January, January"). 
+
+d) One compound event is that all of the students share the same month of birth. The possible outcomes are "January, January, January", "February, February, February", etc. This event contains 12 outcomes. 
+
+## Example 1.1 part 2
+
+a) $E_1$ is the event that all three students are born in January.
+b) $E_2$ is the event that all three students share the same birth month.
+c) $E_3$ is the event that only the first two students share the same birth month.
+
+## Example 1.1 part 3
+
+a) Any events with the same letter (student) and different subscripts (months), e.g. $A_1$ and $A_7$, are mutually exclusive. The first student can't have been born in both January and July. 
+
+b) Any events with different letters (students), e.g. $A_3$ and $B_9$, are not mutually exclusive. There are 12 outcomes in which the first student is born in March and the second in September. 
+
+## Example 1.1 part 4
+
+Consider $E_1$, that all students are born in January. There is one outcome in this event, and there are 1728 outcomes in total. It seems natural to conclude that the probability is 1/1728=.00058. Similarly, there are 12 outcomes in $E_2$ and $12 \times 11=132$ events in $E_3$. It seems reasonable that the probabilities of these events are $12/1728=.0069$ and $132/1728=.076$. We will discuss why this intuition is correct in the next section.
+
+## Exercise 1.1
+
+a) We can denote the outcomes by triplets of P for pass and F for fail where the first letter indicates the result on the biology test, the second on the chemistry test, and the third on the statistics test. The possible outcomes are: PPP, PPF, PFP, PFF, FPP, FPF, FFP, FFF. Note that there are $8=2^3$ possible outcomes.
+
+b) We could write the sample space as:
+$$
+\mathcal S=\{(a,b,c)|a,b,c \in \{P,F\}\}.
+$$
+We would read this as: $\mathcal{S}$ is the set of possible triplets, $(a,b,c)$, such that each element is either P or F. 
+
+c) 
+  i) The events $A$ that the students passes biology and $B$ that the student fails biology are mutually exclusive. There are no events in common (it's impossible to have two different outcomes are one test).
+  
+  ii) The events $A_1$ that the student passes biology and $A_2$ that the student passes chemistry are not mutually exclusive. Their intersection contains two events: PPP and PPF.
+  
+d) Heuristically, $E_1 \cup E_2$ contains all events in which the student passes 1 or 2 tests. The complement of this is that they pass no tests or all tests. Mathematically, De Morgan's law tells us that $(E_1 \cup E_2)'=E_1' \cap E_2'$. $E_1'$ contains all outcomes in which the student passes 0, 2, or 3 tests. $E_2'$ contains all outcomes in which the student passes 0, 1, or 3 tests. The common outcomes are the ones in which the student passes 0 or 3 tests. 

@@ -1,0 +1,58 @@
+---
+title: "STAT 2857A -- Lecture 24 Examples and Exercises"
+format: 
+  pdf: default
+  docx: default
+knitr: 
+  opts_chunk:
+    fig.align: center
+    echo: false
+    warning: false
+    message: false
+    digits: 2
+prefer-html: true
+---
+
+```{r}
+# Load packages
+library(tidyverse)
+library(patchwork)
+library(knitr)
+library(kableExtra)
+library(broom)
+```
+
+## Example 6.1
+
+Spin the wheel at <https://www.roulettesimulator.net/> 5 times placing FUN 1000 bets on black each time. Enter your final balance in the spreadsheet [here](https://uwoca-my.sharepoint.com/:x:/g/personal/sbonner6_uwo_ca/Ee3I7Ds8g81In0-dQO_MD60BbE2CyrRa_XifWRR55PMDxw?e=uXgrB5).
+  
+a) Describe the simulated distribution for the balance.
+b) What are some statistics you could compute from our sample?
+
+## Example 6.2
+
+For student $i$ denote:
+
+- Number of wins: $X_i \sim \mbox{Binomial}(5,18/37)$
+- Final balance: $W_i=5000+1000X - 1000(5-X)=2000X_i$.
+
+The average balance over all students is
+$$
+\bar W=\left(\sum_{i=1}^n W_i\right)/n.
+$$
+
+a) What is the sampling distribution of $\bar W$ if the simulator is realistic?
+b) What are the mean and variance of $\bar W$?
+c) Do you think the simulator is realistic?
+
+## Exercise 6.1
+
+Suppose that each student spun the wheel on the online roulette simulator betting on black repeatedly until they had won 5 times. Let $X_i$ be the number of times that the $i$-th student played and 
+$$
+\bar X = \frac{\sum_{i=1}^n X_i}{n}  
+$$
+be the average number of times played per student. 
+
+a) What is the sampling distribution of $\bar X$ if the simulator is realistic?
+b) What are the mean and variance of $\bar X$?
+c) How could you use the sample values to determine if the simulator is realistic?

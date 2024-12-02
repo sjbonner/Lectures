@@ -1,0 +1,268 @@
+---
+title: "STAT 2857A -- Lecture 19 Examples and Exercises"
+subtitle: "Solutions -- Revised 19/11/2024"
+format: 
+  pdf: 
+   include-in-header: 
+    - text: |
+        \usepackage{mathtools}
+knitr: 
+  opts_chunk:
+    fig.align: center
+    echo: false
+    warning: false
+    message: false
+    digits: 2
+---
+
+```{r}
+## Load packages
+library(tidyverse)
+library(knitr)
+library(latex2exp)
+```
+
+## Example 19.1
+
+1) The bounds on $y$ do not depend on $x$. For all values of $x$, $0 < y < 1$. Hence, $l_y(x)=0$ and $u_y(x)=1$. 
+
+2) The overall limits of $x$ are $0<x<1$.
+
+3) Integrating $f(x,y)$ with respect to $y$ we have
+$$
+\begin{aligned}
+g(x)
+&=\int_0^1 xy~dy.
+\end{aligned}
+$$
+Treating $x$ as a fixed value, it can be brought outside of the integral which becomes
+$$
+\begin{aligned}
+g(x)
+&=x\int_0^1 y~dy\\
+&=.5x.
+\end{aligned}
+$$
+
+4) Finally, integrating $g(x)$ with respect to $x$ gives
+$$
+\begin{aligned}
+\int_0^1 g(x) ~dx
+&=\int_0^1 .5x ~dx\\
+&=.5 \int_0^1 x~dx\\
+&=.5(.5)\\
+&=.25.
+\end{aligned}
+$$
+
+## Example 19.2
+
+The integral of $f(x,y)$ can always be computed in two ways. You can either integrate first with respect to $y$ and then $x$, or vice versa. The following solutions show both approaches for this problem
+
+#### Method 1: $y$ and then $x$
+
+1) In this case, the bounds on $y$ are $x < y < 1$. Hence, $l_y(x)=x$ and $u_y(x)=1$. 
+
+2) The overall limits of $x$ are $0<x<1$.
+
+3) Integrating $f(x,y)$ with respect to $y$ we have
+$$
+\begin{aligned}
+g(x)
+&=\int_x^1 xy~dy\\
+&=x \int_x^1 y ~dy\\
+&=x \left[y^2/2\right]_x^1\\
+&=x (1/2 - x^2/2)\\
+&=(x-x^3)/2. 
+\end{aligned}
+$$
+
+4) Finally, integrating $g(x)$ with respect to $x$ gives
+$$
+\begin{aligned}
+\int_0^1 g(x) ~dx
+&=\int_0^1 .5(x-x^3) ~dx\\
+&=1/2\left[\frac{x^2}{2}-\frac{x^4}{4}\right]_0^1\\
+&=1/2\left(1/2 - 1/4\right)\\
+&=.125.
+\end{aligned}
+$$
+
+Putting this all together, we would write
+$$
+\begin{aligned}
+\int_0^1 \int_x^1 xy ~dy ~dx
+&=\int_0^1 x\int_x^1 y ~dy ~dx\\
+&=\int_0^1 x(1-x^2)/2 ~dx\\
+&=1/2\int_0^1 (x-x^3) ~dx\\
+&=1/2\left[\frac{x^2}{2}-\frac{x^4}{4}\right]_0^1\\
+&=1/2\left(1/2 - 1/4\right)\\
+&=.125.
+\end{aligned}
+$$
+#### Method 2: $x$ and then $y$
+
+If we are integrating with respect to $x$ first, then we need to exchange the roles of $x$ and $y$ in the algorithm I've provided. 
+
+1) The first constraint tells us that $x < y$ and the second that $0<x$. Hence, $l_x(y)=0$ and $u_x(y)=y$. 
+
+2) The overall limits of $y$ are $0<y<1$.
+
+3) Integrating $f(x,y)$ with respect to $x$ we have
+$$
+\begin{aligned}
+g(y)
+&=\int_0^y xy~dx\\
+&=y \int_0^y x ~dx\\
+&=y \left[x^2/2\right]_0^y\\
+&=y (y^2/2)\\
+&=y^3/2. 
+\end{aligned}
+$$
+
+4) Finally, integrating $g(y)$ with respect to $x$ gives
+$$
+\begin{aligned}
+\int_0^1 g(y) ~dy
+&=\int_0^1 y^3/2 ~dy\\
+&=1/2\left[\frac{y^4}{4}\right]_0^1\\
+&=1/2\left(1/4\right)\\
+&=.125.
+\end{aligned}
+$$
+
+In this case, the full calculation would be
+$$
+\begin{aligned}
+\int_0^1 \int_0^y xy ~dx ~dy
+&=\int_0^1 y\int_0^y x ~dx ~dy\\
+&=\int_0^1 y(y^2/2) ~dy\\
+&=1/2\int_0^1 y^3 ~dy\\
+&=1/2\left[\frac{y^4}{4}\right]_0^1\\
+&=1/2\left(1/4\right)\\
+&=.125.
+\end{aligned}
+$$
+Either solution is perfectly fine, and the two methods will lead to the same answer as long as you do the calculations correctly. However, one order of integration may be easier than the other.
+
+## Example 19.3
+
+1) Again, the bounds on $y$ depend on $x$. We are told that $0 < x +y <1$ which means that $-x < y < 1-x$. 
+
+2) The overall limits of $x$ are $0<x<1$.
+
+3) Integrating $f(x,y)$ with respect to $y$ we have
+$$
+\begin{aligned}
+g(x)
+&=\int_{-x}^{\textcolor{red}{1-x}} xy~dy\\
+&=x \int_{-x}^{\textcolor{red}{1-x}} y ~dy\\
+&=x \left[y^2/2\right]_{-x}^{\textcolor{red}{1-x}}\\
+&=x \left(\textcolor{red}{\frac{1-x}{2}} - \frac{x^2}{2}\right)\\
+&=\textcolor{red}{(x-2x^2)/2}. 
+\end{aligned}
+$$
+
+4) Finally, integrating $g(x)$ with respect to $x$ gives
+$$
+\begin{aligned}
+\int_0^1 g(x) ~dx
+&=\int_0^1 \textcolor{red}{(x-2x^2)/2} ~dx\\
+&=1/2 \left[\frac{x^2}{2}-\textcolor{red}{\frac{2x^3}{3}}\right]_0^1\\
+&=1/2\left(1/2 - \textcolor{red}{2/3}\right)\\
+&=\textcolor{red}{-1/12}.
+\end{aligned}
+$$
+
+Putting this all together, we would write
+$$
+\begin{aligned}
+\int_0^1 \int_{-x}^{\textcolor{red}{1-x}} xy ~dy ~dx\\
+&=\int_0^1 x\int_{-x}^{\textcolor{red}{1-x}} y ~dy ~dx\\
+&=\int_0^1 \textcolor{red}{(x-2x^2)/2} ~dx\\
+&=1/2\int_0^1 \textcolor{red}{x-2x^2} ~dx\\
+&=1/2\left[\frac{x^2}{2}-\textcolor{red}{\frac{2x^3}{3}}\right]_0^1\\
+&=1/2\left(1/2 - \textcolor{red}{2/3}\right)\\
+&=\textcolor{red}{-1/12}.
+\end{aligned}
+$$
+
+## Example 19.4
+
+Note that the limits of $y$ do not depend on the value of $x$. Applying the proposition, we have
+$$
+\begin{aligned}
+\int_0^1 \int_0^1 (1-x^2)(1-y^2)~dx
+&=\int_0^1 (1-x^2) ~ dx \int_0^1 (1-y^2)~dy\\
+&=\left(\left[x-\frac{x^3}{3}\right]_0^1\right)^2\\
+&=\left(\frac{2}{3}\right)^2\\
+&=\frac{4}{9}.
+\end{aligned}
+$$
+
+## Exercise 19.1
+
+First, note that
+$$
+f(x,y)=e^{x+y}-1=e^xe^y-1
+$$
+and
+$$
+\int e^x ~dx = e^x +c
+$$
+for any $c \in \Re$. 
+
+a) 
+
+    1) The bounds on $y$ do not depend on $x$. For all values of $x$, $0 < y < 1$. Hence, $l_y(x)=0$ and $u_y(x)=1$. 
+
+    2) The overall limits of $x$ are $0<x<1$.
+
+    3) Integrating $f(x,y)$ with respect to $y$ we have
+$$
+\begin{aligned}
+g(x)
+&=\int_0^1 e^xe^y-1 ~dy\\
+&=\left[e^xe^y - y\right]_0^1\\
+&=(e^xe^1-1)-(e^x)\\
+&=(e-1)e^x-1.
+\end{aligned}
+$$
+
+    4) Finally, integrating $g(x)$ with respect to $x$ gives
+$$
+\begin{aligned}
+\int_0^1 g(x) ~dx
+&=\int_0^1 (e-1)e^x-1 ~dx\\
+&=\left[(e-1)e^x - x\right]_0^1\\
+&=\left[(e-1)e-1x\right]-\left[(e-1)(1)-0\right]\\
+&=e^2-e-1-e+1\\
+&=e^2-2e\\
+&=e(e-2)\\
+&=1.9525
+\end{aligned}
+$$
+b) In this case, we are told that $0<y<x$ and the overall bounds on $x$ are $0<x<1$. Then
+$$
+\begin{aligned}
+\int_0^1 \int_0^x e^xe^y-1~dy ~dx
+&=\int_0^1 \left[e^xe^y -y \right]_0^x~dx\\
+&=\int_0^1 (e^xe^x -x)-(e^x - 0)~dx\\
+&=\int_0^1 e^{2x}-e^x-x ~dx\\
+&=\left[\frac{e^{2x}}{2} -e^x - \frac{x^2}{2}\right]0^1\\
+&=\left(\frac{e^2}{2}-e-\frac{1}{2}\right)-\left(\frac{1}{2}-1-0\right)\\
+&=\frac{e^2-2e}{2}\\
+&=.97625.
+\end{aligned}
+$$
+
+c) The values of $(x,y)$ such that $x^2 + y^2 < 1$ are those that lie inside the circle of radius 1. This implies that $-\sqrt{1-x^2}<y<\sqrt{1-x^2}$ and $-1<x<1$. Then
+$$
+\begin{aligned}
+\int_{-1}^1 \int_{-\sqrt{1-x^2}}^{-\sqrt{1-x^2}} xy ~dy ~dx
+&=\int_{-1}^1 x \left[\frac{y^2}{2}\right]_{-\sqrt{1-x^2}}^{\sqrt{1-x^2}}~dx\\
+&=\int_{-1}^1 x \left(0\right)~dx\\
+&=\int_{-1}^1 0~dx\\
+&=0.
+\end{aligned}
+$$

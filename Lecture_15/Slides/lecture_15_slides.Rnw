@@ -1,0 +1,238 @@
+\input{../../slide_template.tex}
+
+\usepackage[normalem]{ulem}
+\usepackage{enumitem}
+
+\newcommand{\lecturenum}{15}
+
+\title[SS2857]{Probability and Statistics I}
+\subtitle{\lecturenum. Expected Values}
+
+\date{}
+
+%% Add logo
+% \titlegraphic{\includegraphics[height=2cm]{../uwo_logo_reversed}}
+
+%% Initialize R
+<<setup,echo=FALSE,include=FALSE,cache=FALSE>>=
+## Load packages
+library(tidyverse)
+library(xtable)
+library(knitr)
+
+## Set chunk options
+opts_chunk$set(echo=FALSE,results="asis",warning=FALSE,message=FALSE,fig.height=4,fig.width=6,fig.show="hide")
+
+options(scipen=500)
+@
+
+\begin{document}
+
+{
+\setbeamertemplate{footline}{}
+\setbeamercolor{background canvas}{bg=western}
+
+\begin{frame}
+  \addtocounter{framenumber}{-1}
+
+  \maketitle
+\end{frame}
+}
+
+
+\section{Expected Values}
+\begin{frame}
+  \frametitle{\invisible{Hello}}
+
+  \begin{center}
+    \Large{\textbf{4.2 Expected Values \sout{and Moment Generating Functions}}}
+  \end{center}
+
+  \bigskip
+
+  \only<1>{
+    \begin{center}
+      \includegraphics[height=.5\textheight]{zurg}
+    \end{center}
+  }
+
+  \only<2>{
+    \begin{block}{Key Lesson}
+      \begin{center}
+        Replace 
+        \begin{center}
+        sums and pmfs (for discrete random variables) 
+        \end{center}
+        with
+        \begin{center}
+        integrals and pdfs (for continuous random variables).
+        \end{center}
+      \end{center}
+    \end{block}
+  }
+
+\end{frame}
+
+\begin{frame}
+  
+  \begin{block}{Mean}
+    The expected or mean value of a continuous random variable with pdf $f(x)$ is
+    \[
+      \mu_X=E(X)=\int_{-\infty}^{\infty} xf(x) ~dx.
+    \]
+    The expected values exists if $\int_{-\infty}^{\infty} |x|f(x) ~dx< \infty$.
+  \end{block}
+\end{frame}
+
+\begin{frame}
+
+  \begin{block}{Variance}
+    The variance of $X$ is
+    \[
+      \sigma^2_X=V(X)=E[(X-\mu)^2]=\int_{-\infty}^{\infty}(x-\mu)^2 f(x)~dx.
+    \]
+    The standard deviation is $\sigma_X=\sqrt{V(X)}$. 
+    
+    The variance and standard deviation exist if $\int_{-\infty}^{\infty} (x-\mu)^2f(x) ~dx < \infty$.
+  \end{block}
+\end{frame}
+
+\begin{frame}
+
+  \begin{block}{Variance}
+    There is a shortcut formula for the variance. For *any* random variable $X$ (discrete or continuous) the variance can be computed as
+    $$
+    \sigma^2_X=E(X^2)-E(X)^2=E(X^2)-\mu_X^2.
+    $$
+  \end{block}
+\end{frame}
+
+\begin{frame}
+  \begin{block}{\example}
+    Consider the random variable, $X$, from Example 14.1. This random variable represents the distance that an object dropped from a height of 1~m falls in a randomly selected time between 0 and 1 second on the home planet of Emperor Zurg where the force of gravity is only 2~m/s$^2$. The pdf and cdf are
+    \begin{scriptsize}
+      \[
+        f(x)=\left\{
+          \begin{array}{ll}
+            0 \leq 0\\
+            2x & 0 < x < 1\\
+          0 & 1 \leq x
+          \end{array}
+        \right.
+        \mbox{ and }
+        F(x)=\int_{-\infty}^x f(u)~du=
+        \left\{
+          \begin{array}{ll}
+            0 & x \leq 0\\
+            x^2 & 0 < x < 1\\
+            1 & 1 \leq x
+          \end{array}
+        \right.
+      \]
+    \end{scriptsize}
+  \end{block}
+  
+  \begin{enumerate}[label=\alph*),start=1]
+  \item Find the mean of $X$.
+  \item Compute the variance of $X$.
+  \item Provide an interpretation for the mean.
+  \end{enumerate}
+  
+\end{frame}
+
+\begin{frame}
+  
+  \begin{block}{Mean}
+    Let $Y=h(X)$ for some function $h(\cdot)$. Then:
+    \[
+      \mu_Y=E(Y)=\int_{-\infty}^{\infty} h(x)f(x) ~dx
+      \mbox{ and }
+      \sigma^2_Y=V(Y)=\int_{-\infty}^{\infty}(h(y)-\mu_Y)^2 f(x)~dx.
+    \]
+    
+    \bigskip
+    
+    If $Y$ is a linear function of $X$, $Y=aX+b$, then
+    $$
+    \mu_Y=a\mu_X+b
+       \mbox{ and }
+    \sigma^2_Y=a^2\sigma^2_X.
+    $$
+  \end{block}
+\end{frame}
+
+\begin{frame}
+  \begin{block}{\examplectd}
+    Consider the random variable, $X$, from Exmple 14.1. This random variable represents the distance that an object dropped from a height of 1~m falls in a randomly selected time between 0 and 1 second on the home planet of Emperor Zurg where the force of gravity is only 2~m/s$^2$. The pdf and cdf are
+    \begin{scriptsize}
+      \[
+        f(x)=\left\{
+          \begin{array}{ll}
+            0 & x \leq 0\\
+            2x & 0 < x < 1\\
+          0 & 1 \leq x
+          \end{array}
+        \right.
+        \mbox{ and }
+        F(x)=\int_{-\infty}^x f(u)~du=
+        \left\{
+          \begin{array}{ll}
+            0 & x \leq 0\\
+            x^2 & 0 < x < 1\\
+            1 & 1 \leq x
+          \end{array}
+        \right.
+      \]
+    \end{scriptsize}
+  \end{block}
+  
+  \begin{enumerate}[label=\alph*),start=4]
+  \item Let $Y$ be the distance traveled in inches not metres ($Y=39.37X$). Find the mean and variance of $Y$.
+  \item Let $Z=X^2$. Find the mean and variance of $Z$. 
+  \end{enumerate}
+  
+\end{frame}
+\begin{frame}
+  \begin{block}{Approximating the Mean and Variance}
+    The proposition on page 174 (called the delta method) suggests that if $Y=h(X)$ for some function $h(x)$ which is differentiable and has non-zero deriviative at $\mu=E(X)$ then
+\[
+E(Y)\approx h(\mu)
+\]
+and
+\[
+V(Y)\approx h'(\mu)^2 V(X)
+\]
+if ``the variance of $X$ is small''.
+
+\bigskip
+
+\begin{center}
+  \textbf{This is too vague!}
+  We will discuss the full result later.
+\end{center}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+  \begin{center}
+    \Large{\textbf{Questions?}}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+
+\begin{block}{\exercise}
+Suppose that the random variable $X$ has pdf
+$$
+f(x)=\frac{3}{4}\left[2x-x^2\right],\quad 0 \leq x \leq 2.
+$$
+
+\begin{enumerate}[label=\alph*),start=1]
+\item Confirm that $f(x)$ is a valid pdf.
+\item Find the mean and variance of $X$.
+\item Find the mean and variance of $Y=3X+2$.
+\item Find the mean and variance of $Z=X^2$.
+\end{enumerate}
+\end{block}
+\end{frame}
+\end{document}

@@ -1,0 +1,212 @@
+---
+title: "Lecture 13 Notes"
+author: "Simon Bonner"
+format: 
+  pdf: default
+  docx: default
+knitr: 
+  opts_chunk:
+    fig.align: center
+    echo: false
+    warning: false
+    message: false
+    digits: 2
+prefer-html: true
+---
+
+```{r}
+# Load packages
+library(tidyverse)
+library(patchwork)
+library(knitr)
+library(kableExtra)
+library(broom)
+```
+
+```{r}
+## Parameters
+N <- 140 ## Total number of candies
+M <- 40 ## Number of "diseased" candies
+n <- 20 ## Sample size
+thresh <- .05 ## Probability threshold
+```
+
+## Setup
+
+- We are going to consider the problem of estimating the size of a subpopulation.
+- Suppose, for example, that we have a population of known size, and we want to estimate the number of individuals infected with some disease.
+- To make this concrete, I have a bag containing `r N` mints of which an unknown number are ``diseased" (mint chocolate).
+- Out goal is to estimate the number of ``diseased'' candies in the entire population.
+- How can we do this?
+
+## Activity
+
+### Sampling without Replacement
+
+#### 1. Estimation
+
+- Students sample `r n` candies without replacement. Let $x$ be the number of diseased candies in the sample.
+- Ask them to estimate the number of diseased candies in the entire population. The obvious value is
+$$
+\hat M=\frac{`r N` x}{`r n`}.
+$$
+- Ask them why?
+- Provide mathematics:
+    - Given that we are sampling without replacement, $X \sim \mbox{Hypergeometric}(`r n`,M,`r N`)$. Then
+    $$
+    E(X)=\frac{`r n`M}{`r N`}.
+    $$
+    - If we rearrange and solve for $M$ this provides
+    $$
+    M=\frac{`r N` E(X)}{`r n`}.
+    $$
+    - Replacing $E(X)$ with the observed value yields
+    $$
+    \hat M=\frac{`r N` x}{`r n`}.
+    $$
+- Compute estimate for the specific sample obtained by the class.
+    - Round to nearest integer.
+
+#### 2. Precision
+
+- Before continuing, enter value of $x$ in `Slide/lecture_13_slides.Rnw` and recompile.
+- Ask: "Who believe that there are exactly $\hat M$ diseased candies in the bag?"
+- Even though $\hat M$ may be our best guess, and it may be right, there is uncertainty in this experiment. If we repeated the experiment, then we would likely draw a different number of diseased candies in our sample. This would lead to different estimates.
+- More importantly, there are different values of $M$ that could lead to the same value of $x$. 
+    - Use calculator at stattrek to compute $P(X=x|M=\hat M)$ and $P(X=x|M=\hat M+1)$.
+    - The probabilities should be similar. This implies that the true value of $M$ could easily be $\hat M$ or $\hat M+1$. 
+    - In fact, there is a range of values for which $P(X=x|M)$ is close to $P(X=x|M=\hat M)$. 
+- How big this range is tells us about the precision of the estimate. The precision is the opposite of variance. If the precision is big then the range of possible values is small and we can be confident that the true value is close to $\hat M$. On the other hand, if the range is big then the precision is small and we will have less confidence in our estimate.
+- Show plot of $P(X=x|M)$ vs $M$.
+    - One way to measure the precision is to consider the values of $M$ for which $P(X=x|M)$ is above a certain value.
+    - We'll consider the values for which $P(X=x|M)>.05$. (Show next plot with line.)
+    - For our sample, the values are... see following table for the values given the observed $x$.
+
+### Sampling with Replacement
+
+#### 1. Estimation
+
+- Why did we sample without replacement?
+    - The answer seems intuitive. If we sample with replacement then we risk sampling the same indivdiuals multiple time, which would give us less information about the population. How can we see this?
+- Suppose that we were to sample with replacement. Let $Y$ be the number of diseased candies sampled. 
+    - If we sample with replacement, $Y \sim \mbox{Binomial}(`r n`,M/`r N`)$. Then
+    $$
+    E(Y)=\frac{`r n`M}{`r N`}.
+    $$
+    - If we rearrange and solve for $M$ this provides
+    $$
+    M=\frac{`r N` E(X)}{`r n`}.
+    $$
+    - Replacing $E(Y)$ with the observed value yields exactly the same estimator
+    $$
+    \hat M=\frac{`r N` y}{`r n`}.
+    $$
+- This means that if we observe the same number of diseased candies then our estimate will be the same regardless of whether or not we sample with replacement.
+    - So, where does sampling with replacement matter?
+    
+#### 2. Precision
+
+- Sampling with replacement affects the precision of the estimate.
+- Suppose that we consider the values of $M$ for which $P(Y=y|M)>.05$. (Show plot)
+- In this case, the range of plausible values is... see Table 2 for values.
+- The relative precision is...see Table 2 for values.
+    - The range of values is slightly wider when we sample without replacement than when we sample with replacement. 
+    - This is why sampling without replacement is better.
+    
+### Variances
+
+- Computing the range of values such that $P(X=x|M)>.05$ or $P(Y=y|M)>.05$ is not trivial. However, there is a better way to measure the precision.
+- The precision measures the uncertainty of the estimate, and uncertainty is measured by the variance. In fact, precision in statistics is defined to be the inverse of the variance.
+- Consider the case of the hypergeometric:
+$$
+\hat M=\frac{NX}{n},
+$$
+    - Then
+    $$
+    \mbox{Var}(\hat M)=\frac{N^2}{n}\mbox{Var}(X)
+    $$
+    and since $X$ is hypergeometric
+    $$
+    \mbox{Var}(\hat M)=\frac{N^2}{n^2}\left(\frac{N-n}{N-1}\right)\left(\frac{nM}{N}\right)\left(1-     \frac{M}{N}\right).
+    $$
+    -Similarly, if we sample without replacement then 
+    $$
+    \hat M=\frac{NY}{n},
+    $$
+    is a linear transformation of the random variable $Y$. Then 
+    $$
+    \mbox{Var}(\hat M)=\frac{N^2}{n}\mbox{Var}(Y)
+    $$
+    and since $Y$ is binomial
+    $$
+    \mbox{Var}(\hat M)=\frac{N^2}{n^2}n\left(\frac{M}{N}\right)\left(1-\frac{M}{N}\right).
+    $$
+    The ratio of these two is
+    $$
+    \frac{\frac{N^2}{n^2}\left(\frac{N-n}{N-1}\right)\left(\frac{nM}{N}\right)\left(1-\frac{M}{N}\right)}{\frac{N^2}{n^2}n\left(\frac{M}{N}\right)\left(1-\frac{M}{N}\right)}=\frac{N-n}{N-1}
+    $$
+    which shows that the variance is lower by a factor of $(N-n)/(N-1)$ when sampling is conducted with replacement.
+    - Note that the relative variance does not depend on $M$. It only depends on $N$ and $n$. It's always above $1$, but gets closer and closer to 1 as $N$ gets bigger. 
+
+- In our example, the ratio of the variances would be
+$$
+\frac{`r N` - `r n`}{`r N` - 1}=`r (N-n)/(N-1)`.
+$$
+Once again, this suggests that the estimate will be slightly more precise when sampling without replacement.
+
+\newpage
+
+## Sampling without Replacement
+The following table presents the values required for each possible value of $X$ -- the number of ``diseased" candies sampled. The columns are:
+
+- $x$ -- the possible values (from 0 to $n$) 
+
+```{r}
+## Hypergeometric
+hyper_dat <- tibble(x = seq(0,n),
+                    P = dhyper(x, M, N - M, n),
+                    Estimate = as.integer(round(N*x/n)),
+                    Variance = (N - n)/(N - 1) * (n*Estimate/N) * (1 - Estimate/N),
+                    Phat = dhyper(x, Estimate, N - Estimate, n))
+
+hyper_dat$Lower <- sapply(hyper_dat$x, function(x){
+  min(which(dhyper(x, 0:N, N - (0:N), n) > thresh)) - 1
+})
+
+hyper_dat$Upper <- sapply(hyper_dat$x, function(x){
+  max(which(dhyper(x, 0:N, N - (0:N), n) > thresh)) - 1
+})
+
+hyper_dat <- hyper_dat |> 
+  mutate(Precision = Upper - Lower)
+
+kable(hyper_dat)
+```
+
+\newpage
+
+## Sampling with Replacement
+
+```{r}
+## Binomial
+binom_dat <- tibble(y = seq(0,n),
+                    P = dbinom(y, n, M/N),
+                    Estimate = as.integer(round(N*y/n)),
+                    Variance = n * (Estimate/N) * (1 - Estimate/N),
+                    Phat = dbinom(y, n, Estimate/N))
+
+binom_dat$Lower <- sapply(binom_dat$y, function(y){
+  min(which(dbinom(y, n, (0:125)/N) > thresh)) - 1
+})
+
+binom_dat$Upper <- sapply(binom_dat$y, function(y){
+  max(which(dbinom(y, n, (0:125)/N) > thresh)) - 1
+})
+
+binom_dat <- binom_dat |> 
+  mutate(Precision = Upper - Lower,
+         Rel_Precision = Precision/pull(hyper_dat,"Precision"),
+         Rel_Variance = Variance/pull(hyper_dat,"Variance"))
+
+kable(binom_dat)
+```

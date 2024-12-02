@@ -1,0 +1,64 @@
+---
+title: "STAT 2857A -- Lecture 25 Examples and Exercises"
+format: 
+  pdf: default
+  docx: default
+knitr: 
+  opts_chunk:
+    fig.align: center
+    echo: false
+    warning: false
+    message: false
+    digits: 2
+prefer-html: true
+---
+
+```{r}
+# Load packages
+library(tidyverse)
+library(patchwork)
+library(knitr)
+library(kableExtra)
+library(broom)
+```
+
+## Example 25.1
+
+According to Burmaster and Murray (1998), the height of men between the ages of 50 and 80 is normally distributed with a mean of $174.20$ cm and a variance of $42.36$ cm$^2$. Suppose that we collect a random sample of $25$ men from the population. Let their heights be denoted by $X_1,\ldots,X_{25}$. 
+
+a) What is the sampling distribution of the total height, $T_{25}=\sum_{i=1}^{25} X_i$?
+b) What is the sampling distribution of the average height, $\bar X_{25}=\sum_{i=1}^{25} X_i/25$?
+c) What is the sampling distribution of $Z=\frac{(\bar X_{25} - 174.20)}{\sqrt{1.69}}$?
+
+## Example 25.2
+
+Suppose that $X_1,\ldots,X_n$ are independent and identically distributed Bernoulli random variables such that
+$$
+      P(X_i=0)=1-p \mbox{ and } P(X_i=1)=p
+$$
+for all $i=1,\ldots,n$. 
+    
+a) What is the pmf of $\bar X_n$?
+      
+b) What is the approximate cdf of
+      $$
+        Z=\frac{\bar X_n - np}{\sqrt{p(1-p)/n}}
+      $$
+      when $n$ is large?
+      
+## Example 25.3 
+
+See slides.
+
+## Example 25.4
+
+The Acme string company produces spools of string advertised to have a length of 100 m. However, the length of string on a randomly selected ball actually has a mean of 101 m and a standard deviation of .2 m. Approximate the 95-th percentile of the total amount of string in a box containing 50 spools.
+
+## Exercise 25.1
+
+According to Burmaster and Murray (1998), the log weight in kilograms of men between the ages of 50 and 80 is normally distributed with a mean of $4.41$ and variance $.46$. It can be shown that the weight then follows a log-normal distribution with mean $\mu_W = 91.45$ kg and variance $\sigma^2_W=1970.83$ kg. The pdf is shown on the next slide. The vertical dashed line represents the mean.
+  
+a) Describe the shape of the density.
+b) Approximate the distribution of $\bar W_n$. What conditions need to be satisfied?
+c) Explain what the approximation in the previous part means.
+d) Use the approximation to show that $\lim_{n \to \infty} P(\mu_W-\epsilon < \bar W_n < \mu_W + \epsilon) = 1$ for any $\epsilon>0$. Explain what this means.  

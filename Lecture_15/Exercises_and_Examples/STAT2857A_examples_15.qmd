@@ -1,0 +1,65 @@
+---
+title: "STAT 2857A -- Lecture 15 Examples and Exercises"
+format: 
+  pdf: default
+  docx: default
+knitr: 
+  opts_chunk:
+    fig.align: center
+    echo: false
+    warning: false
+    message: false
+    digits: 2
+prefer-html: true
+---
+
+```{r}
+# Load packages
+library(tidyverse)
+library(patchwork)
+library(knitr)
+library(kableExtra)
+library(broom)
+```
+
+## Example 15.1
+
+ Consider the random variable, $X$, from Example 14.1. This random variable represents the distance that an object dropped from a height of 1~m falls in a randomly selected time between 0 and 1 second on the home planet of Emperor Zurg where the force of gravity is only 2~m/s$^2$. The pdf and cdf are
+
+$$
+        f(x)=\left\{
+          \begin{array}{ll}
+            0 \leq 0\\
+            2x & 0 < x < 1\\
+          0 & 1 \leq x
+          \end{array}
+        \right.
+        \mbox{ and }
+        F(x)=\int_{-\infty}^x f(u)~du=
+        \left\{
+          \begin{array}{ll}
+            0 & x \leq 0\\
+            x^2 & 0 < x < 1\\
+            1 & 1 \leq x
+          \end{array}
+        \right.
+$$
+  
+a) Find the mean of $X$.
+b) Compute the variance of $X$.
+c) Provide an interpretation for the mean.
+d) Let $Y$ be the distance traveled in inches not metres ($Y=39.37X$). Find the mean and variance of $Y$.
+e) Let $Z=X^2$. Find the mean and variance of $Z$. 
+
+## Exercise 15.2
+
+Suppose that the random variable $X$ has pdf
+$$
+f(x)=\frac{3}{4}\left[2x-x^2\right],\quad 0 \leq x \leq 2.
+$$
+
+
+a) Confirm that $f(x)$ is a valid pdf.
+b) Find the mean and variance of $X$.
+c) Find the mean and variance of $Y=3X+2$.
+d) Find the mean and variance of $Z=X^2$.

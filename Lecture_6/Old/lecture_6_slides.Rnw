@@ -1,0 +1,239 @@
+\documentclass[aspectratio=169,xcolor=pdftex,dvipsnames,table]{beamer}
+% \documentclass[notes,aspectratio=169,xcolor=pdftex,dvipsnames,table]{beamer}
+
+%\setbeameroption{show notes}
+
+\usepackage{bm,graphicx,amsmath,tikz} %fancybox,
+\usepackage{color}%,textpos}
+\usepackage[round]{natbib}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
+\usepackage{lastpage}
+\usepackage{array}
+\usepackage{color}
+\usepackage{framed}
+
+% Define Western colours
+\definecolor{western}{rgb}{.306,.152,.524}
+\definecolor{westerngray}{rgb}{.512,.508,.524}
+
+%% Define BEAMER colours
+\setbeamercolor{frametitle}{bg=western,fg=white}
+\setbeamercolor{framesubtitle}{bg=western,fg=black}
+\setbeamercolor{title}{fg=white,bg=western}
+\setbeamercolor{author}{fg=white,bg=western}
+\setbeamercolor{institute}{fg=white,bg=western}
+\setbeamercolor{date}{fg=white,bg=western}
+
+%% Set BEAMER fonts
+\setbeamerfont{title}{shape=\bf}
+\setbeamerfont{frametitle}{shape=\sc,size=\Large}
+\setbeamerfont{framesubtitle}{shape=\sc,size=\Large}
+\setbeamerfont{footline}{shape=\sc}
+
+%% Define BEAMER toc
+\setbeamercolor{section in toc}{fg=western}
+\setbeamercolor{subsection in toc}{fg=westerngray}
+\setbeamertemplate{sections/subsections in toc}[ball]
+
+%% Define BEAMER background
+\setbeamercolor{background canvas}{bg=white}
+
+%% Define BEAMER footer
+\setbeamertemplate{navigation symbols}{}
+\setbeamercolor{footline}{fg=white,bg=western}
+\setbeamertemplate{footline}{%
+  \begin{beamercolorbox}[wd=\paperwidth]{footline}
+    \vskip5pt
+
+    \hspace{.1in}
+    \raisebox{.05in}{
+      \scriptsize{\bf \insertshorttitle }
+    }
+    \hfill
+    \raisebox{.05in}{
+      \scriptsize{\bf \insertframenumber/\pageref{LastPage}}
+    }
+    \hspace{5pt}
+
+    \vskip5pt
+  \end{beamercolorbox}
+}
+
+%% Define BLOCK environment
+\setbeamercolor{block title}{fg=western}
+\setbeamerfont{block title}{series=\bfseries}
+
+%% Define ENUMERATE and ITEMIZE environements
+\setbeamertemplate{itemize item}[ball]
+\setbeamertemplate{enumerate item}[ball]
+\setbeamercolor{item projected}{bg=western}
+
+%% Define BEAMER toc
+\setbeamercolor{sections/subsections in toc}{fg=blue!75}
+\setbeamertemplate{sections/subsections in toc}[ball]
+
+%% Define SECTION openings
+\AtBeginSection[]{
+}
+
+\title[SS2857 -- Lecture 6]{SS2857 Probability and Statistics 1\\
+  Fall 2021\\
+  \vspace{.2in}
+  Lecture 6}
+
+\date{September 29}
+
+<<setup, echo = FALSE, include=FALSE>>=
+## Load packages
+library(knitr)
+library(tidyverse)
+
+## Knitr options
+opts_chunk$set(echo=FALSE,
+               include=FALSE,
+               message=FALSE,
+               eval=TRUE,
+               cache=FALSE,
+               fig.height=2.5,
+               fig.width=5,
+               fig.align="center",
+               warning=FALSE)
+
+@
+
+\begin{document}
+
+{
+\setbeamertemplate{footline}{}
+\setbeamercolor{background canvas}{bg=western}
+
+\begin{frame}
+  \maketitle
+\end{frame}
+}
+
+
+\begin{frame}
+  \begin{center}
+    \Large{\textbf{Chapter 2 Summary Exercise}}
+    \Large{Hardy-Weinberg Equilibrium}
+
+    \includegraphics[height = .6\textheight]{1412513462}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Activity}
+  I've given each of you two pieces of paper representing your alleles for eye colour. 
+  
+  \begin{enumerate}
+  \item Record your alleles.
+  \item Walk around the room and mingle with your peers.
+  \item When I say "Mate" exchange one piece of paper with someone nearby (only one exchange each time) and record your new alleles. 
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{Background}
+  Each person has two alleles that determine their eye-colour, one from their mother and one from their father. We will assume that there are only two eye-colours, brown and blue, and let $A$ represent the allele for brown eyes and $a$ the allele for blue eyes.
+
+ \medskip
+ 
+  Your genotype is determined by the pair of alleles you have and your phenotype is your eye-colour. 
+  
+  \begin{center}
+  \begin{tabular}{c|cc}
+  & \multicolumn{2}{c}{Phenotype}\\
+  Genotype & Brown & Blue\\
+  \hline
+  \hline
+  AA & X & \\
+  Aa & X & \\
+  aa &   & X\\
+  \end{tabular}
+  \end{center}
+  
+  We say that the allele for brown eyes is dominant meaning that you will have brown eyes if you have genotype $AA$ or $Aa$ and blue eyes only if you have genotype $aa$. 
+\end{frame}
+
+\begin{frame}{Question 1}
+   A population contains $n_{AA}$ people with two alleles for brown eyes, $n_{Aa}$ with one allele for brown eyes, one for blue eyes, and $n_{aa}$ with two alleles for blue eyes, and $n=n_{AA}+n{Aa}+n_{aa}$ be the total population size. Suppose that we sample a person at random and then sample an allele at random.
+  
+  \begin{enumerate}[a)]
+  \item What is the probability that the person has brown eyes?
+  \item What is the probability that the sampled allele is the allele for brown eyes? 
+  \item What is the probability that the sampled person has brown eyes given that the sampled allele is for blue eyes?
+  \item What do these probabilities mean?
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{Question 2}
+  Let the ordered pair $(m,f)$ denote the alleles an offspring inherits from its parents. 
+  
+  \begin{enumerate}[a)]
+  \item What are the possible outcomes? 
+  \item What are the genotypes and phenotypes associate with each outcome?
+  \end{enumerate}
+
+\end{frame}
+
+\begin{frame}{Question 3}
+  Let $M$ be the event that the offspring inherits the allele for brown eyes from its mother and $M'$ the event it inherits the allele for blue eyes from its mother.
+
+  \medskip
+
+  Let  $F$ be the events that the offspring inherits the allele for brown eyes from its father and $F'$ the event it inherits the allele for blue eyes its father.
+
+  \medskip
+
+  \begin{enumerate}[a)]
+  \item What are the outcomes within each event?
+  \item Which pairs of the events $M$, $M'$, $F$, and $F'$ are mutually exclusive and which are not?
+  \item Define the events associated with each genotype in terms of $M$, $M'$, $F$, and $F'$.
+  \end{enumerate}
+  
+\end{frame}
+
+\begin{frame}{Question 4}
+  The activity at the start of class is intended to simulate random mating. Biologists say that a population is mating at random if two conditions hold:
+  \begin{enumerate}
+  \item the two alleles an offspring inherits from each parent are independent, and 
+  \item the probability that each allele takes a specific form, say $A$, is equal to the proportion of allele $A$ in the parent population.
+  \end{enumerate}
+
+  \medskip
+
+  Assuming random mating:
+  \begin{enumerate}[a)]
+  \item Compute the probabilities for the events $M$, $M'$, $F$, $F'$.  
+  \item Compute the probability of the possible genotypes for the offspring. 
+  \item What is the probability that an offspring has brown eyes? 
+  \item What is the probability that the offspring has blue eyes?
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{Question 5}
+  Suppose that a population undergoes random mating, we randomly select one offspring from the new population, and then we randomly select one of the two alleles from this offspring.
+
+  \medskip
+  
+  \begin{enumerate}[a)]
+  \item What is the probability that the sampled allele is $A$? 
+  \item What is the probability that it is $a$?
+  \item What is the probability that the offspring has brown eyes?
+  \item What is the probability that the offspring has blue eyes?
+  \end{enumerate}
+
+\end{frame}
+
+\begin{frame}{Question 6}
+  Suggest two ways that the assumption of random mating might be violated.
+  
+\end{frame}
+
+\begin{frame}
+  \begin{center}
+    \Large{\textbf{Questions?}}
+  \end{center}
+\end{frame}
+
+\end{document}

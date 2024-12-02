@@ -1,0 +1,233 @@
+---
+title: "STAT 2857A -- Lecture 25 Examples and Exercises"
+subtitle: "Solutions"
+format: 
+  pdf: 
+   include-in-header: 
+    - text: |
+        \usepackage{mathtools}
+knitr: 
+  opts_chunk:
+    fig.align: center
+    echo: false
+    warning: false
+    message: false
+    digits: 2
+---
+```{r}
+## Load packages
+library(tidyverse)
+library(knitr)
+library(latex2exp)
+library(xtable)
+
+options(digits = 3)
+```
+
+## Example 25.1
+
+a) We know that:
+$$
+\begin{aligned}
+  \mu_X&=`r (mu <- 174.20)`\\
+  \sigma_X^2&=`r (ssq <- 42.36)`\\
+  \sigma_X&=`r (sigma <- sqrt(ssq))`.
+  \end{aligned}
+$$
+Since $X_1,\ldots,X_{25}$ are independent we know that $T_{25}$ has mean
+  \begin{align*}
+    \mu_T
+    &=E(\sum_{i=1}^{25} X_i)\\
+    &=\sum_{i=1}^{25}E(X_i)\\
+    &=25(`r mu`)\\
+    &=`r (muT <- 25 * mu)`
+  \end{align*}
+  and variance
+  \begin{align*}
+    \sigma^2_T
+    &=V(\sum_{i=1}^{25} X_i)\\
+    &=\sum_{i=1}^{25}V(X_i)\\
+    &=25(`r ssq`)\\
+    &=`r (ssqT <- 25 * ssq)`.
+  \end{align*}
+  The final piece is that the total is normally distributed. Hence:
+  $$
+    T_{25} \sim \mbox{Normal}(`r muT`,`r ssqT`).
+  $$
+  
+b) Consider that the average (i.e., the sample mean) is a linear function of $T_{25}$
+  $$
+    \bar X_{25}=\frac{T_{25}}{25}.
+  $$
+  So,
+  $$
+  \begin{aligned}
+    E(\bar X_{25})
+    &=\frac{E(T_{25})}{25}\\
+    &=\frac{`r muT`}{25}\\
+    &=`r (muXbar <- muT/25)`\\
+    \end{aligned}
+  $$
+  and
+  $$
+  \begin{aligned}
+  V(\bar X_{25})
+    &=V\left(\frac{T_{25}}{25}\right)\\
+    &=\frac{V(T_{25})}{25^2}\\
+    &=\frac{`r ssqT`}{625}\\
+    &=`r (ssqXbar <- ssqT/625)`.
+  \end{aligned}
+  $$
+  And the final piece -- $\bar X_{25}$ is normally distributed! So
+  $$
+    \bar X_{25}\sim \mbox{Normal}(`r muXbar`,`r ssqXbar`).
+  $$
+
+  
+c) Finally, consider that
+  $$
+    Z=\frac{(\bar X_{25}-174.20)}{\sqrt{1.69}}=\frac{\bar X_{25}-E(\bar X_{25})}{\sqrt{V(\bar X_{25})}}.
+  $$
+  Hence, $Z \sim \mbox{Normal}(0,1)$. 
+
+## Example 25.2
+
+a)  Consider that $\bar X_n=\sum_{i=1}^n X_i/n$. Then the possible values of $\bar X_n$ are $0, 1/n, 2/n,\ldots,(n-1)/n,1$ and $T_n=\sum_{i=1}^n X_i\sim \mbox{Binomial}(n,p)$. So
+$$
+  \begin{aligned}
+    P(\bar X_n=\bar x)
+    &=P(\sum_{i=1}^n X_n = n\bar x)\\
+    &=P(T_n=n\bar x)\\
+    &=\binom{n}{n\bar x}p^{n\bar x} (1-p)^{n-n\bar x}
+  \end{aligned}
+$$
+for $\bar x\in \{0,1/n,2/n,\ldots,(n-1)/n,1\}$. It may seem confusing to see $n\bar x$ in the binomial, but note that this value is always going to be an integer. 
+
+b) Consider that
+$$
+  \begin{aligned}
+    \mu=E(X_i)=p\\
+    \end{aligned}
+$$
+and
+$$
+   \begin{aligned}
+    \sigma = V(X_i)
+    =p(1-p).
+  \end{aligned}
+$$
+So
+$$
+Z=\frac{\bar X_n - \mu}{\sigma/\sqrt{n}}.
+$$
+Applying the central limit theorem directly implies that
+$$
+    Z\overset{\cdot}{\sim}\mbox{Normal}(0,1)
+$$
+meaning that
+$$
+P\left(\frac{\left(\bar X_n - E(\bar X_n)\right)}{\sqrt{V(\bar X_n)}} \leq z\right) \approx P(Z \leq z)
+$$
+where $Z$ is standard normal, provided that $n$ is big enough. 
+
+In fact, we have already seen this result. Let $T_n$ be the total number of successes,  $T_n=\sum_{i=1}^n X_i$. Then
+$$
+T_n \sim \mbox{Binomial}(n,p). 
+$$
+Manipulating $Z$, we get that
+$$
+\begin{aligned}
+    P(Z \leq z)
+    &=P\left(\frac{\left(\bar X_n - p\right)}{\sqrt{p(1-p)/n}} \leq z\right)\\
+    &=P\left(\frac{\left(n\bar X_n-np\right)}{\sqrt{np(1-p)}} \leq z\right)\\
+    &=P\left(\frac{\left(T_n - np\right)}{\sqrt{np(1-p)}} \leq z \right)\\
+    &\approx P\left(\frac{\left(T_n + .5 - np \right)}{\sqrt{np(1-p)}} \leq z \right)
+  \end{aligned}
+$$
+since $.5-np \approx -np$ if $n$ is big. But this is simply the normal approximation to the binomial which we have seen before. If $T_n \sim \mbox{Binomial}(n,p)$ and $n$ is large enough, then
+$$
+   \frac{\left(T_n + .5 - np \right)}{\sqrt{np(1-p)}}
+    \overset{\cdot}{\sim}\mbox{Normal}(0,1).
+$$
+The normal approximation is simply the central limit theorem in disguise. 
+
+## Exercise 25.3
+
+See slides.
+
+## Exercise 25.4
+
+Let $X_1,\ldots,X_{50}$ denote the length of string on each of the balls and $\bar X_{50}$ the average length of string. Then the total is $T_n=50\bar X_{50}$. We want to find the value $t$ such that
+$$
+\begin{aligned}
+  P(T_n \leq t)&=.95\\
+  P\left(\frac{T_n}{50} \leq \frac{t}{50}\right)&=.95\\
+  P\left(\bar X_{50} \leq \frac{t}{50}\right)&=.95\\
+  P\left(\frac{\bar X_{50}-101}{.2/\sqrt{50}} \leq \frac{t/50 - 101}{.2/\sqrt{50}}\right)&=.95\\
+  P\left(Z \leq \frac{t/50 - 101}{.2/\sqrt{50}}\right) &\approx .95
+\end{aligned}
+$$
+where $Z\sim N(0,1)$ by the CLT. Then
+$$
+  P(Z \leq 1.645) = .95
+$$
+so we set
+$$
+  \frac{t/50 - 101}{.2/\sqrt{50}}=1.645
+$$
+and solve for $t$ which gives
+$$
+  t=50[1.645(.2/\sqrt{50}) + 101]=`r (t95 <- 50 *(1.645*(.2/sqrt(50)) + 101))`.
+$$
+The 95-th percentile of the total amount of string in a box of 50 spools is approximately `r t95`~m. 
+
+## Exercise 25.1
+
+a) The distribution is unimodal (there is only one peak) and right-skewed (the tail on the right of the peak extends farther then the tail on the left of the peak).
+
+b) The central limit theorem tells us that if the sample size is large enough (the rule of thumb is $n>30$), then $\bar W_n$ will be approximately normally distributed with mean
+$$
+E(\bar W_n)=91.45
+$$
+and variance
+$$
+V(\bar W_n)=\frac{1970.83}{n}.
+$$
+Alternatively, we can say that
+$$
+Z_n=\frac{\bar W_n - 91.45}{\sqrt{1970.83/n}}
+$$
+is approximately standard normal. The two are equivalent.
+
+c) The approximation means that we can approximate probabilities for $\bar W_n$ with probabilities computed from a normal distribution. Specifically, we can approximate the cdf of $\bar W_n$ by
+$$
+P(\bar W_n \leq w) \approx P\left(Z \leq \frac{w - 91.45}{\sqrt{1970.83/n}}\right)
+$$
+where $Z$ is a standard normal random variable ($Z \sim \mbox{Normal}(0,1)$). Technically,
+$$
+\lim_{n \to \infty} P(\bar W_n \leq w) = P\left(Z \leq \frac{w - 91.45}{\sqrt{1970.83/n}}\right).
+$$
+
+d) The approximation implies that
+$$
+\begin{aligned}
+P(\mu_W-\epsilon < \bar W_n < \mu_W + \epsilon)
+&= P(91.45-\epsilon < \bar W_n < 91.45 + \epsilon)\\
+&= P(\bar W_n \leq 91.45 + \epsilon) - P(91.45-\epsilon \leq \bar W_n)\\
+&= P\left(Z \leq \frac{91.45 + \epsilon - 91.45}{\sqrt{1970.83/n}}\right) - P\left(Z \leq \frac{91.45 - \epsilon - 91.45}{\sqrt{1970.83/n}}\right)\\
+&=P\left(\frac{- \epsilon}{\sqrt{1970.83/n}} \leq Z \leq \frac{\epsilon}{\sqrt{1970.83/n}}\right)
+\end{aligned}
+$$
+where $Z$ is standard normal. Then note that
+$$
+\lim_{n \to \infty} \frac{-\epsilon}{\sqrt{1970.83/n}}= \lim_{n \to \infty} -\frac{\sqrt{n}\epsilon }{\sqrt{1970.83}} =-\infty
+$$
+and similarly
+$$
+\lim_{n \to \infty} \frac{\epsilon}{\sqrt{1970.83/n}}=\infty.
+$$
+Hence,
+$$
+\lim_{n \to \infty} P(\mu_W-\epsilon < \bar W_n < \mu_W + \epsilon)=P(-\infty <Z<\infty)=1.
+$$
+This means that for any small interval about the mean, $(\mu-\epsilon,\mu+\epsilon)$, the probability that $\bar W_n$ is inside this interval will be very close to 1 if $n$ is large enough, and the probability will increase as $n$ increases. We say that $\bar W_n$ converges to $\mu_W$ in probability. 

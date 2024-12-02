@@ -1,0 +1,93 @@
+\documentclass{article}
+
+
+\usepackage[margin=1in]{geometry}
+\usepackage{enumerate,amsmath,graphicx,url}
+
+\usepackage{arev}
+\usepackage[T1]{fontenc}
+
+%% Initialize R
+<<setup,echo=FALSE,include=FALSE,cache=FALSE>>=
+## Load packages
+library(tidyverse)
+library(xtable)
+library(knitr)
+
+## Set chunk options
+opts_chunk$set(echo=FALSE,
+               results="asis",
+               warning=FALSE,
+               message=FALSE,
+               fig.height=4,
+               fig.width=6,
+               fig.show="hide")
+
+options(digits=5)
+@
+
+\begin{document}
+\begin{center}
+  \Large{\textsc{\textbf{SS2857 Probability and Statistics I}}}\\
+  \Large{Fall 2021}
+
+  \bigskip
+  
+  \large{\sc{Lecture \#10} \\
+    Random Variables and Discrete Probability Distributions}
+\end{center}
+
+\section{Introduction}
+\begin{itemize}
+\item In the last chapter we looked at how we can assign probabilities to outcomes. 
+\item We then used counting arguments to compute the probabilities of different events.
+\item Often we are interested not in the specific outcomes, but in some summary of the outcomes. 
+\item These summaries are called random variables.
+\item We want to be able to understand the distribution of these random variables. 
+\item Often random variables will share common distributions. This will make it easy to study them because we don't have to redo the math every time we encounter a new problem. If we can identify that a random variable has a specific form then we can apply what we know already.
+\end{itemize}
+
+\section{Exercise 10.1}
+\begin{enumerate}[a)]
+\item There are two possible outcomes for each individual -- brown or not brown. There are $2^5=32$ possible outcomes in the sample space. Let $B$ indicate that someone has brown eyes and $b$ that they don't have brown eyes. The possible outcomes are:
+  \begin{center}
+    \begin{tabular}{rc}
+      & Outcome\\
+      \hline
+      1 & $($B$,$B$,$B$,$B$,$B$)$  \\
+      2 & $($b$,$B$,$B$,$B$,$B$)$  \\
+      3 & $($B$,$b$,$B$,$B$,$B$)$  \\
+      $\vdots$ & \\
+      31 & $($b$,$b$,$b$,$b$,$B$)$ \\
+      32 & $($b$,$b$,$b$,$b$,$b$)$ \\
+    \end{tabular}
+  \end{center}
+\item  There are ${5 \choose 3}=10$ possible outcomes in which three people have brown eyes: 
+  \begin{center}
+    \begin{tabular}{rc}
+      & Outcome \\
+      \hline
+      1 & $($B$,$B$,$B$,$b$,$b$)$\\
+      2 & $($B$,$B$,$b$,$B$,$b$)$\\
+      3 & $($B$,$b$,$B$,$B$,$b$)$\\
+      $\vdots$ & \\
+      9 & $($b$,$B$,$b$,$B$,$B$)$\\
+      10 & $($b$,$b$,$B$,$B$,$B$)$\\
+    \end{tabular}
+  \end{center}
+  Alternatively, we can denote this event as:
+  \[
+    X=3.
+  \]
+  
+\item There are ${5 \choose 1} + {5 \choose 2} + {5 \choose 3}=21$ possible outcomes in which no more than 3 people have brown eyes. They include the previous 10 events, the same events with $B$'s changed to $b$'s and vice versa, and the 5 events with 1 $B$ and 4 $b$'s.
+
+  Alternatively, we can write:
+  \[
+    X \leq 3.
+  \]
+\end{enumerate}
+
+
+\end{document}
+

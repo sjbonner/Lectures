@@ -1,0 +1,147 @@
+\documentclass[12pt]{article}
+
+\usepackage[margin=2cm]{geometry}
+\usepackage{enumerate,amsmath,framed}
+
+\title{Probability and Statistics I\\
+\textsc{Lecture 26. Expected Values, Covariance, and Correlation}}
+
+%% Initialize R
+<<setup,echo=FALSE,include=FALSE,cache=FALSE>>=
+## Load packages
+library(tidyverse)
+library(xtable)
+library(knitr)
+
+## Set chunk options
+opts_chunk$set(echo=FALSE,results="asis",warning=FALSE,message=FALSE,fig.height=4,fig.width=6,fig.show="hide")
+
+options(scipen=500)
+@
+
+\begin{document}
+
+\maketitle
+
+
+\section{Exercise 26.1}
+
+\subsection{26.1a}
+\label{sec:26.1a}
+
+By definition
+\begin{align*}
+  E(XY)
+  &=\sum_x \sum_y xyp(x,y)\\
+  &=0(0) p_{00} + 0(1) p_{01} + 1(0) p_{10} + 1(1)p_{11}\\
+  &=p_{11}
+\end{align*}
+
+\subsection{26.1a}
+\label{sec:26.1a}
+
+First note that the marginal pmf of $X$ is given by
+\begin{align*}
+  P(X=0)&=p_{00} + p_{10}\\
+  P(X=1)&=p_{10} + p_{11}\\
+\end{align*}
+which implies that $X \sim \mbox{Bernoulli}(p_{10}+p_{11})$ or $X \sim \mbox{Binomial}(1,p_{10}+p_{11})$. Then
+\begin{align*}
+  E(X)&=p_{10}+p_{11}=\mu_x\\
+  V(X)&=(p_{10}+p_{11})(1-p_{10}-p_{11})=\mu_x(1-\mu_x).
+\end{align*}
+Similarly
+\begin{align*}
+  E(Y)&=p_{01}+p_{11}=\mu_y\\
+  V(Y)&=(p_{01}+p_{11})(1-p_{01}-p_{11})=\mu_y(1-\mu_y).
+\end{align*}
+Then
+\begin{align*}
+  \mbox{Cov}(X,Y)
+  &=E[(X-\mu_x)(Y-\mu_y)]\\
+  &=\sum_{x=0}^1 \sum_{y=0}^1 (x-\mu_x)(y-\mu_y)\\
+  &=(-\mu_x)(-\mu_y)p_{00}+(1-\mu_x)(-\mu_y)p_{10}+
+    (-\mu_x)(1-\mu_y)p_{01}+(1-\mu_x)(1-\mu_y)p_{11}\\
+  &= \ldots\\
+  &=p_{11}-(p_{10}+p_{11})(p_{01}+p_{11}).
+\end{align*}
+How did I know that? Because there is a shortcut formula:
+\begin{align*}
+  \mbox{Cov}(X,Y)
+  &=E(XY)-E(X)E(Y)\\
+  &=p_{11}-(p_{10}+p_{11})(p_{01}+p_{11}).\\
+\end{align*}
+That was easy!
+
+Then
+\begin{align*}
+  \mbox{Corr}(X,Y)
+  &=\frac{\mbox{Cov}(X,Y)}{\sqrt{V(X)V(Y)}}\\
+  &=\frac{p_{11}-(p_{10}+p_{11})(p_{01}+p_{11})}
+    {\sqrt{(p_{10}+p_{11})(1-p_{10}-p_{11})\cdot(p_{01}+p_{11})(1-p_{01}-p_{11})}}\\
+  &=\frac{p_{11}-(p_{10}+p_{11})(p_{01}+p_{11})}
+    {\sqrt{(p_{10}+p_{11})(p_{00}+p_{01})\cdot(p_{01}+p_{11})(p_{00}+p_{10})}}.\\
+\end{align*}
+
+Note that if $p_{01}=p_{10}=0$ then $p_{00}=1-p_{11}$ and
+\begin{align*}
+  \mbox{Corr}(X,Y)
+  &=\frac{p_{11}-p_{11}^2}{\sqrt{p_{11}(1-p_{11})\cdot p_{11}(1-p_{11})}}\\
+  &=\frac{p_{11}(1-p_{11})}{p_{11}(1-p_{11})}\\
+  &=1.
+\end{align*}
+Similarly if $p_{00}=p_{11}=0$ then $\mbox{Corr}(X,Y)=-1$.
+
+\subsection{26.1c}
+\label{sec:26.1c}
+
+The property for sums of random variables tells us that:
+\begin{enumerate}
+  
+\item The expected value is
+  \begin{align*}
+    E(Z)
+    &=E(2X + 4Y)\\
+    &=2E(X) + 4E(Y)\\
+    &=2(p_{10}+p_{11}) + 4(p_{01}+_{11})\\
+    &=2p_{10}+4p_{01}+6p_{11}.
+  \end{align*}
+
+  
+\item The variance is
+  \begin{align*}
+    V(Z)
+    &=4V(X) + 8 \mbox{Cov}(X,Y) + 16 V(Y)\\
+    &=4[(p_{10}+p_{11})(p_{00}+p_{01})]
+      + 8 [p_{11}-(p_{10}+p_{11})(p_{01}+p_{11})]
+      + 16[(p_{01}+p_{11})(p_{00}+p_{10})].
+  \end{align*}
+  This could be simplified, but I don't want to waste time doing this for now.
+\end{enumerate}
+
+\subsection{26.1d}
+\label{sec:26.1d}
+
+The random variables $X$ and $Y$ are independent if $p(x,y)=p(x)p(y)$ for all $X$ and $Y$. Let $p_x=P(X=1)=p_{10}+p_{11}$ and $p_y=P(Y=1)=p_{01}+p_{11}$. Then $X$ and $Y$ are independent if
+\begin{align*}
+  p(0,0)&=p_{00}&=(1-p_x)(1-p_y)\\
+  p(1,0)&=p_{10}&=p_x(1-p_y)\\
+  p(0,1)&=p_{01}&=p_y(1-p_x)\\
+  p(1,1)&=p_{11}&=p_xp_y.
+\end{align*}
+Then
+\begin{align*}
+  \mbox{Cov}(X,Y)
+  &=p_{11}-(p_{10}+p_{11})(p_{01}+p_{11})\\
+  &=p_xp_y-[p_x(1-p_y)+p_xp_y][p_y(1-p_x)+p_xp_y]\\
+  &=p_xp_y-[p_x-p_xp_y+p_xp_y][p_y-p_xp_y+p_xp_y]\\
+  &=p_xp_y-p_xp_y\\
+  &=0.
+\end{align*}
+Hence, if $X$ and $Y$ are independent then $\mbox{Cov}(X,Y)=0$ and $E(XY)=E(X)E(Y)$.
+
+This is a special case of the property of the expectation of products of independent random variables.
+
+Note that the opposite is not generally true. It is not generally the case that if $\mbox{Cov}(X,Y)=0$ then $X$ and $Y$ are independent.
+
+\end{document}

@@ -1,0 +1,54 @@
+---
+title: "STAT 2857A -- Lecture 7 Examples and Exercises"
+format: 
+  pdf: default
+  docx: default
+knitr: 
+  opts_chunk:
+    fig.align: center
+    echo: false
+    warning: false
+    message: false
+    digits: 2
+prefer-html: true
+---
+
+```{r}
+# Load packages
+library(tidyverse)
+library(patchwork)
+library(knitr)
+library(kableExtra)
+library(broom)
+```
+
+## Example 7.1
+
+Approximately 79\% of world's population has brown eyes\footnote{\url{https://www.worldatlas.com/articles/which-eye-color-is-the-most-common-in-the-world.html\#targetText=Approximately\%2079\%25\%20of\%20the\%20world's,include\%20gray\%20and\%20red\%2Fviolet.}}. 
+    
+Suppose that we sample 5 people from the population at random with replacement and record their eye-colour as brown or not brown. Let $X$ denote the number of people in the sample with brown eyes.
+
+a) What are the possible outcomes in the sample space?
+b) List the outcomes in the event that exactly 3 people have brown eyes. Write this event in terms of the random variable $X$.
+c) List the outcomes in the event that no more than 3 people have brown eyes. Write this event in terms of the random variable $X$.
+
+
+## Example 7.2
+
+Which of the following random variables are discrete and which are continuous.
+
+a) The year of birth of a randomly selected student.
+b) The time it takes a randomly selected student to drive to school. 
+c) The number of blue candies in a box of Smarties. 
+d) The minimum of your shoe size and the distance you live from Western in kilometres. 
+
+## Exercise 7.1
+
+Identify the following random variables as discrete or continuous. Which are Bernoulli random variables.
+
+a) Whether or not it rains tomorrow with 1 = Rain and 0 = No rain.
+b) The number of birds in a flock.
+c) The wavelength of light measured from a distant star.
+d) Whether or not you live past 80.
+e) Height of a randomly selected building in metres.
+f) Height of a randomly selected building in floors.

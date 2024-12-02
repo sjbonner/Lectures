@@ -1,0 +1,201 @@
+\documentclass[12pt]{article}
+
+\usepackage[margin=2cm]{geometry}
+\usepackage{enumerate,amsmath,framed}
+
+\title{SS2857 -- Probability and Statistics I\\
+\textsc{Lecture 23a. A Primer on Double Integration}}
+
+%% Initialize R
+<<setup,echo=FALSE,include=FALSE,cache=FALSE>>=
+## Load packages
+library(tidyverse)
+library(xtable)
+library(knitr)
+
+## Set chunk options
+opts_chunk$set(echo=FALSE,results="asis",warning=FALSE,message=FALSE,fig.height=4,fig.width=6,fig.show="hide")
+
+options(scipen=500)
+@
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+The material on jointly distributed random variables in Chapter 5 is going to require that you be able to compute double integrals. In particular, given a joint pdf, $f(x,y)$, for two random variables, $X$ and $Y$, you will need to be able to compute
+\[
+  \int \int f(x,y) ~dy~dx
+\]
+to show that $f(x,y)$ is a proper joint pdf (or to find the multiplicative constant that makes it into a proper pdf) and
+\[
+  E(XY)=\int \int xy f(x,y) ~dy~dx
+\]
+which is required to compute the covariance of $X$ and $Y$. Since you may not have covered double integration yet in calculus I will provide a primer on how to compute these integrals. Note that this primer is not exhaustive, but will cover all of the exercises and examples that you see in this course.
+
+\section{Method}
+
+Suppose that you wish to integrate the function $f(x,y)$ over some domain in $\Re^2$. The following approach will work for all of the problems you will see in this course:
+\begin{enumerate}[1)]
+\item Identify the limits of $y$ as a function of $x$. Call these $l_y(x)$ (the lower bound of $y$ given $x$) and $u_y(x)$ (the upper bound of $y$ given $x$). 
+\item Identify the limits of $x$ over all possible values of $y$. Call these $l_x$ and $u_x$.
+\item Integrate $f(x,y)$ with respect to $y$ from $l_y(x)$ to $u_y(x)$. This will generate a new function $g(x)$ that depends only on $x$.
+\item Integrate $g(x)$ from $l_x$ to $u_x$.
+\end{enumerate}
+
+\section{Example 23a.1}
+
+Integrate $f(x,y)=xy$ over the domain $0<x<1$, $0<y<1$.
+
+\subsection*{Solution}
+
+\begin{enumerate}[1)]
+\item The notation above implies that the domain of $y$ is independent of the value of $x$ (and vice versa). Hence, $l_y(x)=0$ and $u_y(x)=1$.
+\item As given, $l_x=0$ and $u_x=1$. 
+\item We then evaluate
+  \begin{align*}
+    g(x)
+    &=\int_{l_y(x)}^{u_y(x)} f(x,y) ~dy\\
+    &=\int_0^1 xy~dy\\
+    &=x\int_0^1y~dy
+  \end{align*}
+  since $x$ can be viewed as a constant when integrating with respect to $y$. Then
+  \begin{align*}
+    g(x)
+    &=x\left[\frac{y^2}{2}\right]_0^1\\
+    &=\frac{x}{2}.
+  \end{align*}
+\item Finally
+  \begin{align*}
+    \int_{l_x}^{u_y} g(x)~dx
+    &=\int_0^1 \frac{x}{2}~dx\\
+    &=\frac{1}{2}\left[\frac{x^2}{2}\right]_0^1\\
+    &=\frac{1}{4}.
+  \end{align*}
+\end{enumerate}
+Hence, $\int_0^1 \int_0^1 xy~dy~dx=1$.
+
+Usually we would not write out these steps, though there is nothing wrong with doing so. Instead, we would write this as
+\begin{align*}
+  \int_0^1 \int_0^1 xy ~dy~dx
+  =&\int_0^1 x\int_0^1y~dy ~dx\\
+  =&\int_0^1 \frac{x}{2}~dx\\
+  =&\frac{1}{4}.
+\end{align*}
+Note that in this case
+\[
+  \int_0^1 \int_0^1 xy ~dy~dx=\int_0^1 x~dx \int_0^1 y ~dy.
+\]
+This simplification can be applied any time that $f(x,y)$ breaks into a product of terms involving only $x$ and only $y$ and (stress on the and) the limits of one variable do not depend on the value of the other.
+
+\section{Proposition}
+
+Suppose that $f(x,y)=g(x)h(y)$ and the domain of $y$ is independent of $x$ so that $l_y < y < u_y$ regardless of the value of $x$. 
+\[
+  \int_{l_x}^{u_x} \int_{l_y}^{u_y} f(x,y) ~dy ~dx= \int_{l_x}^{u_x} g(x) ~dx \int_{l_y}^{u_y} h(y) ~dy.
+\]
+
+\subsection*{Proof}
+
+\begin{align*}
+  \int_{l_x}^{u_x} \int_{l_y}^{u_y} f(x,y) ~dy ~dx
+  =&\int_{l_x}^{u_x} \int_{l_y}^{u_y} g(x)h(y)~dy~dx\\
+  =&\int_{l_x}^{u_x} g(x) \int_{l_y}^{u_y}h(y)~dy~dx
+\end{align*}
+since $g(x)$ does not depend on $y$ and can be brought outside of the inner integral. However, the inside integral, $\int_{l_y}^{u_y}h(y)~dy$ doesn't depend on $x$ and can also be brought out front. Hence
+\begin{align*}
+  \int_{l_x}^{u_x} \int_{l_y}^{u_y} f(x,y) ~dy ~dx
+  =&\int_{l_y}^{u_y}h(y)~dy\int_{l_x}^{u_x} g(x) ~dx\\
+  =&\int_{l_x}^{u_x} g(x) ~dx\int_{l_y}^{u_y}h(y)~dy.
+\end{align*}
+
+\subsection*{Note}
+Be careful only to apply this proposition when the domain of $y$ does not depend on the value of $x$. If this is not the case then the inside integral will be a function of $x$ and can't be treated as a constant. If you end up with $x$ in your final answer then you've done something wrong.
+
+\section{Example 23a.2}
+
+Integrate $f(x,y)=(1-x^2)(1-y^2)$ over the domain $0<x<1$, $0<y<1$.
+
+\subsection*{Solution}
+Applying the above proposition
+\begin{align*}
+  \int_0^1 \int_0^1 (1-x^2)(1-y^2)~dy~dx
+  =&\int_0^1 1-x^2~dx \int_0^1 1-y^2~dy\\
+  =&\left(\int_0^1 1-x^2~dx\right)^2, \mbox{ by symmetry}\\
+  =&\left(\frac{2}{3}\right)^2\\
+  =&\frac{4}{9}.
+\end{align*}
+
+\section{Example 23a.3}
+Integrate $f(x,y)=xy/(1-x)$ over the domain $0<x<1$, $0<y<1-x$.
+
+\subsection*{Solution}
+
+\begin{enumerate}
+\item The domain of $y$ is $0<y<1-x$. Hence, $l_y(x)=0$ and $u_y(x)=1-x$.
+\item The domain of $x$ over all $y$ is $0<x<1$. Hence, $l_x=0$ and $u_x=1$.
+\item
+  \begin{align*}
+    g(x)
+    &=\int_{l_y(x)}^{u_y(x)} f(x,y)~dy\\
+    &=\int_0^{1-x}\frac{xy}{1-x}~dy\\
+    &=\frac{x}{1-x}\int_0^{1-x}y~dy\\
+    &=\frac{x}{1-x}\left(\frac{(1-x)^2}{2}\right)\\
+    &=\frac{x(1-x)}{2}\\
+  \end{align*}
+\item
+  \begin{align*}
+    \int_{l_x}^{u_x} g(x)~dx
+    &=\int_{0}^1 \frac{x-x^2}{2}~dx\\
+    &=\frac{1}{2}\left[\frac{x^2}{2}-\frac{x^3}{3}\right]_0^1\\
+    &=\frac{1}{2}\left(\frac{1}{6}\right)\\
+    &=\frac{1}{12}\\
+  \end{align*}
+\end{enumerate}
+
+\subsection*{Alternate Solution}
+
+Double integrals can always be performed by switching the order of integration. The only concern is to make sure that you have the correct limits of integration. It often helps to draw a picture of the domain of integration to make sure that you have the correct limits.
+
+Consider the above problem again. The limits of integration are $0<x<1$ and $0 < y < 1-x$ which looks like this
+\begin{center}
+  <<exercise23a-3,fig.show="asis",fig.height=4,fig.width=4>>=
+  mydf <- tibble(x=c(0,0,1,0),
+                 y=c(0,1,0,0))
+  
+  mydf %>%
+    ggplot(aes(x = x, y=y)) +
+    geom_polygon()
+  
+  @
+\end{center}
+From this plot we can see that the overall range of $y$ is from 0 to 1 and that if we fix $y$ then $x$ ranges from 0 to $1-y$. Hence, we can rewrite the domain of integration as $0<y<1$, $0<x<1-y$. Now we can apply the steps above, switching the roles of $x$ and $y$
+\begin{enumerate}[1)]
+\item $l_x(y)=0$ and $u_x(y)=1-y$
+\item $l_y=0$ and $u_y=1$
+\item
+  \begin{align*}
+    g(y)
+    &=\int_0^{1-y}\frac{xy}{1-x}~dx\\
+    &=y\int_0^{1-y}\frac{x}{1-x}~dx\\
+    &=y\left[-x - \log(1-x)\right]_0^{1-y}\\
+    &=-y(1-y) - y\log y
+  \end{align*}
+\item
+  \begin{align*}
+    \int_0^1 g(y)~dy
+    &=\int_0^1 -y(1-y) - y\log y~dy\\
+    &=-\left(\int_0^1 y-y^2~dy + \int_0^1 y \log y ~dy\right)\\
+    &=-\left(\left[\frac{y^2}{2}-\frac{y^3}{3}\right]_0^1 +
+      \left[\frac{y^2}{2}\log y - \frac{y^2}{4}\right]_0^1\right)\\
+    &=-\left(\left(\frac{1}{2}-\frac{1}{3}\right) +
+      \left(0 - \frac{1}{4} - 0 + 0\right)\right)\\
+    &=-\left(\frac{1}{6}-\frac{1}{4}\right)\\
+    &=\frac{1}{12}
+  \end{align*}
+\end{enumerate}
+
+The answer is exactly the same as before. However, this example illustrates an important point. Sometimes a double integral might be much easier to compute for one order of integration instead of the other. If you encounter an integral that is difficult to solve, try switching the order of integration. This won't always work, but it often makes things easier. Just be careful to make the right adjustment to the limits of integration.
+\end{document}

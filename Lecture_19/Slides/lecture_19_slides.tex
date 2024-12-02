@@ -1,0 +1,131 @@
+\input{../../slide_template.tex}
+
+\newcommand{\lecturenum}{19}
+
+\title[SS2857]{Probability and Statistics I}
+\subtitle{\lecturenum.~A Primer on Double Integration}
+
+\date{}
+
+%% Add logo
+%% \titlegraphic{\includegraphics[height=2cm]{../uwo_logo_reversed}}
+
+%% Initialize R
+
+
+\begin{document}
+
+{
+\setbeamertemplate{footline}{}
+\setbeamercolor{background canvas}{bg=western}
+
+\begin{frame}
+  \addtocounter{framenumber}{-1}
+
+  \maketitle
+\end{frame}
+}
+
+
+\section{Double Integration}
+
+\begin{frame}
+
+  \begin{block}{Method\footnote{This approach is not completely general but will work for all problems in this course. The method assumes that $y$ is the inner variable of integration and $x$ is the outer variable of integration. The roles would switch if you switch the order of integrations: $\int \int_A f(x,y) ~dx ~dy$.}}
+    Suppose that you wish to integrate the function $f(x,y)$ over some domain in $A \subset \mathbb R^2$:
+    $$
+    \int \int_A f(x,y) ~dy ~dx.
+    $$
+    \begin{scriptsize}
+    \begin{enumerate}[1)]
+    \item Sketch the area of integration.
+    \item Identify the limits of $y$ as functions of $x$: $l_y(x)$ and $u_y(x)$.
+    \item Identify the overall limits of $y$: $l_x$ and $u_x$.
+    \item Integrate $f(x,y)$ with respect to $y$ treating $x$ as fixed.
+    \item Integrate $g(x)$ with respect to $x$. 
+    \end{enumerate}
+    \end{scriptsize}
+    
+  \end{block}
+\end{frame}
+
+
+
+
+\begin{frame}
+  \begin{block}{\example}
+    Integrate $f(x,y)=xy$ over the domain $0<x<1$, $0<y<1$.
+    
+    \begin{center}
+    \includegraphics[height = .5\textheight]{figure/example1-1}
+    \end{center}
+  \end{block}
+\end{frame}
+
+
+
+
+\begin{frame}
+  \begin{block}{\example}
+    Integrate $f(x,y)=xy$ over the domain $x<y<1$, $0<x<1$.
+    
+    \begin{center}
+    \includegraphics[height = .5\textheight]{figure/example2-1}
+    \end{center}
+  \end{block}
+\end{frame}
+
+ 
+
+
+\begin{frame}
+  \begin{block}{\example}
+    Integrate $f(x,y)=xy$ over the domain $0 < x < 1$, $0 < x + y < 1$.
+  \end{block}
+ 
+ \pause
+ 
+ \begin{center}
+    \includegraphics[height = .5\textheight]{figure/example3-1}
+    \end{center}
+\end{frame}
+
+\begin{frame}
+
+  \begin{block}{Proposition\footnote{Keep in mind that this only works if the domain of $y$ and $x$ do not depend on each other.}}
+    Suppose that $f(x,y)=g(x)h(y)$ and the domain of $y$ is independent of $x$ so that $l_y < y < u_y$ regardless of the value of $x$. Then 
+\[
+  \int_{l_x}^{u_x} \int_{l_y}^{u_y} f(x,y) ~dy ~dx= \int_{l_x}^{u_x} g(x) ~dx \int_{l_y}^{u_y} h(y) ~dy.
+\]
+
+  \end{block}
+\end{frame}
+
+\begin{frame}
+  \begin{block}{\example}
+    Integrate $f(x,y)=(1-x^2)(1-y^2)$ over the domain $0<x<1$, $0<y<1$.
+  \end{block}
+\end{frame}
+
+\begin{frame}<handout:0>
+  \begin{center}
+    \Huge{\textbf{Questions?}}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+
+\begin{block}{\exercise}
+
+\begin{enumerate}
+\item Integrate $f(x,y)=e^{x+y}-1.
+$ over the region $0 < x < 1$, $0<y<1$.
+\item Integrate $f(x,y)=e^{x+y}-1.
+$ over the region$y < x < 1$, $0 < y < 1$
+\item Integrate $f(x,y)=xy$ over the region $x^2 + y^2 < 1$.
+\end{enumerate}
+
+\end{block}
+\end{frame}
+
+\end{document}

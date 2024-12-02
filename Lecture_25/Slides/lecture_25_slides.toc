@@ -1,0 +1,2 @@
+\beamer@sectionintoc {1}{Normal Population Distribution}{3}{0}{1}
+\beamer@sectionintoc {2}{Central Limit Theorem}{5}{0}{2}

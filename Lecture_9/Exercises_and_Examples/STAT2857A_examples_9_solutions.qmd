@@ -1,0 +1,205 @@
+---
+title: "STAT 2857A -- Lecture 9 Examples and Exercises"
+subtitle: "Solutions"
+format: 
+  pdf: 
+   include-in-header: 
+    - text: |
+        \usepackage{mathtools}
+knitr: 
+  opts_chunk:
+    fig.align: center
+    echo: false
+    warning: false
+    message: false
+    digits: 2
+---
+
+```{r}
+## Load packages
+library(tidyverse)
+library(knitr)
+library(latex2exp)
+```
+
+## Example 9.1
+
+
+The mean of the bottom two plots (Plots 3 and 4) is the same and higher than the mean of the top two plots (Plots 1 and 2). The variances of the two plots on the left (Plots 1 and 3) is higher than the variances of the two plots on the right (Plot 2 and 4). 
+
+## Example 9.2
+
+Let an outcome of the experiment be denoted by strings of the form $(B,B,b,B,b)$ where the $i$-th entry is $B$ if the $i$-th person in the sample has brown eyes $b$ if they have blue eyes. There are $2^5=32$ possible outcomes. 
+
+The possible values of $X$ are $0,1,2,3,4,5$. There are ${5 \choose x}$ possible ways that $X=x$, and each of these has probability $.79^x(1-.79)^{5-x}$. Hence, the probability mass function is
+$$
+P(X=x)={5 \choose x}.79^x(1-.79)^{5-x},\quad x=0,1,2,3,4,5.
+$$
+The computed values are
+```{r}
+
+prob <- .79
+
+ex9_1 <- tibble(x=0:5,
+               p=dbinom(x,5,prob),
+               xp=x*p,
+               x2p=x^2*p,
+               devx=x-sum(xp),
+               devx2p=devx^2*p,
+               y=2*x + 10,
+               yp=y*p,
+               devy=y-sum(yp),
+               devy2p=devy^2*p,
+               z=y^2,
+               zp = z*p,
+               devz=z-sum(zp),
+               devz2p = devz^2 * p)
+
+ex9_1 |> 
+  select(x,p) |> 
+  kable(col.names = c("x","$P(X=x)$"), digits = 4)
+```
+a) The expected value of $X$ is
+$$
+\begin{aligned}
+E(X)
+=&0(.0004) + 1(.0077) + 2(.0578) + 3(.2174) + 4(.4090) + 5(.3077)\\
+=&3.95.
+\end{aligned}
+$$
+b) The deviations are 
+```{r}
+ex9_1 |> 
+  select(x, p, devx) |> 
+  kable(col.names = c("x","$P(X=x)$","$x-\\mu_x$"), digits = 4)
+```
+The variance is
+$$
+\begin{aligned}
+\sigma^2_X
+=&(-3.95)^2(.0004) + (-2.95)^2(.0077) + (-1.95)^2(.0578) + \\
+&(-.95)^2(.2174) + (.05)^2(.4090) + (1.05)^2(.3077)\\
+=&.8295.
+\end{aligned}
+$$
+
+c) The standard deviation is
+$$
+\sigma_X=.9108.
+$$
+d) The expected value represents the average number of people with brown eyes in many, many samples of 5 people. If we were to repeatedly sample 5 people at random and count the number with brown eyes each time, then the average would be very close to 3.95 and get closer and closer the more times the experiment is repeated. 
+
+## Example 9.3
+
+a) Note that the number of brown eyes in the sample is $2X$, but there are always 10 hands. Hence, $Y=2X+10$. This is a linear function. Hence
+$$
+\begin{aligned}
+E(Y)
+=& E(2X + 10)\\
+=& 2E(X)+10\\
+=& 17.9.
+\end{aligned}
+$$
+
+b) Again, since $Y$ is a linear function of $X$,
+$$
+\begin{aligned}
+\sigma^2_Y
+&=V(2X + 10)\\
+&=2^2\sigma^2_X\\
+&=4(.8295)\\
+&=3.3180.
+\end{aligned}
+$$
+
+
+c) The standard deviation is
+$$
+\sigma_Y=\sqrt{3.3180}=1.8215.
+$$
+Alternatively, we can say that
+$$
+\sigma_Y=2\sigma_X=1.8215.
+$$
+
+d) The expected value represents the average value of the number of brown eyes plus the number of hands in many, many samples of 5 people. If we were to repeatedly sample 5 people at random and count the number of brown eyes and the number of hands each time and add them together, then the average of this value would be very close to 17.90 and get closer and closer the more times the experiment is repeated. 
+
+## Exercise 9.1
+
+a) First, we need to compute the PMF of $X$. The possible values are 0, 1, 2, 3, 4, or 5. As a function, the probability that the professor must stop at $x$ lights is
+$$
+\begin{aligned}
+P(X=x)
+=&{5 \choose x}.75^x(1-.75)^{5-x}\\
+=&{5 \choose x}.75^x.25^{5-x}.
+\end{aligned}
+$$
+The possible values are
+```{r}
+mytab <- tibble(x=0:5,
+                p=round(dbinom(x, 5, .75),4))
+
+mytab |> 
+  kable(col.names = c("x",TeX("P(X=x)")))
+```
+  
+The expected value of $X$ is
+$$
+\begin{aligned}
+E(X)= & 0(.0010) + 1(.0146) + 2(.0879) + 3(.2637) + 4(.3955) + 5(.2373)\\
+=& 3.75.
+\end{aligned}
+$$
+We can now compute the deviations for each value of $x$:
+```{r}
+mytab <- mytab |> 
+  mutate(dev = x - 3.75)
+
+mytab |> 
+  select(x,dev,p) |> 
+  kable(col.names = c("x",TeX("x-E(X)"),TeX("P(X=x)")))
+```
+The variance value of $X$ is
+$$
+\begin{aligned}
+\sigma^2_X
+=&(-3.75^2)(.0010) + (-2.75^2)(.0146) + (-1.75^2)(.0879) + \\
+& (-.75^2)(.2637) + (.25^2)(.3955) + (1.25^2)(.2373)\\
+=&.9375.
+\end{aligned}
+$$
+The standard deviation of $X$ is
+$$
+\sigma_X=\sqrt{.9375}=.9682.
+$$
+
+b) Note that the expected value is not a possible value of the random variable. We do not expect that the professor will stop at 3.75 lights in the usual sense of the word. Instead, the expected value represents the long term average. If the professor was to drive the same route many, many times then the average number of lights he stops at would be very close to 3.75 and get closer and closer the more times he repeats the experiment.
+
+c) Note that $Y=3X + 15$. Applying the rule for the expectation of a linear function of a random variable
+$$
+\begin{aligned}
+E(Y)
+&=E(3X + 15)\\
+&=3E(X) + 15\\
+&=3(3.75) + 15\\
+&=26.25.
+\end{aligned}
+$$
+The average length of time the professor drives over many, many days will be 26.25 minutes. 
+To compute the variance, we could compute the deviations for $Y$ and repeat the calculation above. However, we can again use the fact that $Y$ is a linear function of $X$:
+$$
+\begin{aligned}
+\sigma^2_Y
+=& 9 \sigma^2_X\\
+=& 9(.9375) 
+=&8.4375.
+\end{aligned}
+$$
+The standard deviation is
+$$
+\sigma_Y=\sqrt{8.4375}=2.9047.
+$$
+Alternatively,
+$$
+\sigma_Y=2\sigma_X=2.9047.
+$$

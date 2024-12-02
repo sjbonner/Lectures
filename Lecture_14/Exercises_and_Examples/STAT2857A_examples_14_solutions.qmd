@@ -1,0 +1,236 @@
+---
+title: "STAT 2857A -- Lecture 14 Examples and Exercises"
+subtitle: "Solutions -- Revised 31/10/24"
+format: 
+  pdf: 
+   include-in-header: 
+    - text: |
+        \usepackage{mathtools}
+knitr: 
+  opts_chunk:
+    fig.align: center
+    echo: false
+    warning: false
+    message: false
+    digits: 2
+---
+
+```{r}
+## Load packages
+library(tidyverse)
+library(knitr)
+library(latex2exp)
+```
+
+## Example 14.1
+
+a) To show that $f(x)$ is a proper density function we need to show that:
+
+  i. $f(x) \geq 0$ for all $x \in \Re$
+  ii. $\int_{\infty}^\infty f(u)~du=1$
+
+  The first criterion requires that $c \geq 0$. Then we need
+  $$
+  \begin{aligned}
+    \int_{\infty}^\infty f(u)~du &= 1\\
+    \int_{-\infty}^0 0~du + \int_0^1 cu^2~du + \int_1^\infty 0~du & = 1\\
+    \left[\frac{cu^2}{2}\right]_0^1& =1\\
+      c&=2
+    \end{aligned}
+  $$
+  Hence, the pdf is proper if $c=2$. This give us
+  $$
+  f(x)=\left\{
+    \begin{array}{ll}
+      0 \leq 0\\
+      2x & 0 < x < 1\\
+      0 & 1 \leq x
+    \end{array}
+  \right.
+  $$
+  
+b) By definition, the cdf is
+  $$
+  F(x)=\int_{-\infty}^x f(u)~du=
+    \left\{
+        \begin{array}{ll}
+          0 & x \leq 0\\
+          x^2 & 0 < x < 1\\
+          1 & 1 \leq x
+        \end{array}
+      \right.
+  $$
+  
+c) 
+
+  i) By definition:
+  $$
+      \begin{aligned}
+        P(X \leq .5) 
+        &=F(.5)\\
+        &=.5^2\\
+        &=.25
+      \end{aligned}
+  $$
+
+  ii) For any continuous random variable $P(X=x)=0$ for any $x \in \Re$. Hence, $P(X=.5)=0$. 
+
+  iii) Consider that:
+    $$
+    \begin{aligned}
+        P(X < .5)
+        &=P(X \leq .5) - P(X=.5)\\
+        &=F(.5) - 0\\
+        &=.5^2\\
+        &=.25
+    \end{aligned}
+    $$
+   Note that $P(X < .5)=P(X \leq .5)$. In general, if $X$ is a continuous random variable then $P(X<x)=P(X\leq x)=F(x)$. 
+    
+  
+  iv) 
+  $$
+      \begin{aligned}
+        P(.25 \leq X \leq .75)
+        &=P(X \leq .75) - P(X < .25)\\
+        &=P(X \leq .75) - P(X \leq .25)\\
+        &=.75^2-.25^2\\
+        &=.50
+      \end{aligned}
+  $$
+
+  v)
+  $$
+      \begin{aligned}
+        P((X <.25) \cup (X >.75)
+        &=1-P(.25 \leq X \leq .75)\\
+        &=1-[F(.75)-F(.25)]\\
+        &=1-F(.75) + F(.25)\\
+        &=1-.75^2+.25^2\\
+        &=1-.5625+.0625
+      \end{aligned}
+  $$
+  
+d) The random variable $X$ is continuous, according to Devore and Berk, if:
+    
+   i) the possible values (support) of $X$ is a union of (possibly one) disjoint interval in $\Re$, and
+   ii) $P(X=x)=0$ for any $x \in \Re$. 
+
+  The first criterion is  satisfied because the support of $X$ is a single interval, $(0,1)$.
+
+  To show that the second criterion is true consider that
+    $$
+    \begin{aligned}
+      P(X=x)
+      &=P(X \leq x) - P(X < x)\\
+      &=P(X \leq x) - \lim_{x^- \nearrow} P(X \leq x^{-})\\
+      &=F(x) - \lim_{x^- \nearrow x} F(x^-)\\
+      &=x^2 - \lim_{x^- \nearrow x} (x^-)^2\\
+      &=0.
+    \end{aligned}
+    $$
+  What the second criterion really implies is that $F(x)$ is continuous. Hence a continuous random variable!
+  
+## Exercise 14.2
+
+We know from Example 14.1. that the cdf is
+$$
+  F(x)=\int_{-\infty}^x f(u)~du=
+    \left\{
+        \begin{array}{ll}
+          0 & x \leq 0\\
+          x^2 & 0 < x < 1\\
+          1 & 1 \leq x
+        \end{array}
+      \right.
+$$
+Inverting the cdf we have that
+$$
+\eta_p=\sqrt{p}
+$$
+for any $0 \leq p \leq 1$ where we are considering the positive square root. 
+
+a) The median is
+$$
+\eta_{.5}=\sqrt{.5}=.7071.
+$$
+
+b) The 5th and 95th percentiles are
+$$
+\begin{aligned}
+\eta_{.05}&=\sqrt{.05}=.2236\\
+\eta_{.95}&=\sqrt{.95}=.9747.
+\end{aligned}
+$$
+
+c) Since $f(x)$ is monotonically increasing where it is positive, $(0,1)$, the shortest interval will occur when $x_2=1$. Then $x_1$ must satisfy
+$$
+P(x_1 < X <1)=.90
+$$
+which implies that
+$$
+P(X < x_1)=.10
+$$
+or 
+$$
+x_1=\eta_{.10}=\sqrt{.10}=.3162.
+$$
+
+## Exercise 14.1
+
+a)
+
+```{r}
+mydat1 <- tibble(x = 9*(0:100)/100) |> 
+  mutate(f = 1/((x + 1) * log(10)),
+         F = log10(x + 1)) |> 
+  arrange(x)
+
+mydat <- tibble(x = c(-1,0), f = c(0,0), F = c(0,0)) |> 
+  bind_rows(mydat1) |> 
+  bind_rows(tibble(x = c(9,10), f =c(0,0), F= c(1,1)))
+
+mydat |> 
+  ggplot(aes(x = x, y = F)) +
+  geom_line() +
+  xlab("x") + 
+  ylab("F(x)")
+```
+
+b) The pdf is given by
+$$
+\begin{aligned}
+f(x)
+&=\frac{d}{dx} F(x).\\
+\end{aligned}
+$$
+Note that $F(x)$ is flat over the regions $x<0$ and $x>9$ so
+$$
+f(x) = \frac{d}{dx} F(x)=0.
+$$
+For $0 \leq x \leq 9$
+$$
+\begin{aligned}
+f(x)
+&=\frac{d}{dx} \log_10(1 + x)\\
+&=\frac{1}{(x + 1)\ln(10)}. 
+\end{aligned}
+$$
+c)
+
+```{r}
+mydat |> 
+  ggplot(aes(x = x, y = f)) +
+  geom_line() +
+  xlab("x") + 
+  ylab("f(x)")
+```
+
+d) 
+
+    i) $P(X \leq \sqrt{10}\textcolor{red}{-1}) = F(\sqrt{10}\textcolor{red}{-1}) = \log_{10}(\sqrt{10})=.50$.
+    ii) Since the cdf is continuous, $P(X < \sqrt{10}\textcolor{red}{-1})=P(X \leq \sqrt{10}\textcolor{red}{-1})=.50$. 
+    iii) Since the cdf is continuous, $P(X=\sqrt{10}\textcolor{red}{-1})=0$.
+    iv) $P(X > \sqrt{10}\textcolor{red}{-1})=1-P(X \leq \sqrt{10}\textcolor{red}{-1})=.5$
+  v)$P(X \geq \sqrt{10}\textcolor{red}{-1})=1-P(X < \sqrt{10}\textcolor{red}{-1})=.5$
+  

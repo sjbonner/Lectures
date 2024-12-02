@@ -1,0 +1,215 @@
+---
+title: "STAT 2857A -- Lecture 16 Examples and Exercises"
+subtitle: "Solutions -- Revised 7/11/24"
+format: 
+  pdf: 
+   include-in-header: 
+    - text: |
+        \usepackage{mathtools}
+knitr: 
+  opts_chunk:
+    fig.align: center
+    echo: false
+    warning: false
+    message: false
+    digits: 2
+---
+
+```{r}
+## Load packages
+library(tidyverse)
+library(knitr)
+library(latex2exp)
+```
+
+## Review
+
+a) FALSE
+
+b) FALSE
+
+c) TRUE
+
+d) This is a trick question. All of these are equal.
+
+## Example 16.1 
+
+a) 
+$$
+f(x)=\frac{1}{3\sqrt{2\pi}} \exp\left(-\frac{(x-64)^2}{18}\right)
+$$
+for all $x \in \Re$.
+
+b) Note that 5~ft is equivalent to 60 inches and 6~ft to 72 inches. Plugging these values into the calculator on stattrek we find
+$$
+\begin{aligned}
+      P(X < 60)=.09121
+\end{aligned}
+$$
+and 
+$$
+P(X > 72) = .00383.
+$$
+Finally
+$$
+P(60 < X < 72)=.99612-.09121=.9049.
+$$
+
+c) Let $\eta_p$ denote the $(100p)-th$ percentile of the distribution, as we did before. Then 
+$$
+P(X \leq \eta_p)=p
+$$
+and
+$$
+P(X \leq \eta_{.95+p})=.95 + p
+$$
+for any $0 < p < .05$. Hence
+$$
+P(\eta_p < X < \eta_{.95+p})=(.95+p)-p=.95.
+$$
+The shortest interval will occur when the interval is symmetric about the mean since it will then contain the points with highest density. This occurs when $p=.025$. In that cas
+$$
+l=\eta_{.025}=58.120 \mbox{ and } u=\eta_{.0975}=69.880.
+$$
+
+d) 
+$$
+\begin{aligned}
+      P(X \leq 60)
+      &=P\left(\frac{X-64}{3} \leq \frac{60-64}{3}\right)\\
+      &=P\left(Z \leq \frac{60-64}{3}\right)\\
+      &=P(Z \leq -4/3)\\
+      &=.09121.
+\end{aligned}
+$$
+
+$$
+\begin{aligned}
+      P(X \geq 72)\\
+      &=1-P(X \leq 72)\\
+      &=1-P(\left(\frac{X-64}{3} \leq \frac{72-64}{3}\right)\\
+      &=1-P\left(Z \leq \frac{72-64}{3}\right)\\
+      &=1-P(Z \leq 8/3)\\
+      &=1-.99617\\
+      &=.00383
+\end{aligned}
+$$
+
+e) Let $0<\alpha<.05$. Then 
+$$
+P(Z > z_\alpha)=\alpha
+$$
+and
+$$
+P(Z > z_{.95+\alpha})=P(Z>z_{.95+\alpha})=.95+\alpha.
+$$
+Then
+$$
+P(z_{.95+\alpha} < Z < z_\alpha)=(.95+\alpha)-\alpha=.95.
+$$
+Reversing the standardization, this means that
+$$
+P(\mu + (z_{.95+\alpha})\sigma < X < \mu + z_\alpha \sigma)=.95.
+$$
+Once again, the shortest interval will occur when the points are symmetric about the mean which happens when $\alpha=.025$. Applying the empirical rule\footnote{The exact values are -1.960 and 1.960.},
+$$
+z_{.975} \approx -2 \mbox{ and } z_{.025}\approx 2.
+$$
+Then
+$$
+l \approx 64 + 3(-2)=58 \mbox{ and } u \approx 64 + 3(2)=70.
+$$
+
+## Example 16.2
+
+a) We know from the previous lecture that 
+$$
+X \sim \mbox{Binomial}(200,.486).
+$$ 
+Then
+$$
+\begin{aligned}
+    P(95 \leq X \leq 105)
+    &=\sum_{x=95}^{105} \binom{200}{y} .486^y.514^{200-y}\\
+    &=`r dbinom(95,200,18/37)` +
+      `r dbinom(96,200,18/37)` +
+      \cdots +
+      `r dbinom(104,200,18/37)` +
+      `r dbinom(105,200,18/37)` \\
+    &=`r sum(dbinom(95:105,200,18/37))`
+\end{aligned}
+$$
+  
+b) Alternatively, if we let $Z$ denote a standard normal random variable then 
+$$
+  \begin{aligned}
+    P(95 \leq X \leq 105)
+    &=P(X \leq 105) - P(X \leq 94)\\
+    &\approx P\left(Z \leq \frac{105.5 - 200(.486)}{\sqrt{200(.486)(.514)}}\right) -
+      P\left(Z \leq \frac{94.5 - 200(.486)}{\sqrt{200(.486)(.514)}}\right)\\
+    &=P(Z \leq `r (u <- (105.5 - 200*(.486))/(sqrt(200*(.486)*(.514))))`) -
+      P(Z \leq `r (l <- (94.5 - 200*(.486))/(sqrt(200*(.486)*(.514))))`)\\
+    &=`r pnorm(u)` - `r pnorm(l)`\\
+    &=`r pnorm(u)-pnorm(l)`
+  \end{aligned}
+$$
+Although the probability is not exact it is very close.
+
+## Exercise 16.1
+
+a) 
+```{r}
+## Parameters
+mu <- 28
+sigma <- 4
+
+## Create data frame
+mydf <- tibble(x = mu + sigma * c(seq(-3,3,length=100)),
+               f = dnorm(x, mu, sigma))
+
+## Plot density
+plot1 <- mydf %>%
+  ggplot(aes(x = x, y = f)) +
+  geom_line() +
+  ylab("f(x)") +
+  geom_vline(xintercept = mu, lty = 2)
+
+print(plot1)
+```
+
+b) 
+```{r}
+## Plot density with probability area
+xval <- 36
+area1 <- filter(mydf, x >= xval) %>%
+  bind_rows(tibble(x = c(max(mydf$x), xval, xval),
+                   f = c(0,0, dnorm(xval,mu,sigma))))
+
+plot1 +
+  geom_polygon(data = area1, aes(x= x, y =f), alpha = .5)
+```
+
+c) Using the calculator
+$$
+P(X > 34)=.06681.
+$$
+Standardizing
+$$
+\begin{aligned}
+P(X > 34)
+&=1-P(X \leq 34)\\
+&=1-P\left(Z \leq \frac{34 - 28}{4}\right)\\
+&=1-P(Z \leq 1.5)\\
+&=1-.9332\\
+&=\textcolor{red}{.0668}.
+\end{aligned}
+$$
+
+d) Here we can apply the empirical rule. Note that
+$$
+36=28 + 8=\mu + 2\sigma.
+$$
+Hence
+$$
+P(X > 36)=P(X >  \mu + 2\sigma)=(1-.95)/2=.025.
+$$

@@ -1,0 +1,123 @@
+---
+title: "STAT 2857A -- Lecture 12 Examples and Exercises"
+subtitle: "Solutions"
+format: 
+  pdf: 
+   include-in-header: 
+    - text: |
+        \usepackage{mathtools}
+knitr: 
+  opts_chunk:
+    fig.align: center
+    echo: false
+    warning: false
+    message: false
+    digits: 2
+---
+
+```{r}
+## Load packages
+library(tidyverse)
+library(knitr)
+library(latex2exp)
+```
+
+## Example 12.1
+
+a) The distribution of $X$ is Poisson with mean $495t$:
+  $$
+    X \sim \mbox{Poisson}(495t).
+  $$
+  
+b) The pmf of $X$ is
+  $$
+    p(x)=P(X=x)=\frac{e^{495t}(495t)^x}{x!},\quad x=0,1,2,3,\ldots
+  $$
+  
+c) The mean and variance of $X$ are
+  $$
+  \begin{aligned}
+    E(X)&=495t \\
+    V(X)&=495t
+  \end{aligned}
+  $$
+  
+d) As $t$ increases both the mean and the variance increase. 
+
+## Exercise 12.2
+
+a) Assuming that students are independent (e.g., no close relatives) the distribution is binomial:
+$$
+X \sim \mbox{Binomial}(100,.0451).
+$$
+
+b) The mean and variance of $X$ are
+$$
+\begin{aligned}
+\mu_X&=100(.04512)=4.512\\
+\sigma^2_X&=100(.4512)(1-.04512)=4.3084.
+\end{aligned}
+$$
+
+c) Using stattrek
+$$
+P(X>5)=.29714.
+$$
+d) The approximation is
+$$
+X \overset{\cdot}{\sim} \mbox{Poisson}(4.512).
+$$
+The approximate mean and variance are
+$$
+\begin{aligned}
+\mu_X&=4.512\\
+\sigma^2_X&=4.512.
+\end{aligned}
+$$
+The approximate probability that more than 5 students are colour blind is
+$$
+P(X>5)=.29991.
+$$
+
+e) The sample size, $n=100$, and mean, $\mu_X=4.512$, satisfy the conditions in the textbook for using the Poisson approximation to the binomial. More importantly, the mean and variance, and the probability of interest from the approximation are all close to the exact values. The approximation seems appropriate in this case. 
+
+## Exercise 12.1
+
+a) Assuming that atoms decay independently of one another, $X$ follows a binomial distribution. Specifically
+$$
+X \sim \mbox{Binomial}(2.35\times 10 ^{21},9.85\times 10^{-10}).
+$$
+
+b) The mean and variance are
+$$
+\begin{aligned}
+\mu_X&=2.35\times 10 ^{21} \cdot 9.85\times 10^{-10}=2.3148\times10^{12}\\
+\sigma^2_X&=.35\times 10 ^{21} \cdot 9.85\times 10^{-10}(1-9.85\times 10^{-10})=2.3148\times10^{12}.
+\end{aligned}
+$$
+Note that the mean and variance are identical to 5 significant digits, as we would expect for a Poisson random variable.
+
+c) Uh oh! You can't put that into stattrek. The answer is $0.5000002$.
+
+d) If we approximate the distribution of $X$ by a Poisson then 
+$$
+X \overset{\cdot}{\sim} \mbox{Poisson}(2.3148\times10^{12}).
+$$
+The approximate mean and variance of $X$ are
+$$
+\begin{aligned}
+\mu_X&= 2.3148\times10^{12}\\
+\sigma^2_X&=2.3148\times10^{12}.
+\end{aligned}
+$$
+Unfortunately, we still can't compute the value in stattrek. However, recall that the Poisson distribution becomes more symmetric as $\lambda$ increases. This implies that $P(X > \mu_X)\approx .50$, which is the answer from the binomial. Alternatively, we can see what happens when we increase $\lambda$ on stattrek:
+$$
+\begin{aligned}
+\mbox{if} \lambda &= 100 \mbox{ then } P(X > \mu_X)=.47340\\
+\mbox{if} \lambda &= 1000 \mbox{ then } P(X > \mu_X)=.49159\\
+\mbox{if} \lambda &= 10000 \mbox{ then } P(X > \mu_X)=.49734\\
+\end{aligned}
+$$
+Again, as $\lambda=\mu_X$ increases, $P(X > \mu_X)$ gets closer and closer to .50.
+
+d) According to the book, the Poisson approximation is appropriate if $n>50$ and $np <5$. The first is true but the second is not. However, it's clear from the previous part that the approximation is very, very close to the true distribution. I would say that the approximation is appropriate despite the fact that the conditions from the book are not satisfied. This is the problem with rules of thumb.  

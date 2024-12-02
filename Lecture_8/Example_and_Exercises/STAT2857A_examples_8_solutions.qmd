@@ -1,0 +1,172 @@
+---
+title: "STAT 2857A -- Lecture 8 Examples and Exercises"
+subtitle: "Solutions -- Revised 02/10/24"
+format: 
+  pdf: 
+   include-in-header: 
+    - text: |
+        \usepackage{mathtools}
+knitr: 
+  opts_chunk:
+    fig.align: center
+    echo: false
+    warning: false
+    message: false
+    digits: 2
+---
+
+```{r}
+# Load packages
+library(tidyverse)
+library(patchwork)
+library(knitr)
+library(kableExtra)
+library(latex2exp)
+```
+
+## Example 8.1
+
+a) There are ${5 \choose x}$ outcomes for which $X=x$. E.g., there is one sample in which no people have brown eyes, 5 samples in which one person has brown eyes, etc. The probability of any outcome in which $x$ people have brown eyes is $.79^x(.21)^{(5-x)}$. Hence the pmf is:
+  $$
+    p(x)={5 \choose x}.79^x(.21)^{(5-x)}
+  $$
+  for $x=0,1,2,3,4,5$.
+    
+  Strictly speaking, we should denote that $p(x)=0$ for all other $x \in \mathbb R$. However, it is common not to do this. We know it must be true because $p(0)+p(1)+\cdots+p(5)=0$.
+
+  We can list these values out in a table:
+  
+```{r}
+## Compute pmf
+  prob <- .79
+  
+  mydf <- tibble(x=-1:5,
+                 interval = c("$(-\\infty,0)$",paste0("$[",0:5,",",c(1:5,"\\infty"),")$")),
+                 ystart=rep(0,7),
+                 p=dbinom(x,5,prob),
+                 F=pbinom(x,5,prob))
+  
+  mydf |> 
+    filter(x >= 0) |> 
+    select(x,p) |> 
+    rename(`p(x)`=p) |> 
+    kable(digits = 5)
+  
+  #tab1 <- xtable(mydf[-1,c("x","p")], digits = 5)
+  #
+  #names(tab1) <- c("x","$p(x)$")
+  #
+  #kable(tab1)
+```
+
+b) Here is a plot of the pmf:
+
+```{r}
+## Draw pmf
+mydf |> 
+  filter(x >= 0) |> 
+  ggplot(aes(x=x,y=p)) +
+    geom_point() +
+    geom_segment(aes(x=x,xend=x,y=ystart,yend=p)) +
+    xlab(TeX("Number with Brown Eyes")) + ylab("Probability Mass Function")
+
+```
+
+c) The cdf is defined as $F(x)=P(X \leq x)$ for any $x \in \mathbb R$. The values are:
+$$
+F(x)=\left\{
+\begin{array}{ll}
+0 & x < 0\\
+p(0)=.00041 & 0 \leq x < 1\\
+p(0) + p(1) = .00809 & 1 \leq x < 2\\
+p(0) + p(1) + p(2) = .065989 & 2 \leq x < 3\\
+p(0) + p(1) + p(2) + p(3) = .28332 & 3 \leq x <4\\
+p(0) + p(1) + p(2) + p(3) + p(4)= .69229 &4 \leq x <5\\
+p(0) + p(1) + p(2) + p(3) + p(4) + p(5)= 1 & 5 \leq x\\
+\end{array}
+\right.
+$$
+
+d) Here is the plot of the cdf:
+```{r}
+## Plot cdf
+mydf <- mutate(mydf,xend=x+1)
+
+qplot(data=mydf,x=x,xend=xend,y=F,yend=F,geom="segment") +
+    geom_point() +
+    xlab("Number with Brown Eyes") +
+    ylab("Cumulative Distribution Function")
+```
+
+\newpage
+
+## Example 8.2
+
+The probability mass function will tend to favour small values of $X$ when $p$ is close to 0 and big values of $X$ when $p$ is close to 1. When $p$ is close to .50, the pmf will favour either 2 or 3 of the people having brown eyes. Here are some examples of the pmf for different values of $p$:
+```{r}
+## Create data frame
+mydf1 <- cross_df(list(x=0:5,
+                       ystart=0,
+                       p=c(.1,.4,.6,.9))) %>%
+    mutate(y=dbinom(x,5,p))
+
+
+## Draw pmf
+mydf1 |> 
+  ggplot(aes(x=x,y=y)) +
+  geom_point() +
+  geom_segment(aes(x=x,xend=x,y=ystart,yend=y)) +
+  xlab("Number with Brown Eyes") + 
+  ylab("Probability Mass Function") +
+  facet_wrap(vars(p))
+
+```
+
+\newpage
+
+## Exercise 8.1
+
+```{r}
+mytib <- crossing(x1 = 0:2, x2 = 0:2) |> 
+  mutate(x = x1 + x2, 
+         p1 = choose(2,x1)*.1^x1*.9^(2-x1), 
+         p2 = choose(2, x2) * .4^x2 * .6^(2-x2),
+         p = p1 * p2) |> 
+  group_by(x) |> 
+  summarize(p=sum(p),.groups = "drop") |> 
+  mutate(F=cumsum(p))
+```
+
+a) 
+
+```{r}
+mytib |> 
+  bind_rows(tibble(x = -1, F = 0)) |> 
+  arrange(x) |> 
+  mutate(xend = x + 1) |> 
+  ggplot(aes(x=x,xend=xend,y=F,yend=F)) + 
+  geom_segment() +
+  geom_point(data = mytib, aes(x = x, y = F, xend = x, yend = F)) +
+  xlab("z") +
+  ylab("F(z)")
+```
+
+b) The possible values of $Z$ are found where the steps occur. These are 0, 1, 2, 3, 4. \
+
+c) The probability mass function is
+```{r}
+mytib |> 
+  select(x,p) |>
+  kable(col.names = c("x","P(X=x)"))
+```
+
+d) 
+
+```{r}
+mytib |>
+  ggplot(aes(x=x,xend=x,y=F,yend=0)) + 
+  geom_segment() +
+  geom_point() +
+  xlab("z") +
+  ylab("f(z)")
+```

@@ -1,0 +1,47 @@
+---
+title: "STAT 2857A -- Lecture 19 Examples and Exercises"
+format: 
+  pdf: default
+  docx: default
+knitr: 
+  opts_chunk:
+    fig.align: center
+    echo: false
+    warning: false
+    message: false
+    digits: 2
+prefer-html: true
+---
+
+```{r}
+# Load packages
+library(tidyverse)
+library(patchwork)
+library(knitr)
+library(kableExtra)
+library(broom)
+```
+
+## Example 19.1
+
+Integrate $f(x,y)=xy$ over the domain $0<x<1$, $0<y<1$.
+
+## Example 19.2
+
+Integrate $f(x,y)=xy$ over the domain $x<y<1$, $0<x<1$.
+
+## Example 19.3
+
+Integrate $f(x,y)=xy$ over the domain $0 < x < 1$, $0 < x + y < 1$.
+
+## Example 19.4
+
+Integrate $f(x,y)=(1-x^2)(1-y^2)$ over the domain $0<x<1$, $0<y<1$.
+
+## Exercise 19.1
+
+a) Integrate $f(x,y)=e^{x+y}-1.
+$ over the region $0 < x < 1$, $0<y<1$.
+b) Integrate $f(x,y)=e^{x+y}-1.
+$ over the region$y < x < 1$, $0 < y < 1$
+c) Integrate $f(x,y)=xy$ over the region $x^2 + y^2 < 1$.

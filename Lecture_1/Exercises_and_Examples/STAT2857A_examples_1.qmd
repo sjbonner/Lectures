@@ -1,0 +1,64 @@
+---
+title: "STAT 2857A -- Lecture 1 Examples and Exercises"
+format: 
+  pdf: default
+  docx: default
+knitr: 
+  opts_chunk:
+    fig.align: center
+    echo: false
+    warning: false
+    message: false
+    digits: 2
+prefer-html: true
+---
+
+```{r}
+# Load packages
+library(tidyverse)
+library(patchwork)
+library(knitr)
+library(kableExtra)
+library(broom)
+```
+
+## Example 1.1: Happy Birthmonth!
+Consider the month of birth for three students selected randomly from the class (call them Alexandria, Braden, and Chen). 
+    
+  a) Describe the outcomes.
+  b) How many outcomes are in the sample space?
+  c) Identify one simple event?
+  d) Identify one compound event?
+
+## Example 1.1 part 2
+
+Let $A_i$ denote the event that Alexandria is born in month $i$.
+Let $B_i$ denote the event that Braden is born in month $i$.
+Let $C_i$ denote the event that Chen is born in month $i$.
+
+Describe each of the following events in words?
+
+a) $E_1=A_1 \bigcap B_1 \bigcap C_1$
+b) $E_2=\bigcup_{i=1}^{12} (A_i \bigcap B_i \bigcap C_i)$
+c) $E_3=\bigcup_{i=1}^{12} (A_i \bigcap B_i \bigcap C_i')$
+
+## Example 1.1 part 3
+
+a) Identify two events that are disjoint/mutually exclusive.
+b) Identify two events that are \textit{not} disjoint/mutually exclusive.
+
+## Example 1.1 part 4
+
+Consider the events $E_1$, $E_2$, and $E_3$ from part 2.
+
+a) What is the probability of each event?
+b) What do these probabilities mean?
+
+## Exercise 1.1
+
+An unfortunate student has tests in biology, chemistry, and statistics all in one day (a cruel experiment). Thankfully, each test is graded on a pass/fail basis. 
+  
+a) List all of the outcomes in the sample space.
+b) Write the sample space in set builder notation.
+c) Identify i) two events that are mutually exclusive and ii) two events that are not mutually exclusive.
+d) Let $E_1$ be the event the student passes one test and $E_2$ the event they pass two test. List the outcomes in and describe the event $(E_1 \cup E_2)'$.

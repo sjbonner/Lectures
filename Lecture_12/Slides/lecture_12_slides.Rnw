@@ -1,0 +1,282 @@
+\input{../../slide_template.tex}
+
+\newcommand{\lecturenum}{12}
+
+\title[SS2857]{Probability and Statistics I}
+\subtitle{\lecturenum. The Poisson Distribution}
+
+\date{}
+
+%% Add logo
+%% \titlegraphic{\includegraphics[height=2cm]{../uwo_logo_reversed}}
+
+%% Initialize R
+<<setup,echo=FALSE,include=FALSE,cache=FALSE>>=
+## Load packages
+library(knitr)
+library(tidyverse)
+library(xtable)
+
+## Set chunk options
+opts_chunk$set(echo=FALSE,results="asis",warning=FALSE,message=FALSE,fig.height=4,fig.width=6,fig.show="hide")
+
+options(scipen=500,digits=3)
+@
+
+\begin{document}
+
+{
+\setbeamertemplate{footline}{}
+\setbeamercolor{background canvas}{bg=western}
+
+\begin{frame}
+  \addtocounter{framenumber}{-1}
+
+  \maketitle
+\end{frame}
+}
+
+\begin{frame}
+  \frametitle{\invisible{Hello}}
+
+  \begin{center}
+    
+    \Large{\textbf{3.7 The Poisson Distribution}}
+  \end{center}
+  
+  
+  \begin{center}
+    \includegraphics[height=.5\textheight]{figure/umbrella}
+  \end{center}
+
+
+
+\end{frame}
+
+\section{The Poisson Distribution}
+
+\begin{frame}
+  \begin{block}{The Poisson Distribution}
+  We say that $X$ has a Poisson distribution with mean $\lambda$ if $X$ has pmf
+  $$
+  P(X=x)=p(x;\lambda)=\frac{e^{-\lambda} \lambda^x}{x!},\quad x=0,1,2,\ldots.
+  $$
+  
+  \medskip
+  
+  Mathematically
+      \[
+        X \sim \mbox{Poisson}(\lambda).
+      \]
+  \end{block}
+\end{frame}
+
+\begin{frame}
+  \begin{block}{PMF and CDF}
+    \begin{itemize}
+    \item PMF: $p(x;\lambda)=\frac{e^{-\lambda}\lambda^x}{x!},\quad x=0,1,2,\ldots$.
+    \item CDF: requires special functions
+    \end{itemize}
+  \end{block}
+
+  %\begin{block}{Moment Generating Function}
+  %  \[
+  %    M_X(t)=e^{\lambda(e^t-1)}
+  %  \]
+  %\end{block}
+
+  \begin{block}{Properties}
+    \begin{itemize}
+    \item Mean: $E(X)=\lambda$
+      
+    \item Variance: $V(X)=\lambda$
+      
+   % \item Skewness: $\lambda^{-1/2}$
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+  \begin{block}{The Poisson Distribution}
+    The Poisson distribution is most commonly used to model the number of times a specific event occurs within a fixed time period or the number of items in a fixed area.
+    
+    \medskip
+    
+    E.g.:
+    \begin{itemize}
+    \item The number of patients admitted to hospital in a day.
+    \item The number of goals a soccer player scores in a season.
+    \item The number of claims to an insurance company in a year.
+    \item the number of students in a class. 
+    \end{itemize}
+  \end{block}
+
+\end{frame}
+
+\begin{frame}
+  \begin{block}{Poisson Process}
+  \only<1-4>{
+    \begin{enumerate}
+    \item The probability of exactly one event in a short time interval of length $\Delta t$ tends toward $\alpha \Delta t$ as $\Delta t$ decreases.
+    \item The probability of exactly zero events in a short time interval of length $\Delta t$ tends toward $1-\alpha \Delta t$ as $\Delta t$ decreases.
+    \item The number of events in disjoint intervals are independent.
+    \end{enumerate}
+  }
+  
+  \only<2>{
+  \medskip
+  Points 1 and 2 imply:
+  \begin{itemize}
+  \item the rate of events is constant, $\alpha$ events per unit time on average.
+  \item events cannot occur simultaneously.
+  \end{itemize}
+  }
+
+    \only<3>{
+      Under these conditions, the number of events in an interval of length 1 has a Poisson distribution with parameter $\lambda=\alpha$.
+
+      \bigskip
+      Mathematically
+      \[
+        X \sim \mbox{Poisson}(\alpha).
+      \]
+    }
+    \only<4>{
+      Under these conditions, the number of events in an interval of length $t$ has a Poisson distribution with parameter $\alpha t$.
+
+      \bigskip
+      Mathematically
+      \[
+        X \sim \mbox{Poisson}(\alpha t).
+      \]
+    }
+
+  \end{block}
+\end{frame}
+
+\begin{frame}
+  \begin{block}{\example}
+    According to the book ``United States Water Law: An Introduction'' by John W.~Johnson, heavy rain falls at about 495 drops per second per metre square. Let $X$ be the number of rain drops that falls in one metre square in $t$ seconds.
+    \begin{enumerate}[a)]
+    \item What is the distribution of $X$?
+    \item What is the pmf of $X$?
+    \item What are the mean and variance of $X$?
+    \item How does the shape of the distribution vary with $t$?
+    \end{enumerate}
+  \end{block}
+\end{frame}
+
+<<rainfall>>=
+## Set parameter
+alpha <- 495
+times <- c(.001,.01,.1,1)
+
+mydf <- do.call("bind_rows",
+                lapply(times,function(t){
+                    crossing(time=t,
+                             alpha=alpha * t,
+                             x=0:qpois(.9999,alpha)) %>%
+                    mutate(zero=0,xend=x,p=dpois(x,alpha))
+                    }))
+
+for(t in times){
+
+    print(qplot(data=filter(mydf,time==t),x=x,y=p) +
+          geom_segment(aes(x=x,xend=x,y=zero,yend=p)) +
+          xlab("Number of Raindrops") +
+          ylab("Probabitlity Mass Function"))
+
+}
+
+@
+
+
+\begin{frame}
+  \begin{block}{\examplectd}
+<<rainfall2,results="asis",echo=FALSE>>=
+mydf1 <- tibble(t=times,
+                Mean=alpha*times) %>%
+    mutate(Variance=Mean) #,Skew=1/Mean^.5)
+
+print(xtable(mydf1,digits=3),include.rownames = FALSE)
+
+@
+  \end{block}
+\end{frame}
+
+\begin{frame}
+  \begin{block}{\examplectd}
+    \begin{center}
+      \begin{tabular}{cc}
+        $t=\Sexpr{times[1]}$
+        &$t=\Sexpr{times[2]}$
+        \\
+        \includegraphics[width=.4\textheight]{figure/rainfall-1}
+        & \includegraphics[width=.4\textheight]{figure/rainfall-2} \\
+        $t=\Sexpr{times[3]}$
+        &$t=\Sexpr{times[4]}$
+        \\
+        \includegraphics[width=.4\textheight]{figure/rainfall-3}
+        & \includegraphics[width=.4\textheight]{figure/rainfall-4} \\
+      \end{tabular}
+    \end{center}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+
+  \begin{block}{Poisson Approximation to the Binomial}
+  
+  Suppose that
+  $$
+  X \sim \mbox{Binomial}(n,p)
+  $$
+  such that $n$ is large and $\mu_X=np$ is small\footnote{Your book uses the rule of thumb $n>50$ and $np<5$}. 
+  
+  \medskip
+  Then we can approximate the distribution of $X$ with a Poisson distribution
+  $$
+  X \overset{\cdot}{\sim} \mbox{Poisson}(np).
+  $$
+  
+  \end{block}
+\end{frame}
+
+\begin{frame}
+
+  \begin{block}{\example}
+  In lecture 4, we showed that the probability that a randomly selected person is colour blind is about .04512. Let $X$ be the number of colour blind students in a class of 100.
+  
+  \begin{enumerate}[a)]
+  \item What is the distribution of $X$?
+  \item What are the mean and variance of $X$?
+  \item What is the probability that the class contains more than 5 students who are colour blind?
+  \item Approximate the distribution of $X$ by a Poisson and repeat the questions above. 
+  \item Do you think the Poisson approximation is appropriate?
+  \end{enumerate}
+  
+  \end{block}
+\end{frame}
+
+\begin{frame}
+  \begin{center}
+    \Large{\textbf{Questions?}}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \begin{block}{\exercise}
+  One gram of Uranium-235 contains $2.35 \times 10^{21}$ atoms. Each atom has probability $9.85 \times 10^{-10}$ of decaying in one year. Let $X$ be the number of atoms that decay in 1 year. You may assume that atoms decay independently of one another.
+  
+  \begin{enumerate}[a)]
+  \item What is the distribution of $X$?
+  \item What are the mean and variance of $X$?
+  \item What is the probability that the number of decays in one year is greater than the mean?
+  \item Approximate the distribution of $X$ by a Poisson and repeat the questions above. 
+  \item Do you think the Poisson approximation is appropriate?
+  \end{enumerate}
+  \end{block}
+\end{frame}
+
+\end{document}
+

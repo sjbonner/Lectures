@@ -1,0 +1,185 @@
+\input{../../slide_template.tex}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  filecolor=magenta,      
+  urlcolor=blue,
+}
+  
+\newcommand{\lecturenum}{23}
+
+\title[SS2857]{Probability and Statistics I}
+\subtitle{\lecturenum.~Statistics and their Distributions}
+
+\date{}
+
+%% Add logo
+%% \titlegraphic{\includegraphics[height=2cm]{../uwo_logo_reversed}}
+
+%% Initialize R
+
+
+\begin{document}
+
+{
+\setbeamertemplate{footline}{}
+\setbeamercolor{background canvas}{bg=western}
+
+\begin{frame}
+  \addtocounter{framenumber}{-1}
+
+  \maketitle
+\end{frame}
+}
+
+\begin{frame}
+  \frametitle{\invisible{Hello}}
+  
+  \begin{center}
+    \Large{\textbf{Chapter 5 Summary Exercise}}
+
+    \bigskip
+
+    % \begin{center}
+    %   \includegraphics[height=.5\textheight]{nestle-smarties-candies}
+    % \end{center}
+  \end{center}
+  
+\end{frame}
+
+
+
+
+
+\begin{frame}
+    \begin{center}
+       \includegraphics[height=.5\textheight]{Apple_gray_logo}
+    \end{center}
+\end{frame}
+
+\begin{frame}
+  \begin{block}{Daily Closing Price Nov 2019 -- Nov 2024}
+    \begin{center}
+       \includegraphics[height=.7\textheight]{figure/plot1-1}
+    \end{center}
+  \end{block}
+\end{frame}
+
+
+
+\begin{frame}
+  \begin{block}{Daily Change in Closing Price Nov 2019 -- Nov 2024}
+    \begin{center}
+       \includegraphics[height=.7\textheight]{figure/plot2-1}
+    \end{center}
+  \end{block}
+\end{frame}
+
+
+
+\begin{frame}
+  \begin{block}{Daily Change in Closing Price Nov 2019 -- Nov 2024}
+    \begin{center}
+       \includegraphics[height=.7\textheight]{figure/plot3-1}
+    \end{center}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+  \begin{block}{Daily Change in Closing Price Nov 2019 -- Nov 2024}
+    
+    Summary statistics:
+    \begin{itemize}
+    \item Mean: 0.1202
+    \item Variance: 5.2372
+    \item Std.~Deviation: 2.2885
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+
+  \begin{block}{\example}
+    Suppose that the change in the stock price per day is normal with constant mean and variance.  
+    \begin{enumerate}[a)]
+    \item What is the probability that the stock price increases on a randomly selected day?
+    \item What is the probability that the stock price decreases on a randomly selected day?
+    \item Suppose that you buy stock on 10 randomly selected days and sell them back one day later each time.
+     \begin{enumerate}[i)]
+        \item What is your expected gain/loss?
+        \item What is the probability that the stock price increases on at least half of the days?
+        \item What is the probability that you lose money on at least half of the days?
+      \end{enumerate}
+    \end{enumerate}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+
+  \begin{center}
+  {\Large Can you beat the system?}
+  
+  \pause
+  
+  \bigskip
+  
+  Suppose that you buy stock only on the day after a large increase. 
+  
+  Does this improve your chance of making a profit?
+  \end{center}
+  
+\end{frame}
+
+
+
+\begin{frame}
+  \begin{block}{Daily Change in Closing Price Nov 2019 -- Nov 2024}
+    \begin{center}
+       \includegraphics[height=.7\textheight]{figure/plot4-1}
+    \end{center}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+  \begin{block}{Daily Change in Closing Price Nov 2019 -- Nov 2024}
+    
+    Summary statistics:
+    \begin{itemize}
+    \item Mean: 0.1202
+    \item Variance: 5.2413
+    \item Std.~Deviation: 2.2894
+    \item Covariance: 0.0412
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+
+  \begin{block}{\example}
+     Suppose that the changes in the stock price for one day and the next are bivariate normal with constant mean, variance, and correlation.  
+ 
+    \begin{enumerate}[a)]
+    \item What is the distribution of the stock price on a on a randomly selected day \textit{given that the price increased by $d=5$ euros the day before}?
+    \item What is the probability that the stock price increases on a randomly selected day \textit{given that the price increased by $d=5$ euros the day before}?
+    \item What is the probability that the stock price decreases on a randomly selected day \textit{given that the price increased by $d=5$ euros the day before}?
+    \end{enumerate}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+
+  \begin{block}{\examplectd}
+     Suppose that the changes in the stock price for one day and the next are bivariate normal with constant mean, variance, and correlation.  
+ 
+    \begin{enumerate}[d)]
+    \item Suppose that you buy stock on 10 days selected at random from the days \textit{given that the price increased by $d=5$ euros the day before} and sell them back one day later each time.
+     \begin{enumerate}[i)]
+        \item What is your expected profit/loss?
+        \item What is the probability that you make a profit on at least half of the days?
+        \item What is the probability that you lose money on at least half of the days?
+      \end{enumerate}
+    \end{enumerate}
+  \end{block}
+\end{frame}
+\end{document}

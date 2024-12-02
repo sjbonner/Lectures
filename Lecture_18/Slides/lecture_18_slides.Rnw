@@ -1,0 +1,263 @@
+\input{../../slide_template.tex}
+
+\newcommand{\lecturenum}{18}
+
+\title[SS2857]{Probability and Statistics I}
+\subtitle{\lecturenum. Chapter 4 Summary Exercise}
+
+\date{}
+
+%% Add logo
+% \titlegraphic{\includegraphics[height=2cm]{../uwo_logo_reversed}}
+
+%% Initialize R
+
+<<setup,echo=FALSE,include=FALSE,cache=FALSE>>=
+## Load packages
+library(tidyverse)
+library(xtable)
+library(knitr)
+library(readxl)
+
+## Set chunk options
+opts_chunk$set(echo=FALSE,
+               results="asis",
+               warning=FALSE,
+               message=FALSE,
+               fig.height=4,
+               fig.width=6,
+               fig.show="hide")
+
+options(scipen=500,digits=3)
+
+## Load data
+#datafile <- file.path("../Data/lecture_18_test_data.xlsx") ## Test
+datafile  <- file.path("../Data/lecture_18_data.xlsx")
+mydata <- read_xlsx(datafile) |> 
+  filter(!is.na(Distance))
+
+## Simple statistics
+n <- nrow(mydata)
+@
+
+\begin{document}
+
+{
+\setbeamertemplate{footline}{}
+\setbeamercolor{background canvas}{bg=western}
+
+\begin{frame}
+  \addtocounter{framenumber}{-1}
+
+  \maketitle
+\end{frame}
+}
+
+\begin{frame}
+
+\begin{block}{How far do Western students live from campus?}
+
+Use Google Maps to compute the distance from your home to campus. Enter the result in the spreadsheet at:
+\begin{center}
+\url{https://uwoca-my.sharepoint.com/:x:/g/personal/sbonner6_uwo_ca/Ee9EAgVPP2pJkSgS7SPQCZoBhubeOhoSTgMd-2QrGf9KIg?e=o27rxM}
+\end{center}
+\end{block}
+\end{frame}
+
+
+<<histogram>>=
+hist1 <- mydata |> 
+  ggplot(aes(x = Distance, y = stat(count / sum(count)))) + 
+  geom_histogram(binwidth = 1)
+
+print(hist1)
+
+mu_hat <- mean(mydata$Distance)
+sigmasq_hat <- var(mydata$Distance)
+@
+
+\begin{frame}
+\begin{block}{How far do Western students live from campus?}
+\begin{center}
+\includegraphics[height=.7\textheight]{figure/histogram-1.pdf}
+\end{center}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\begin{block}{How far do Western students live from campus?}
+\begin{center}
+\includegraphics[height=.5\textheight]{figure/histogram-1.pdf}
+\end{center}
+
+$$
+n=\Sexpr{nrow(mydata)},\quad
+\hat \mu = \Sexpr{mu_hat},\quad
+\widehat{\sigma^2} = \Sexpr{sigmasq_hat} 
+$$
+\end{block}
+\end{frame}
+
+\begin{frame}
+
+
+\begin{block}{How far do Western students live from campus?}
+Use the data summaries on the previous slide to estimate the parameters assuming:
+\begin{itemize}
+\item the distribution is normal.
+\item the distribution is gamma.
+\end{itemize}
+\end{block}
+For each distribution find:
+\begin{enumerate}
+\item The value $d_1$ so that 97.5\% of students live less than $d_1$~km from campus.
+\item The value $d_2$ so that 97.5\% of students live greater than $d_2$~km from campus.
+\end{enumerate}
+
+\begin{center}
+Which distribution do you believe will fit the data better?
+\end{center}
+\end{frame}
+
+<<normal>>=
+normal <- tibble(x = seq(0,1.1* max(mydata$Distance), length = 100),
+                 y = dnorm(x, mu_hat, sqrt(sigmasq_hat)))
+
+hist1 +
+  geom_line(data = normal, aes(x = x, y = y), col = "red")
+                 
+@
+\begin{frame}
+
+\begin{block}{Normal Distribution}
+$$
+\hat \mu = \Sexpr{mu_hat}, \quad \widehat{\sigma^2} = \Sexpr{sigmasq_hat} 
+$$
+
+\begin{center}
+\includegraphics[height=.5\textheight]{figure/normal-1.pdf}
+\end{center}
+
+\end{block}
+\end{frame}
+
+<<gamma>>=
+beta_hat <- sigmasq_hat/mu_hat
+alpha_hat <- mu_hat/beta_hat
+
+gamma <- tibble(x = seq(0,1.1* max(mydata$Distance), length = 100),
+                 y = dgamma(x, alpha_hat, scale = beta_hat))
+
+hist1 +
+  geom_line(data = gamma, aes(x = x, y = y), col = "red")
+                 
+@
+
+\begin{frame}
+
+\begin{block}{Gamma Distribution}
+$$
+\hat{\alpha} = \Sexpr{alpha_hat}, \quad \hat{\beta} = \Sexpr{beta_hat} 
+$$
+
+\begin{center}
+\includegraphics[height=.5\textheight]{figure/gamma-1.pdf}
+\end{center}
+\end{block}
+\end{frame}
+
+\begin{frame}
+
+\begin{block}{Percentile Plots}
+
+Suppose that the data come from a distribution with percentiles $\eta_p$. Then we would expect the $k$-th largest data point to be close to $\eta_{(k-.5)/n}$\footnote{The extra $-.5$ keeps us below 100\%.}. 
+
+\bigskip
+
+With \Sexpr{n} observations, we would expect
+\begin{itemize}
+\item the smallest observation to be close to $\eta_{\frac{.5}{\Sexpr{n}}}$
+\item the next smallest observation to be close to $\eta_{\frac{1.5}{\Sexpr{n}}}$
+\item $\cdots$
+\item the biggest observation to be close to $\eta_{\frac{\Sexpr{n-.5}}{\Sexpr{n}}}$
+\end{itemize}
+
+\bigskip
+
+Generally, if $x_{(1)},\ldots,x_{(n)}$ represent the \textit{ordered} data then
+$$
+x_{(k)}\approx \eta_{\frac{k}{n}}.
+$$
+
+\bigskip
+
+A percentile plot plots $x_{(k)}$ vs $\eta_{\frac{k}{n}}$ for $k=1,\ldots,n$. If the data were generated from that distribution then the points will lie close to a straight line.
+\end{block}
+\end{frame}
+
+\begin{frame}
+
+\begin{block}{Percentile Plots}
+
+Suppose that the data come from a distribution with percentiles $\eta_p$. Then we would expect the $k$-th largest data point to be close to $\eta_{(k-.5)/n}$\footnote{The extra $-.5$ keeps us below 100\%.}. 
+
+\bigskip
+
+Generally, if $x_{(1)},\ldots,x_{(n)}$ represent the \textit{ordered} data then
+$$
+x_{(k)}\approx \eta_{\frac{k}{n}}.
+$$
+
+\bigskip
+
+A percentile plot plots $x_{(k)}$ vs $\eta_{\frac{k}{n}}$ for $k=1,\ldots,n$. If the data were generated from that distribution then the points will lie close to a straight line.
+\end{block}
+\end{frame}
+
+
+<<qqnorm>>=
+mydata |> 
+  ggplot(aes(sample = Distance)) + 
+  geom_qq(dparams = list(mean = mu_hat, sd = sqrt(sigmasq_hat))) +
+  ylab("Distance") +
+  xlab("Quantiles of Normal Distribution") +
+  geom_qq_line(dparams = list(mean = mu_hat, sd = sqrt(sigmasq_hat)))
+
+@
+
+\begin{frame}
+
+\begin{block}{Percentile Plots -- Normal}
+
+\begin{center}
+\includegraphics[height=.7\textheight]{figure/qqnorm-1.pdf}
+\end{center}
+
+\end{block}
+\end{frame}
+
+
+<<qqgamma>>=
+mydata |> 
+  ggplot(aes(sample = Distance)) + 
+  geom_qq(distribution = qgamma, dparams = list(shape = alpha_hat, scale = beta_hat)) +
+  ylab("Distance") +
+  xlab("Quantiles of Gamma Distribution") +
+  geom_qq_line(distribution = qgamma, dparams = list(shape = alpha_hat, scale = beta_hat))
+
+@
+
+\begin{frame}
+
+\begin{block}{Percentile Plots -- Gamma}
+
+\begin{center}
+\includegraphics[height=.7\textheight]{figure/qqgamma-1.pdf}
+\end{center}
+
+\end{block}
+\end{frame}
+
+\end{document}
+
+

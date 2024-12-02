@@ -1,0 +1,95 @@
+---
+title: "STAT 2857A -- Lecture 14 Examples and Exercises"
+subtitle: "Revised 31/10/24"
+format: 
+  pdf: default
+  docx: default
+knitr: 
+  opts_chunk:
+    fig.align: center
+    echo: false
+    warning: false
+    message: false
+    digits: 2
+prefer-html: true
+---
+
+```{r}
+# Load packages
+library(tidyverse)
+library(patchwork)
+library(knitr)
+library(kableExtra)
+library(broom)
+```
+
+## Example 14.1
+Let
+$$
+      f(x)=
+      \left\{
+        \begin{array}{ll}
+          0 & x \leq 0\\
+          cx & 0 < x \leq 1\\
+          0 & x > 1\\
+        \end{array}
+      \right.
+$$
+
+a) Find the value of $c$ such that $f(x)$ is a valid probability density function (pdf).
+
+b) Find the associated cumulative density function (cdf).
+        
+c) Compute the probabilities of the following events:
+
+    i) $X \leq .5$
+    ii) $X = .5$
+    iii) $X < .5$
+    iv) $.25 \leq X \leq .75$
+    v) $X <.25$ or $X>.75$
+
+d) Prove that $X$ satisfies the definition of a continuous random variable.
+
+## Example 14.2
+
+Let
+$$
+      f(x)=
+      \left\{
+        \begin{array}{ll}
+          0 & x \leq 0\\
+          2x & 0 < x \leq 1\\
+          0 & x > 1\\
+        \end{array}
+      \right.
+$$
+
+a) Find the median of $X$.
+b) Find the $5$-th and $95$-th percentiles of $X$.
+c) What is the shortest interval, $(x_1,x_2)$, such that $P(x_1 < X <x_2)=.90?
+      
+## Exercise 14.1
+
+Consider the distribution with cdf
+$$
+  F(X)=
+  \left\{
+  \begin{array}{ll}
+  0 & x < 0\\
+  \log_{10}(x + 1) & 0 \leq x < 9\\
+  1 & 9 \leq x
+  \end{array}
+  \right.
+$$
+  
+a) Plot $F(x)$.
+b) Compute the pdf, $f(x)$.
+c) Plot $f(x)$.
+d) Compute the following probabilities:
+
+    i) $(X \leq \sqrt{10}\textcolor{red}{-1})$
+    ii) $P(X < \sqrt{10} \textcolor{red}{-1})$
+    iii) $P(X = \sqrt{10}\textcolor{red}{-1})$
+    iv) $P(X > \sqrt{10}\textcolor{red}{-1})$
+    v) $P(X \geq \sqrt{10}\textcolor{red}{-1})$
+

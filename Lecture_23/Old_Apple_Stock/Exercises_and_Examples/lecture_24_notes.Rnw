@@ -1,0 +1,180 @@
+
+<<data>>=
+## Load data
+## Obtained from https://finance.yahoo.com/quote/AAPL/history?p=AAPL
+apple <- read_csv("apple_stock_prices_2020_2021.csv")
+
+#apple$Date <- as.Date(apple$Date,format = %Y-%m-%d")
+
+apple <- apple %>%
+  arrange(Date) %>%
+  mutate(prev = lag(Close, order_by = Date),
+         Change = Close - prev,
+         AbsChange = abs(Change)) %>%
+  select(-prev)
+
+## Traceplot of closing values
+ggplot(apple,aes(x=Date,y=Close)) +
+  geom_line()
+
+## Traceplot of daily changes
+ggplot(apple, aes(x = Date, y = Change)) +
+  geom_line() +
+  ylab("Daily Change")
+
+## Normal qq-plot of change
+ggplot(apple,aes(sample = Change)) +
+  geom_qq() +
+  geom_qq_line() + 
+  xlab("Population Percentiles") + ylab("Sample Percentiles")
+
+## Traceplot of absolute changes
+ggplot(apple, aes(x = Date, y = AbsChange)) +
+  geom_line() +
+  ylab("Absolute Daily Change")
+
+## Gamma qq-plot of absolute change
+fit_gamma <- function(x){
+  ## llhd <- function(pars,x) -sum(dgamma(x,exp(pars[1]),exp(pars[2]),log=TRUE))
+    
+  ## opt_out <- optim(c(1,1),llhd,x=x)
+  
+  ## exp(opt_out$par)
+  m <- mean(x)
+  v <- var(x)
+
+  beta <- v/m
+  alpha <- m/beta
+
+  c(alpha,beta)
+}
+
+gamma_fit <- fit_gamma(apple$AbsChange[-1])
+
+n <- nrow(apple) - 1
+
+apple <- apple %>%
+  arrange(AbsChange) %>%
+  add_column(Gamma = c(NA ,qgamma((1:n - .5)/n,gamma_fit[1],gamma_fit[2]))) %>%
+  arrange(Date)
+
+qplot(data=apple,x=Gamma,y=AbsChange,geom="point") +
+    geom_abline(intercept=0,slope=1) +
+    xlab("Population Percentiles") + ylab("Sample Percentiles")
+
+## Fit log-normal distribution
+fit_ln <- function(x){
+  ## llhd <- function(pars,x) -sum(dlnorm(x,pars[1],exp(pars[2]),log=TRUE))
+    
+  ## opt_out <- optim(c(0,1),llhd,x=x)
+  
+  ## c(opt_out$par[1],exp(opt_out$par[2]))
+  c(mean(log(x)), sd(log(x)))
+}
+
+ln_fit <- fit_ln(apple$AbsChange[-1])
+ln_mean <- exp(ln_fit[1] + ln_fit[2]^2/2)
+ln_sd <- sqrt(exp(ln_fit[2]^2 - 1) * ln_mean^2)
+
+apple <- apple %>%
+  mutate(LogAbsChange = log(AbsChange))
+
+## Traceplot of absolute changes
+ggplot(apple, aes(x = Date, y = LogAbsChange)) +
+  geom_line() +
+  ylab("log(Absolute Daily Change)")
+
+## Normal qq-plot of log of absolute change
+ggplot(apple,aes(sample = LogAbsChange)) +
+  geom_qq() +
+  geom_qq_line() + 
+  xlab("Population Percentiles") + ylab("Sample Percentiles")
+
+@
+
+\section{Introduction}
+As an example of the application of the material on continuous distributions in Chapter 4 we are going to consider modelling the stock prices of a little company you may have heard of. It's called Apple Inc.
+
+The figure below shows the stock price at the close of trading for the past year. Despite minor setbacks in a couple of months the stock price today is more \Sexpr{floor((increase <- apple[nrow(apple),'Close'] - apple[1,'Close']))} above what it was last year -- an increase of over \Sexpr{floor(100 * increase/apple[1,'Close'])}\%. That's not too bad.
+
+\begin{center}
+  \includegraphics[width=.9\textwidth]{figure/data-1}
+\end{center}
+
+If we wanted to understand the changes in the stock price make predictions into the future then we might ask how best to model the changes. The following figure shows the daily changes in the stock price from one day to the next.
+
+\begin{center}
+  \includegraphics[width=.9\textwidth]{figure/data-2}
+\end{center}
+
+\section{Normal}
+
+One possibility is that the changes in the stock price are normally distributed. The mean and standard deviation of the changes in the price are \Sexpr{(mu <- mean(pull(apple,Change),na.rm=TRUE))} and \Sexpr{(sigma <- sd(pull(apple,Change),na.rm=TRUE))}. Hence, if $D$ represents the change in the stock price from one day to the next then we might assume that
+\[
+  D \sim \mbox{Normal}(\Sexpr{mu},\Sexpr{sigma}). 
+\]
+If the changes were normally distributed then we could compute the probability that the stock price increases by more than, say, \$2:
+\begin{align*}
+  P(D > 2)
+  &=1-P\left(\frac{D - \Sexpr{mu}}{\Sexpr{sigma}} \leq \frac{2 - \Sexpr{mu}}{\Sexpr{sigma}} \right)\\
+  &=1-P(Z \leq \Sexpr{(2 - mu)/sigma}), \quad \mbox{where } Z \sim \mbox{Normal}(0,1)\\
+  &=\Sexpr{1 - pnorm(2,mu,sigma)}.
+\end{align*}
+Similarly, we could compute the probability that the stock price decreases by more than \$2:
+\begin{align*}
+  P(D < -2)
+  &=P\left(\frac{D - \Sexpr{mu}}{\Sexpr{sigma}} \leq \frac{-2 - \Sexpr{mu}}{\Sexpr{sigma}} \right)\\
+  &=1-P(Z \leq \Sexpr{(-2 - mu)/sigma}), \quad \mbox{where } Z \sim \mbox{Normal}(0,1)\\
+  &=\Sexpr{pnorm(-2,mu,sigma)}.
+\end{align*}
+We would also know, by applying the empirical rule, that the daily change in the stock price would be between \Sexpr{mu-sigma} and \Sexpr{mu + sigma} approximately 68\% of the time, between \Sexpr{mu-2*sigma} and \Sexpr{mu + 2*sigma} approximately 95\% of the time, and between \Sexpr{mu-3*sigma} and \Sexpr{mu + 3*sigma} approximately 99.7\% of the time.
+
+The following probability plot compares the distribution of the daily changes in the stock price for apple to the normal distribution, and we can see that in this case the fit is not bad. Most of the points lie along the straight line, though there is some deviation in the tails. Unfortunately, if you are a trader then this is something that you really need to pay attention to. The probability plot indicates that the tails of the distribution are heavier than would be expected under the normal distribution. This means that there is a higher probability of making big gains then the normal model would suggest, but more significantly, and more importantly, there is a higher probability of big losses. This is in fact part of what lead to the market crash of 2008. Most models being used were based on assumed normal distributions and they did not allow for the market to make big jumps, as it did.  
+
+\begin{center}
+  \includegraphics[width=.9\textwidth]{figure/data-3}
+\end{center}
+
+\section{Gamma Model}
+
+Another possibility is to model the direction of the change (increase or decrease) and the magnitude of the change (i.e., the absolute change) separately. That is, we might assume that whether or not the stock price increases or decreases on each day is determined by a Bernoulli distribution (i.e., that it in increases with some probability $p$ and decreases with probability $1-p$) and that the amount of change is then drawn from some distribution with support given by the positive real values. The following figure depicts the magnitude (absolute value) of the  daily change in the stock price.
+
+\begin{center}
+  \includegraphics[width=.9\textwidth]{figure/data-4}
+\end{center}
+
+Based on the distributions we have considered in class, we might assume that the distribution of the absolute change in the stock price follows a gamma distribution. The mean of these values is \Sexpr{mean(pull(apple, 'AbsChange'), na.rm = TRUE)} and the standard deviation is \Sexpr{sd(pull(apple, 'AbsChange'), na.rm = TRUE)}. The gamma distribution that matches the mean and standard deviation (a process called method of moments estimation) has parameters $\alpha=\Sexpr{gamma_fit[1]}$ and $\beta=\Sexpr{gamma_fit[2]}$. According to this model, the probability that the stock price changes by more than \$2 in one day, either increasing or decreasing is
+\[
+  P(|D| > 2)=\Sexpr{1-pgamma(2,gamma_fit[1],gamma_fit[2])}.
+\]
+
+The following plot compares the sample data with the percentiles of the corresponding gamma distribution. In this case we see that the points lie above the line suggesting that the data are more skewed and have a heavier right tail than the model that we have proposed.  
+
+\begin{center}
+  \includegraphics[width=.9\textwidth]{figure/data-5}
+\end{center}
+
+\section{Log-Normal Distribution}
+
+Another distribution that we might consider is the log-normal distribution. This distribution is covered in Chapter 4.5 of your text (which we skipped), but the idea is pretty simple. The log-normal distribution arises if the log of the values follows a normal distribution. So, we will consider modelling the log of the daily differences.
+
+The figure below shows the log of the magnitude of the daily change in Apple's stock price. The mean and standard deviation are \Sexpr{(muLN <- mean(pull(apple, 'LogAbsChange'), na.rm = TRUE))} and \Sexpr{(sdLN <- sd(pull(apple, 'LogAbsChange'), na.rm = TRUE))}. If we were to assume that $\log(|D|) \sim \mbox{Normal}(\Sexpr{muLN}, \Sexpr{sdLN})$ then we would compute the probability of a change of more than 2 as
+\begin{align*}
+  P(|D| > 2)
+  &=P(\log(|D|) > \log(2))\\
+  &=1-P\left(Z \leq \frac{\log(2) - \Sexpr{muLN}}{\Sexpr{sdLN}}\right)\\
+  &=\Sexpr{1 - pnorm(log(2), muLN, sdLN)}.
+\end{align*}
+The probability plot comparing the distribution of the data to this theoretical distribution is shown below. The points in this plot show a convex (downward facing) curve, which suggests that the distribution of the log of the magintude of the daily changes is skewed to the left. This is not surprising from looking at the plot above which shows many more large downward jumps than upward jumps. 
+
+\begin{center}
+  \includegraphics[width=.9\textwidth]{figure/data-6}
+\end{center}
+
+\section{Conclusion}
+
+Out of the three possible models I've proposed the gamma model of the absolute change in the stock price seems to fit very well. According to this model, the mean of the absolute daily change in stock price is about \Sexpr{prod(gamma_fit)} with standard deviation \Sexpr{sqrt(prod(gamma_fit) * gamma_fit[2])}. Note that this is not a complete model, and there is still a lot of work to be done if we really wanted to be able to predict the stock price. Most importantly, our model does not provide any information about the direction of the change in the stock price, and this is very important. One might assume that the direction can be represented with simple Bernoulli random variables such that the price increases on each day with probability $p$ and days are independent, but this is a very poor model. The original plot makes it clear that the direction of the change is not independent across days. Moreover, the absolute changes are not independent either.
+
+The single outlying point is also concerning -- particularly because it represents a big loss. The gamma model does not allow for such big changes in one day, and it would be very dangerous to ignore this. In fact, this is part of what led to the stock market crash in 2008. Most of the models in use assumed that changes in the price of stocks were close to normally distributed and did not allow for large changes (in that case, decreases) in a single day. Unfortunately, that was very wrong and a lot of people lost a lot of money.
+
+\end{document}

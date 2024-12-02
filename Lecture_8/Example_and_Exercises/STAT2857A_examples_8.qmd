@@ -1,0 +1,63 @@
+---
+title: "STAT 2857A -- Lecture 8 Examples and Exercises"
+subtitle: "Revised 02/10/24"
+format: 
+  pdf: default
+  docx: default
+knitr: 
+  opts_chunk:
+    fig.align: center
+    echo: false
+    warning: false
+    message: false
+    digits: 2
+prefer-html: true
+---
+
+```{r}
+# Load packages
+library(tidyverse)
+library(patchwork)
+library(knitr)
+library(kableExtra)
+library(broom)
+```
+
+## Example 8.1
+
+Approximately 79\% of world's population has brown eyes. 
+    
+Suppose that we sample 5 people from the population at random with replacement and record their eye-colour as brown or not brown. Let $X$ be the number of people in our sample with brown eyes.
+
+a) Compute the pmf of $X$.
+b) Draw a figure showing the pmf of $X$. 
+c) Compute the cdf of $X$.
+d) Draw a figure showing the cdf of $X$. 
+
+## Example 8.2
+
+Let $p$ be the proportion of the world's population with brown eyes. Suppose that we sample 5 people from the population at random with replacement and record their eye-colour as brown or not brown. Let $X$ be the number of people in our sample with brown eyes.
+
+How would the distribution of $X$ change if $p$ was varied?
+
+## Exercise 8.1
+
+Consider a discrete random variable, Z, with the cdf:
+$$
+F(z)=
+\left\{
+\begin{array}{ll}
+0 & x < 0\\
+0.292  &   0 \leq x <1\\
+0.745  &  1 \leq x <2\\
+0.965  &  2 \leq x <3\\
+0.998 &   3 \leq x <4\\
+1     &    x \geq 4
+\end{array}
+\right.
+$$
+
+a) Sketch the cdf.
+b) What are the possible values $Z$ (i.e., for what values of $z$ is $P(Z=z)>0$)?
+c) What is the probability mass function?
+d) Sketch the pmf.

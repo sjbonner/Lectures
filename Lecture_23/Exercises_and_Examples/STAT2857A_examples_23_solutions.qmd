@@ -1,0 +1,262 @@
+---
+title: "STAT 2857A -- Lecture 23 Examples and Exercises"
+subtitle: "Solutions -- Revised 27/11/24"
+format: 
+  pdf: 
+   include-in-header: 
+    - text: |
+        \usepackage{mathtools}
+knitr: 
+  opts_chunk:
+    fig.align: center
+    echo: false
+    warning: false
+    message: false
+    digits: 2
+---
+```{r}
+## Load packages
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+library(latex2exp)
+library(readxl)
+
+## Options
+opt_bkp <- options
+options(digits = 3)
+```
+
+a) First consider the number of white marbles you draw from the bag. We know that $W$ will follow a hypergeometric distribution. Specifically
+$$
+W \sim \mbox{Hypergeometric}(3,18,27).
+$$
+Then
+$$
+P(W=w)=\frac{{18 \choose w}{9 \choose 3-w}}{{27 \choose 3}}.
+$$
+Hence,
+$$
+P(W=2)=\frac{{18 \choose w}{9 \choose 3-w}}{{27 \choose 3}}=`r (pw2 <- dhyper(2,18,9,3))`.
+$$
+Now consider the number of red cards that you draw from the deck. Given $W=2$, number of cards you choose is $N=\max(2,1)=2$. Then
+$$
+R|W=2 \sim \mbox{Hypergeometric}(2,26,52).
+$$
+So
+$$
+P(R=1|W=2)=\frac{{26 \choose 1}{26 \choose 1}}{{\textcolor{red}{52} \choose 2}}
+=`r (pr1w2 <-dhyper(1,26,26,2))`.
+$$
+Finally,
+$$
+\begin{aligned}
+P(W=2,R=1)
+&=P(W=2)P(R=1|W=2)\\
+&=`r pw2`(`r pr1w2`)\\
+&=`r pw2 * pr1w2`.
+\end{aligned}
+$$
+
+b) Again, we start with the number of white marbles you draw from the bag. As above,
+$$
+P(W=w)=\frac{{18 \choose w}{9 \choose 3-w}}{{27 \choose 3}}.
+$$
+Then, given $W=w$, $N=\max(w,3-w)$ and
+$$
+R|W=w \sim \mbox{Hypergeometric}(\max(w,3-w),26,52).
+$$
+So
+$$
+P(R=r|W=w)=\frac{{26 \choose r}{26 \choose \max(w,3-w)-r}}{{\textcolor{red}{52} \choose \max(w,3-w)}}.
+$$
+Finally, we consider the set of possible values (support) of $W$ and $R$. The possible values of $W$ are 0,1,2, and 3, and the possible values of $R$ are 0, 1, 2, and 3 if $W=0$ or $W=3$ and 0,1, or 2 if $W=1$ or $W=2$. Hence,
+$$
+P(W,R)=P(W=w)P(R=r|W=w)=\frac{{18 \choose w}{9 \choose 3-w}{26 \choose r}{52 \choose \max(w,3-w)-r}}{{27 \choose 3}{\textcolor{red}{52} \choose \max(w,3-w)}}.
+$$
+The following table provides the values in the intermediate calculations used to compute the table provided in the exercises:
+```{r}
+mydata <- tibble(w = 0:3,
+                 N = pmax(w,3-w)) |> 
+  group_by(w,N) |>  
+  reframe(r = 0:N) |> 
+  mutate(`P(W=w)`=dhyper(w,18,9,3),
+         `P(R=r|W=w)`=dhyper(r,26,26,N),
+         `P(W=w,R=r)`=`P(W=w)`*`P(R=r|W=w)`) 
+
+mydata |> 
+  kable(digits = 3)
+```
+
+b) To answer this question, we first need to find the marginal pmf for $R$. This is computed by summing the joint pdf over $w$ for each value of $r$. Equivalently, we sum the columns in the table above. The values are
+```{r}
+mydata1 <- mydata |>
+  select(r,`P(W=w,R=r)`) |> 
+  group_by(r) |> 
+  summarise(`P(R=r)`=sum(`P(W=w,R=r)`)) 
+
+erch <- paste0(mydata1$r,"(",round(pull(mydata1,2),3),")",collapse = "+")
+er2ch <- paste0(mydata1$r^2,"(",round(pull(mydata1,2),3),")",collapse = "+")
+
+er <- sum(pull(mydata1,1) * pull(mydata1,2))
+er2 <- sum(pull(mydata1,1)^2 * pull(mydata1,2))
+vr <- er2 - er^2
+
+mydata1 |> 
+  kable()
+```
+Then
+$$
+\begin{aligned}
+E(R)&=`r erch`=`r er`,\\
+E(R^2)&=`r er2ch`=`r er2`, \mbox{and}\\
+V(R)&=E(R^2)-E(R)^2=`r vr`.
+\end{aligned}
+$$
+
+
+
+c) You win if $R=0$ or $R=N$. Note that these are mutually exclusive. The probability that you win is
+```{r}
+pr0 <- mydata |> 
+  filter(r==0) |> 
+  pull(`P(W=w,R=r)`) 
+
+pr0ch <- pr0 |>
+  round(3) |> 
+  paste(collapse = "+")
+
+pr2 <- mydata |> 
+  filter(r==2) |> 
+  pull(`P(W=w,R=r)`) 
+
+pr2ch <- pr2 |>
+  round(3) |> 
+  paste(collapse = "+")
+
+pr3 <- mydata |> 
+  filter(r==3) |> 
+  pull(`P(W=w,R=r)`) 
+
+pr3ch <- pr3 |>
+  round(3) |> 
+  paste(collapse = "+")
+
+prN <- mydata |> 
+  filter(r == w) |> 
+  pull(`P(W=w,R=r)`) 
+
+prNch <- prN |>
+  round(3) |> 
+  paste(collapse = "+")
+
+
+```
+$$
+\begin{aligned}
+P(R=0) + P(R=N)
+=&(`r pr0ch`) + \textcolor{red}{(`r prNch`)}\\
+=&\textcolor{red}{`r sum(pr0) + sum(prN)`}
+\end{aligned}
+$$
+
+d) For any $w$ and $r$, the conditional probability of $W=w|R=r$ is
+$$
+P(W=w|R=r)=\frac{P(W=w,R=r)}{P(R=r)}.
+$$
+For the specific case of interest, we have
+$$
+P(R=2)=`r pr2ch` = `r pr2`.
+$$
+Then
+$$
+P(W=w|R=2)=\frac{P(W=w,R=2)}{`r sum(pr2)`}
+$$
+The entries in the conditional pdf are shown in the following table:
+```{r}
+mydata2 <- mydata |> 
+  filter(r==2) |> 
+  select(w,r,`P(W=w,R=r)`) |> 
+  mutate(`P(W=w|R=2)`=`P(W=w,R=r)`/sum(pr2)) 
+
+mydata2 |> 
+  kable(digits = 3)
+```
+
+e) Using the values from the previous parts
+```{r}
+ewch <- paste0(mydata2$w,"(",round(pull(mydata2,4),3),")",collapse = "+")
+ew2ch <- paste0(mydata2$w^2,"(",round(pull(mydata2,4),3),")",collapse = "+")
+
+ew <- sum(pull(mydata2,1) * pull(mydata2,4))
+ew2 <- sum(pull(mydata2,1)^2 * pull(mydata2,4))
+```
+$$
+\begin{aligned}
+E(W|R=2)&=`r ewch`=`r ew`
+\end{aligned}
+$$
+
+f) Using the values from the previous parts
+$$
+\begin{aligned}
+E(W^2|R=2)&=`r ew2ch`=`r ew2`
+\end{aligned}
+$$
+and
+$$
+\begin{aligned}
+V(W|R=2)&=E(W^2|R=r)-E(W|R=r)^2=`r ew2 - ew^2`.
+\end{aligned}
+$$
+
+```{r}
+ew <-  sum(mydata$w * pull(mydata,6))
+vw <- (27-3)/(27-1)*3*2/3*1/3
+
+erw <- sum(mydata$w * mydata$r *  pull(mydata,6))
+
+mydata3 <- mydata |> 
+  filter(w > 0, r>0)
+
+erwch <- paste0(mydata3$w,"(",mydata3$r,")","(",round(pull(mydata3,6),3),")",collapse = "+")
+```
+
+g) The shortcut formula implies that
+$$
+\mbox{Cov}(W,R)=E(WR)-E(W)E(R).
+$$
+Since $W$ is hypergeometric, we know that 
+$$
+E(W)=\frac{3(18)}{27}=`r ew`.
+$$
+and
+$$
+V(W)=\frac{27-3}{27-1}\cdot\left(\frac{3(18)}{27}\right)\left(1-\frac{18}{27}\right)=`r vw`
+$$
+We also have that
+$$
+E(R)=`r er`.
+$$
+Then
+$$
+\begin{aligned}
+E(RW)
+&=`r erwch`\\
+&=`r erw`.
+\end{aligned}
+$$
+Hence
+$$
+\mbox{Cov}(W,R)
+=`r erw` - (`r er`)(`r ew`)=`r (covrw <- erw - er*ew)`.
+$$
+Finally
+$$
+\begin{aligned}
+\mbox{Corr}(W,R)
+&=\frac{\mbox{Cov}(W,R)}{\sqrt{V(W)V(R)}}\\
+&=\frac{`r covrw`}{\sqrt{(`r vw`)(`r vr`)}}\\
+&=`r covrw/sqrt(vw * vr)`
+\end{aligned}
+$$

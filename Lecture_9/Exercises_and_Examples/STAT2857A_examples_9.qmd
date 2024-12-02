@@ -1,0 +1,62 @@
+---
+title: "STAT 2857A -- Lecture 9 Examples and Exercises"
+format: 
+  pdf: default
+  docx: default
+knitr: 
+  opts_chunk:
+    fig.align: center
+    echo: false
+    warning: false
+    message: false
+    digits: 2
+prefer-html: true
+---
+
+```{r}
+# Load packages
+library(tidyverse)
+library(patchwork)
+library(knitr)
+library(kableExtra)
+library(broom)
+```
+
+## Example 9.1
+Compare the mean and variance of the distributions with the following pmfs.
+
+  \begin{center}
+    \includegraphics[height = 4in]{../Slides/figure/example-12-1-1-1}
+  \end{center}
+
+## Example 9.2
+
+Approximately 79\% of the world's population has brown eyes\footnote{\url{https://www.worldatlas.com}}.
+
+Suppose that we sample 5 people from the population at random with replacement and record their eye-colour as brown or not brown. Let $X$ represent the number of people in our sample with brown eyes.
+
+a) Compute the expected value of $X$. 
+b) Compute the variance of $X$.
+c) Compute the standard deviation of $X$.
+d) Provide an interpretation for $E(X)$.
+
+## Example 9.3
+
+Approximately 79\% of the world's population has brown eyes.
+
+Suppose that we sample 5 people from the population at random with replacement and record their eye-colour as brown or not brown. Let $Y$ represent the number of brown eyes in the sample plus the number of hands\footnote{We'll assume that everyone has two of each}.
+
+a) Compute the expected value of $Y$. 
+b) Compute the variance of $Y$.
+c) Compute the standard deviation of $Y$.
+d) Provide an interpretation for $E(Y)$.
+
+## Exercise 9.1
+
+ A professor driving to Western must pass through 5 sets of traffic lights. There is a .75 percent chance of being stopped at each light (or so it appears to him). The time it takes him to complete the drive is 15 minutes plus 3 minutes for each light he has to stop at. 
+
+Let $X$ be the number of lights he must stop at and $Y$ the time it takes him in minutes.
+
+a) Compute the expected value, variance, and standard deviation of $X$.
+b) Provide an interpretation for the expected value.
+c) Compute the expected value, variance, and standard deviation of $Y$.

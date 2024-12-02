@@ -1,0 +1,238 @@
+---
+title: "STAT 2857A -- Lecture 23 Examples and Exercises"
+subtitle: "Solutions"
+format: 
+  pdf: 
+   include-in-header: 
+    - text: |
+        \usepackage{mathtools}
+knitr: 
+  opts_chunk:
+    fig.align: center
+    echo: false
+    warning: false
+    message: false
+    digits: 2
+---
+```{r}
+## Load packages
+library(tidyverse)
+library(knitr)
+library(latex2exp)
+library(xtable)
+library(readxl)
+
+## Data summaries
+apple_mu <- 0.1202
+apple_var <- 5.2413
+apple_sd <- 2.2984
+apple_cov <- 0.0412
+apple_cor <- apple_cov/apple_sd^2
+
+## Options
+opt_bkp <- options
+options(digits = 4)
+```
+
+## Example 23.1
+
+a) Let $D$ be the change (difference) in stock price for a randomly selected day. If $D>0$ then the stock price increases. If $D<0$, then the stock price decreases. We are assuming that
+$$
+D \sim \mbox{Normal}(`r apple_mu`,`r apple_var`).
+$$
+Using the online calculator, the probability that the stock price increases is
+$$
+P(D > 0)
+=`r 1-pnorm(0,apple_mu,apple_sd)`.
+$$
+Alternatively, using standardization
+$$
+P(D > 0)
+=P\left(Z > \frac{`r -apple_mu`}{`r apple_sd`}\right)
+=`r (pinc <- 1-pnorm(0,apple_mu,apple_sd))`
+$$
+where $Z$ is standard normal ($Z \sim \mbox{Normal}(0,1)$). 
+
+b) Applying the complement rule, the probability the stock price decreases is
+$$
+P(D<0)
+=`r pnorm(0,apple_mu,apple_sd)`.
+$$
+
+c) 
+
+    i) Let $D_1,\ldots,D_{10}$ be the difference in stock price on the 10 selected days. The expected gain over all 10 days is
+$$
+\begin{aligned}
+E\left(\sum_{i=1}^{10}D_i\right)
+&=\sum_{i=1}^{10} E(D_i)\\
+&=\sum_{i=1}^{10} `r apple_mu`\\
+&=`r 10*apple_mu`.
+\end{aligned}
+$$
+  
+    ii) Let $X$ be the number of days on which the stock price increases. If the days are selected at random, then the changes in the stock prices will be mutually independent. In that case, we have 10 independent trials, each resulting in one of two outcomes (increase or decrease), the probability of an increase is constant ($p=P(D>0)=`r pinc`$), and the trials are independent. This means that $X$ is binomial:
+    $$
+    X \sim \mbox{Binomial}(10,`r pinc`).
+    $$
+    Then
+    $$
+    P(X>5)
+    =\sum_{x=6}^{10} {10 \choose x} `r pinc`^x (1 - `r pinc`)^{10-x}
+    =`r 1-pbinom(5, 10, pinc)`.
+    $$
+    iii) The probability that you lose money on more than half the days is
+    $$
+    P(X<5)
+    =\sum_{x=0}^{5} {10 \choose x} `r pinc`^x (1 - `r pinc`)^{10-x}
+    =`r pbinom(4, 10, pinc)`.
+    $$
+    Because $\mu_D=`r apple_mu`>0$, and $P(D_i>0)=`r pinc`>0$, you are slightly more likely to choose more than 5 days on which the stock price increases than you are to choose more than 5 days on which the stock price decreases. However, the most likely outcome is that the stock price increases on half the days and decreases on half the days:
+    $$
+    P(X=5)=1-P(X>5)-P(X<5)=`r dbinom(5, 10, pinc)`.
+    $$
+
+## Example 23.2
+
+Note that I have first presented the solutions for a general observed difference, $d$, and then focused on the specific the case $d=5$ given in the slides. 
+
+```{r}
+apple_cond_var <- apple_sd^2 * (1-apple_cor^2)
+apple_cond_sd <- sqrt(apple_cond_var)
+```
+
+a) Let $D_i$ and $D_{i+1}$ be the change in stock price on two subsequent days. In this case, we are interested in the distribution of $D_{i+1}|D_i=d$. If we assume that $D_i$ and $D_{i+1}$ are bivariate normal then their joint distribution is defined by their means, their variances/standard deviations, and their correlation. In this case,
+$$
+E(D_i)=E(D_{i+1})=`r apple_mu`,
+$$
+$$
+V(D_i)=V(D_{i+1})=`r apple_sd`^2,
+$$
+and
+$$
+\begin{aligned}
+\rho &= \mbox{Corr}(D_i,D_{i+1})\\
+&=\frac{`r apple_cov`}{`r apple_sd`^2}\\
+&=`r apple_cor`.
+\end{aligned}
+$$
+Using the properties of the bivariate normal distribution, $D_{i+1}|D_i=d$ is normal with mean
+$$
+\begin{aligned}
+E(D_{i+1}|D_i=d)&=E(D_{i+1}) + \rho \frac{\sigma_{D_{i+1}}}{\sigma_{D_{i}}}(d-E(D_i))\\
+&=`r apple_mu` + `r apple_cor`(d-`r apple_mu`)\\
+&=(1-`r apple_cor`)(`r apple_mu`) + `r apple_cor`d\\
+&=`r (1-apple_cor) * apple_mu` + `r apple_cor`d\\
+\end{aligned}
+$$
+and variance
+$$
+\begin{aligned}
+V(D_{i+1}|D_i=d)
+&=V(D_{i+1})(1-\rho^2)\\
+&=`r apple_sd`^2(1-`r apple_cor`^2)\\
+&=`r apple_cond_var`
+\end{aligned}
+$$
+or equivalently standard deviation
+$$
+SD(D_{i+1}|D_i=d)=`r apple_cond_sd`.
+$$
+The following plot shows how the mean of $D_{i+1}|D_i=d$ changes with $d$. The dashed lines represent the marginal mean, $E(D_i)=E(D_{i+1})=`r apple_mu`$. 
+```{r}
+mydata <- tibble(d = seq(-10,10,length = 50)) |> 
+  mutate(mu = (1-apple_cor) * apple_mu + apple_cor * d)
+
+mydata |> 
+  ggplot(aes(x = d, y = mu)) +
+  geom_line(lwd=2) + 
+  geom_hline(yintercept = 0) + 
+  geom_vline(xintercept = 0) +
+  geom_hline(yintercept = apple_mu, lty = 2) + 
+  geom_vline(xintercept = apple_mu, lty = 2) +
+  ylab(TeX("$E(D_{i+1}|D_i=d)$"))
+```
+Note that when $d > E(D_i)$ then $E(D_{i+1}|D_i=d)>E(D_i)$. However, the increase in $E(D_{i+1}|D_i=d)$ is much smaller than $d-E(D_i)$ because the correlation is so small. In the case that $d=5$ euros on one day, the conditional mean is 
+$$
+`r (1- apple_cor) * apple_mu` + `r apple_cor` (5) = `r (apple_cond_mu <- (1-apple_cor) * apple_mu + apple_cor * 5)`
+$$
+euros so that
+$$
+D_{i+1}|D_i \sim \mbox{Normal}(`r apple_cond_mu`, `r apple_cond_var`).
+$$
+Note that the conditional mean is bigger than the unconditional mean. Knowning that the stock price increased by 5 euros on one day has increased the expected stock price on the following day. However, the gain is relatively minimal. 
+
+b) The probability that the price on day $i+1$ increases given that the change on day $i$ is $d$ is
+$$
+P(D_{i+1}>0|D_i=d)
+=\int_0^\infty f_{D_{i+1}|D_i}(x|d)~x.
+$$
+Alternatively, we can standardize so that
+$$
+P(D_{i+1}>0|D_i=d)
+=P\left(Z > \frac{-(`r (1- apple_cor) * apple_mu` + `r apple_cor` (5))}{`r apple_cond_var`}\right)
+$$
+where $Z$ is standard normal. However, neither of the has an analytical solution (i.e., we can't do the integral by hand). Instead, we can use the calculator to compute the probability for different values of $d$. The following plot displays the probability that the increase is positive on day $i+1$ given the change on day $i$. The dotted line is the probability that the price increases on a randomly selected day. 
+```{r}
+mydata <- mydata |> 
+  mutate(p0 = 1 - pnorm(0, mu, apple_cond_sd))
+
+mydata |> 
+  ggplot(aes(x = d, y = p0)) +
+  geom_line(lwd=2) + 
+  geom_hline(yintercept = 0) + 
+  geom_vline(xintercept = 0) +
+  ylab(TeX("$P(D_{i+1}>0|D_i=d)$")) +
+  ylim(c(0,1)) +
+  geom_hline(yintercept = 1-pnorm(0, apple_mu, apple_sd), lty=2)
+```
+  To make this clearer, the following plot zooms the $y$-axis to the range $(.4,.6)$.
+```{r}
+mydata |> 
+  ggplot(aes(x = d, y = p0)) +
+  geom_line(lwd=2) + 
+  geom_vline(xintercept = 0) +
+  ylab(TeX("$P(D_{i+1}>0|D_i=d)$")) +
+  ylim(c(.4,.6)) +
+  geom_hline(yintercept = 1-pnorm(0, apple_mu, apple_sd), lty=2)
+```
+You can see that the conditional probability is above marginal probability when $d>E(D_i)=`r apple_mu`$. However, there isn't much gain. Given that $D_i=5$, the probability of an increase on the next day is only
+$$
+P(D_{i+1}>0|D_i=5)=`r (pinc_cond <- 1 - pnorm(0, apple_cond_mu, apple_cond_sd))`.
+$$
+Again, this is an increase from the marginal probability. We have learned something about $D_{i+1}$ by observing that $D_{i}=5$, but not very much. 
+
+c) 
+
+    i) Suppose that the stock price increases by exactly $d$ euros on days $t_1,\ldots,t_{10}$. The expected gain over all 10 days is
+$$
+\begin{aligned}
+E\left(\sum_{i=1}^{10}D_{t_i+1}|D_{t_i}=d\right)
+&=\sum_{i=1}^{10} E(D_{t_i+1}|D_{t_i}=d)\\
+&=\sum_{i=1}^{10} `r (1-apple_cor) * apple_mu` + `r apple_cor`d\\
+&=10(`r (1-apple_cor) * apple_mu` + `r apple_cor`d).
+\end{aligned}
+$$
+If $d=5$, then
+$$
+E\left(\sum_{i=1}^{10}D_{t_i+1}|D_{t_i}=5\right)
+=`r 10*apple_cond_mu`.
+$$
+
+   ii) As before, if $Y$ represents the number of days on which the price increases, then $Y$ will be binomial. Specifically, 
+   $$
+   Y \sim \mbox{Binomial}(10,P(D_{i+1}>0|D_i=d)).
+   $$
+   For the case $d=5$,
+   $$
+    P(Y>5)
+    =\sum_{y=6}^{10} {10 \choose y} `r pinc_cond`^y (1 - `r pinc_cond`)^{10-y}
+    =`r 1-pbinom(5, 10, pinc_cond)`.
+  $$
+    iii) Similarly,
+    $$
+    P(Y<5)
+    =\sum_{x=0}^{5} {10 \choose y} `r pinc_cond`^y (1 - `r pinc_cond`)^{10-y}
+    =`r pbinom(4, 10, pinc_cond)`.
+    $$
+    The probability that the stock price increases on more than have the days is larger than it was before. However, the gain is fairly small. 

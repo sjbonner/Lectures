@@ -1,0 +1,55 @@
+---
+title: "STAT 2857A -- Lecture 4 Examples and Exercises"
+format: 
+  pdf: default
+  docx: default
+knitr: 
+  opts_chunk:
+    fig.align: center
+    echo: false
+    warning: false
+    message: false
+    digits: 2
+prefer-html: true
+---
+
+```{r}
+# Load packages
+library(tidyverse)
+library(patchwork)
+library(knitr)
+library(kableExtra)
+library(broom)
+```
+
+## Example 4.1
+
+According to \url{http://https://www.colourblindawareness.org/}, colour blindness affects 1 in 12 people assigned to be male at birth and 1 in 200 people assigned to be female at birth. Approximately 48.78\% of all babies born in the world are assigned to be female at birth.
+
+a) Identify the conditional probability(ies) in this statement and define them in terms of the events $F$ a person is assigned to be female at birth and $B$ a person is colour blind.
+      
+b) What is the probability that a randomly selected newborn is female and colour blind/male and colour blind?
+
+c) What is the probability that a randomly selected newborn is colour blind?
+
+d) What is the probability that a baby is assigned to be male at birth given that it is colour blind?
+
+e) What is the probability that someone answers yes to the following statement?\\
+\begin{quote}
+  I am colour blind \textbf{OR\footnote{We will always use the inclusive or so that the statement is true if one or both are true.}} my birthday falls on an odd numbered day of the month. 
+\end{quote}
+Note that there are 187 odd days in the year and 178 even days (ignoring the leap day). 
+
+## Exercise 4.1
+
+The 2024 US Presidential election will be held on November 5 and provides a lot of opportunity for interesting statistics. Current polls put Kamala Harris in the lead nationally with 48% of the vote versus Donald Trump's 46% (the remaining 6% are undecided or voting for other candidates). However, Kamala's support by state varies from 28% in Utah (population 3,417,734) to 70% in Vermont (population 647,464). The total population of the 50 US states is 334,235,923. 
+
+a) Identify the conditional probabilities defined in this question.
+
+b) What is the probability that a randomly selected US voter is from Utah and is planning to vote for Kamala Harris?
+
+c) What is the probability that someone not from Utah plans to vote for Kamala Harris?
+
+d) Suppose that a randomly selected person is planning to vote for Kamala Harris. Is this person more likely to be from Utah or from Vermont? 
+
+e) What is the key assumption to answering these questions?

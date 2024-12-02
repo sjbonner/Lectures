@@ -1,0 +1,194 @@
+---
+title: "STAT 2857A -- Lecture 17 Examples and Exercises"
+subtitle: "Solutions"
+format: 
+  pdf: 
+   include-in-header: 
+    - text: |
+        \usepackage{mathtools}
+knitr: 
+  opts_chunk:
+    fig.align: center
+    echo: false
+    warning: false
+    message: false
+    digits: 2
+---
+
+```{r}
+## Load packages
+library(tidyverse)
+library(knitr)
+library(latex2exp)
+```
+
+## Review
+
+a) FALSE (I've divided by the variance not the standard deviation.)
+b) d
+c) a
+d) a
+
+## Example 17.1
+
+```{r}
+alpha <- .628
+beta <- 8.662
+```
+
+a) The pdf of $X$ is:
+  $$
+    f(x)=\frac{1}{`r beta`^{`r alpha`}\Gamma(`r alpha`)}x^{`r alpha`-1}e^{-x/`r beta`},\quad x \geq 0.
+  $$
+
+b) The mean and variance are:
+$$
+\begin{aligned}
+    E(X)&=\alpha \beta = `r alpha`(`r beta`)=`r alpha * beta`\\
+    V(X)&=\alpha \beta^2 =`r alpha`(`r beta`^2)=`r alpha * beta^2`\\
+\end{aligned}
+$$
+  
+c) The probability that the total precipitation is more than 10 mm given that it rains at all is:
+$$
+\begin{aligned}
+    P(X \geq 10)
+    &=1-P(X \leq 10)\\
+    &=1-`r pgamma(10,alpha,1/beta)`\\
+    &=`r 1-pgamma(10,alpha,1/beta)`
+\end{aligned}
+$$
+
+
+## Example 17.2
+```{r}
+hlife <- .7038
+lambda <- -log(.5)/hlife
+p <- pexp(10^-9,lambda)
+n <- 2.56e21
+
+sci <- function(n) format(n, scientific = TRUE)
+```
+
+a) To write down the pdf we need first to understand what the half-life means. The half-life means that the probability of decay within the given time is .5 (i.e., the median). If we let $t_{1/2}$ denote the half-life then
+$$
+\begin{aligned}
+    F(t_{1/2})&=.5\\
+    1-e^{-\lambda t_{1/2}}&=.5\\
+    \lambda t_{1/2}&=-\log(.5)\\
+    \lambda&=`r -log(.5)/hlife`
+  \end{aligned}
+$$
+The pdf is
+$$
+\begin{aligned}
+    f(t)
+    &=e^{-\lambda t}\\
+    &=e^{-`r lambda` t}, \quad t > 0.
+\end{aligned}
+$$
+  
+b) The mean and variance of $T$ are
+$$
+  \begin{aligned}
+    E(T)&=\frac{1}{\lambda}=\frac{1}{`r lambda`}=`r 1/lambda`\\
+    V(T)&=\frac{1}{\lambda^2}=\frac{1}{`r lambda^2`}=`r 1/lambda^2`\\
+  \end{aligned}
+$$
+
+c) The probability that $T>1$ is
+$$
+  \begin{aligned}
+    P(T>1)
+    &=1-P(T\leq 1)\\
+    &=1-(1-e^{-`r lambda`})\\
+    &=e^{-`r lambda`}\\
+    &=`r 1-pexp(1,lambda)`
+  \end{aligned}
+$$
+  
+d) The probability that $T > 2$ given $T>1$ is
+$$
+  \begin{aligned}
+    P(T>2 | T>1)
+    &=\frac{P(T>2,T>1)}{P(T>1)}\\
+    &=\frac{P(T>2)}{P(T>1)}\\
+    &=\frac{e^{-2(`r lambda`)}}{e^{-(`r lambda`)}}\\
+    &={e^{-(`r lambda`)}}\\
+    &=`r 1-pexp(1,lambda)`\\
+    &=P(T>1)
+  \end{aligned}
+$$
+e) The probability that $T > 100,001$ given $T>100,000$ is
+$$
+  \begin{aligned}
+    P(T>100,001 | T>100,000)
+    &=\frac{P(T>100,001)}{P(T>100,000)}\\
+    &=\frac{e^{-100,001(`r lambda`)}}{e^{-100,000(`r lambda`)}}\\
+    &={e^{-(`r lambda`)}}\\
+    &=`r 1-pexp(1,lambda)`\\
+    &=P(T>1)
+  \end{aligned}
+$$
+     In fact, for any $t_0,t >0$
+$$
+    P(T>t+t_0|T>t_0)=P(T>t).
+$$
+
+## Example 17.3
+
+Suppose that $Z \sim N(0,1)$ then
+$$
+\begin{aligned}
+  P(Z^2 \leq 2)
+  &=P(-sqrt{2} < Z < \sqrt{2})\\
+  &=P(-1.4142 < Z < 1.4142)\\
+  &=P(Z < 1.4142) - P(Z < -1.4142)\\
+  &=.9213 - .0787\\
+  &=.8426.
+\end{aligned}
+$$
+
+Using the online calculator at stattrek we find that
+$$
+  P(X < 2) = .8426
+$$
+exactly as required. In fact, this would hold for any value, not just 2. 
+
+## Exercise 17.1
+
+a) According to the question,
+$$
+T_5 \sim \mbox{Gamma}(5,10).
+$$
+Then $\mu_{T_5}=E(T_5)=50$ and $\sigma^2_{T_5}=V(T_5)=500$. 
+
+b) Using the online calculator
+$$
+P(T_5 > 60)=0.28506.
+$$
+
+c) Using the calculator, the 5-th, 50-th (median), and 95-th percentiles of $T_5$ and the normal distribution with mean $50$ and variance $500$ are
+```{r}
+mydat <- tibble(p = c(5, 50, 95)/100,
+                Gamma = qgamma(p, 5, scale = 10),
+                Normal = qnorm(p, 50, sqrt(500)))
+```
+
+d) The following plot compares the ratio of the 5-th, 50-th, and 95-th percentiles for the gamma distribution with $\alpha = k$ and $\beta = 10$ and the normal distribution with matching mean and variance ($\mu=10k$ and $\sigma^2=100k$). For all three percentiles, the ratio gets closer to 1.00 as $k$ increases. This implies that the percentiles of the gamma and the percentiles of the normal distribution are becoming closer and closer, relatively speaking.
+```{r}
+mydat <- crossing(p = c(5, 50, 95)/100,
+                  k = c(5, 25, 50, 100)) |> 
+  mutate(Gamma = qgamma(p, k, scale = 10),
+         Normal = qnorm(p, k*10, 10*sqrt(k)),
+         r = Gamma/Normal)
+
+mydat |> 
+  ggplot(aes(x = k, y = r, colour = as.factor(100*p))) + 
+  geom_point() + 
+  ylim(c(0,NA)) + 
+  geom_hline(yintercept = 1, lty = 2) +
+  ylab("Ratio of Percentiles (Gamma/Normal)") +
+  labs(colour = "Percentile")
+```
+  

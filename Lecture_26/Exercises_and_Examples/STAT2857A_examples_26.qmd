@@ -1,0 +1,56 @@
+---
+title: "STAT 2857A -- Lecture 26 Examples and Exercises"
+format: 
+  pdf: default
+  docx: default
+knitr: 
+  opts_chunk:
+    fig.align: center
+    echo: false
+    warning: false
+    message: false
+    digits: 2
+prefer-html: true
+---
+
+```{r}
+# Load packages
+library(tidyverse)
+library(patchwork)
+library(knitr)
+library(kableExtra)
+library(broom)
+```
+
+## Example 26.1
+
+The normal resting heart rate of people between the ages of 18 and 25 is normally distributed with a mean of 70 beats per minute (bpm). 
+
+A professor measures the heart rates of 15 of 250 students as they leave their exam. The sample mean is $\bar x=74$ bpm with a standard deviation of $s=7$ bpm. 
+  
+Can the professor conclude that the mean heart rate of students leaving tests is above the normal resting heart rate? 
+
+## Example 26.2
+
+The amount of string on a spool produced by the Acme is supposed to be normally distributed with a mean of 50 m and a standard deviation of $.1 m$. 
+
+Each day the company tests 20 randomly selected spools. Suppose they find that the observed standard deviation is .11 m.
+  
+
+Can they conclude that the standard deviation is too high?
+
+The amount of string on a spool produced by the Acme is supposed to be normally distributed with a mean of 50~m. 
+  
+Each day the company tests 20 randomly selected spools. Suppose that the observed standard deviation is .11~m and .09~m the next.
+  
+Can they conclude that the standard deviation is different?
+
+## Example 26.3
+
+The historical average maximum daily temperature in London in October is normally distributed with a mean of 15C. Suppose that the temperatures on each of the 31 days are mutually independent\footnote{This is a highly questionable assumption.}
+
+a) The observed mean in October of this year was 17.76C with a standard deviation of 4.59C. Is it reasonable to believe that the mean is still 15C?
+  
+b) The historical standard deviation is 4C. Is it reasonable to believe that this is still true?
+  
+c) The standard deviation in September of this year was 3.00C. Can we conclude that daily maximum temperatures in October are more variable than in September?

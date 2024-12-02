@@ -1,0 +1,167 @@
+\documentclass[12pt]{article}
+
+\usepackage[margin=2cm]{geometry}
+\usepackage{enumerate,amsmath,framed,hyperref}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  filecolor=magenta,      
+  urlcolor=blue,
+}
+  
+\title{Probability and Statistics I\\
+\textsc{Lecture 28.~Statistics and their Distributions}}
+
+%% Initialize R
+<<setup,echo=FALSE,include=FALSE,cache=FALSE>>=
+## Load packages
+library(tidyverse)
+library(xtable)
+library(knitr)
+
+## Set chunk options
+opts_chunk$set(echo=FALSE,results="asis",warning=FALSE,message=FALSE,fig.height=4,fig.width=6,fig.show="hide")
+
+options(scipen=500)
+@
+
+\begin{document}
+
+\maketitle
+
+\section{Concepts}
+\begin{itemize}
+\item Statistics
+\item Point estimates
+\item Sampling distributions
+\item Random samples
+\item Deriving the sampling distribution for simple statistics
+\item Simulation experiments
+\end{itemize}
+
+\section{Introduction}
+\begin{itemize}
+\item Today we are going to start on the last chapter of the text that we will cover in the course
+\item The chapter is titled Chapter 6: Statistics and Sampling Distributions.
+\item The material in this chapter provides the essential connection between probability and statistical inference.
+\item What we cover in this chapter is why we have been studying probability all semester.
+\end{itemize}
+
+\section{Exercise 27.1}
+
+\begin{enumerate}[a)]
+\item What are some statistics that you could compute?
+  \begin{itemize}
+  \item A statistic is any quantity that we compute from sample data.
+    
+  \item Examples of statistics we could compute are:
+    \begin{itemize}
+    \item The number of times you win.
+    \item Your final balance.
+    \item The highest balance you had over the five spins. 
+    \end{itemize}
+    
+  \item Before we collect data there is uncertainty about the value of the statistics. For example, you don't know often you will win. The entire reason that we have studied probability is to be able to describe (i.e., to model) this uncertainty using probability distributions.
+    
+  \end{itemize}
+  
+\item Count the number of Smarties of each colour in your sample. Enter your data in the \href{https://uwoca-my.sharepoint.com/:x:/g/personal/sbonner6_uwo_ca/EZEgkzplE_lMtEcwJ-6HyDIBREt9WAuEsX86lhjij3zedw?e=Baz6Cl}{spreadsheet}.
+
+  \begin{itemize}
+  \item What we have in the spreadsheet is an approximation to the sampling distribution of the final balance.
+  \item The sampling distribution describes how the value of a statistic changes when we repeatedly sample and compute the statistic's value.
+  \item As an example we are going to consider the final balance.
+  \item Note that the final balance is varies between students even though you all did exactly the same thing. 
+  \item Our goal is to describe the sampling distribution so that we can compute the probability of events of interest. 
+  \end{itemize}
+  
+\item Describe the sampling distribution for the final balance.
+  \begin{itemize}
+  \item Have to do this on the fly!
+  \end{itemize}
+\end{enumerate}
+
+\section{Exercise 27.1ctd: Theoretical Sampling Distributions}
+Suppose that the proportion of each colour in the entire population of Smarties is exactly 1/8.
+  
+\begin{enumerate}[a)]
+\item What is the sampling distribution of $W$?
+  \begin{itemize}
+  \item Note that $W$ can take five values, 2000, 4000, 6000, 8000, 1000. Then
+    \[
+      P(W=w)=P(X=w/2000). 
+    \]
+    Hence we can construct the following table:
+    \begin{center}
+      \begin{tabular}{ccc@{=}c}
+        $w$ & $x$ & $P(W=x)$ & \\
+        \hline
+        0 &
+            0 &
+                $\binom{5}{0}\left(\frac{18}{37}\right)^0\left(\frac{19}{37}\right)^5$
+            & \Sexpr{dbinom(0,5,18/37)}\\
+        2000 &
+            1 &
+                $\binom{5}{1}\left(\frac{18}{37}\right)^1\left(\frac{19}{37}\right)^4$
+            & \Sexpr{dbinom(1,5,18/37)}\\
+        4000 &
+            2 &
+                $\binom{5}{2}\left(\frac{18}{37}\right)^2\left(\frac{19}{37}\right)^3$
+            & \Sexpr{dbinom(2,5,18/37)}\\
+        6000 &
+            3 &
+                $\binom{5}{3}\left(\frac{18}{37}\right)^3\left(\frac{19}{37}\right)^2$
+            & \Sexpr{dbinom(3,5,18/37)}\\
+        8000 &
+            4 &
+                $\binom{5}{4}\left(\frac{18}{37}\right)^4\left(\frac{19}{37}\right)^1$
+            & \Sexpr{dbinom(4,5,18/37)}\\
+        10000 &
+                5 &
+                $\binom{5}{5}\left(\frac{18}{37}\right)^4\left(\frac{19}{37}\right)^0$
+            & \Sexpr{dbinom(5,5,18/37)}\\
+      \end{tabular}
+    \end{center}
+    
+  \end{itemize}
+  
+
+\item What is the probability that the final balance is \texteuro 10,000?
+  \begin{itemize}
+  \item
+    \begin{align*}
+      P(W = 10000)
+      &=P(X=5)\\
+      &=\Sexpr{dbinom(5,5,18/37)}
+    \end{align*}
+  \end{itemize}
+   
+\item How many times would you expect to have to spin the wheel before the ball lands in a black cell for the 5th time?
+  \begin{itemize}
+  \item Let $T$ be the number of spins until the 5th black and $Y=T-5$. 
+  \item Then $Y \sim \mbox{Neg.~Bin.}(5,18/37)$.
+  \item The expected value of $Y$ is
+    \[
+      E(Y)=\frac{r(1-p)}{p}=\frac{\Sexpr{5}(1-18/37)}{18/37}=\Sexpr{(EY <- 5*19/18)}.
+    \]
+  \item Then $E(T)=E(Y+5)=\Sexpr{EY+5}$.
+  \end{itemize}
+\item What is the (approximate) probability that the ball lands in a black cell on more than half of 50 spins?
+  \begin{itemize}
+  \item Here we can use the normal approximation to the binomial:
+    Let $Z$ be the number of wins on 50 spins. Then $Z \sim \mbox{Binomial}(50,18/37)$. 
+    \begin{align*}
+      P(X > 25)
+      &=1-P(X \leq 25)\\
+      &\approx 1-P\left(Z \leq \frac{25.5 - 50(18/37)}{\sqrt{50(18/37)(19/37)}}\right)\\
+      &=1-P\left(Z \leq \Sexpr{(z <- (25.5 - 50*(18/37))/(sqrt(50*(18/37)*(19/37))))}\right)\\
+      &=1-\Sexpr{pnorm(z)}\\
+      &=\Sexpr{1-pnorm(z)}
+    \end{align*}
+    where $Z$ is a standard normal random variable, $Z \sim \mbox{Normal}(0,1)$. 
+  \end{itemize}
+  
+\end{enumerate}
+
+\end{document}

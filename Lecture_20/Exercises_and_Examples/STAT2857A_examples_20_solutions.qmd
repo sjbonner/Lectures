@@ -1,0 +1,252 @@
+---
+title: "STAT 2857A -- Lecture 20 Examples and Exercises"
+subtitle: "Solutions"
+format: 
+  pdf: 
+   include-in-header: 
+    - text: |
+        \usepackage{mathtools}
+knitr: 
+  opts_chunk:
+    fig.align: center
+    echo: false
+    warning: false
+    message: false
+    digits: 2
+---
+
+```{r}
+## Load packages
+library(tidyverse)
+library(knitr)
+library(latex2exp)
+library(xtable)
+```
+
+## Example 20.1
+
+We can estimate the joint pmf of $X$ and $Y$ by
+$$
+P(X=x,Y=y) = \frac{N(X=x,Y=x)}{N}
+$$
+for all possible pairs of $x=0,1$ and $y=1,\ldots,6$.
+
+For example
+$$
+\begin{aligned}
+    P(X=0,Y=1)
+    &\approx \frac{825}{4526}\\
+    &=.182\\
+    P(X=0,Y=2)
+    &\approx \frac{560}{4526}\\
+    &=.124\\
+  \end{aligned}
+$$
+etcetera.
+
+The following table provides the complete pmf for all 12 possibilities:
+```{r}
+berkeley <- read_csv("../Slides/berkeley.csv") %>%
+    gather(key="Gender",value="Count",-Major)
+
+berkeley2 <- mutate(berkeley,p=round(Count/sum(Count),3)) %>%
+    select(-Count) %>%
+    spread(key=Gender,value=p)
+
+#xtable(berkeley2, digits = 3)
+kable(berkeley2)
+```
+  
+b) The marginal distribution for $X$ is given by
+$$
+  \begin{aligned}
+    P(X=0)
+    &=P(X=0,Y=1) + \ldots + P(X=0,Y=6)\\
+    &=.182 + .124 + .072 + .092  +.042 + .082\\
+    &=.594\\
+    \end{aligned}
+$$
+and
+$$
+\begin{aligned}
+P(X=1)
+    &=P(X=1,Y=1) + \ldots + P(X=1,Y=6)\\
+    &=.024 + .006 + .131 + .083 + .087  +.075\\
+    &=.406.
+  \end{aligned}
+$$
+The marginal distribution for $Y$ is given by
+$$
+  \begin{aligned}
+    P(Y=1)
+    &=P(X=0,Y=1) + P(X=1,Y=1)\\
+    &=.182 + .024\\
+    &=.206,\\
+    P(Y=2)
+     &=P(X=0,Y=1) + P(X=1,Y=1)\\
+    &=.124 + .006\\
+    &=.130\\
+    &\mbox{etc}
+  \end{aligned}
+$$
+The following table provides the complete marginal pdf of $Y$:
+```{r}
+berkeley_majors <- berkeley2 %>%
+  group_by(Major) %>%
+  mutate(p=Men + Women) %>%
+  select(Major, p)
+
+kable(berkeley_majors)
+```
+
+c) If $X$ and $Y$ were independent then we would find that
+$$
+    P(X=x,Y=x) = P(X=x)P(Y=y)
+$$
+    for all $x$ and $y$. There is some random error since we estimated the probabilities from data so we wouldn't expect this to be exactly true, but it should be approximately true. However, consider the probability that $X=0$ and $Y=2$. Our estimated probability is $P(X=0,Y=2)=.124$ but
+$$
+  \begin{aligned}
+    P(X=1) P(Y=2)
+    &=.594(.130)\\
+    &=.077.
+  \end{aligned}
+$$
+    Similarly $P(X=1,Y=3)\approx .131$ but $P(X=1)P(Y=3)\approx .082$. This is strong evidence that the random variables are not independent.
+
+
+## Example 20.2
+
+a) As with univariate problems we require that the pdf integrate to 1. However, we must now integrate over both $X$ and $Y$. We need
+$$
+  \begin{aligned}
+    \int_{-\infty}^{\infty}\int_{-\infty}^{\infty}f(x,y) ~dxdy &= 1\\
+    \int_{-1}^1\int_{-1}^1 c(1-x^2)(1-y^2)~dxdy &=1\\
+    c\int_{-1}^1c(1-x^2)~dx \int_{-1}^1 (1-y^2)~dy&=1\\
+    c\left(\left[x-\frac{x^3}{3}\right]_-1^1\right)^2&=1\\
+    c\left(\frac{4}{3}\right)^2&=1\\
+  \end{aligned}
+$$
+  which implies that $c=9/16$.
+
+    The complete pdf is
+  $$
+    f(x,y)=\frac{9}{16}(1-x^2)(1-y^2)
+  $$
+    for $-1<x<1$ and $-1<y<1$.
+  
+b) The marginal distributions are found in the same way as for discrete random variables except that we need to integrate instead of summing.
+$$
+  \begin{aligned}
+    f(x)
+    &=\int_{-\infty}^{\infty} f(x,y) ~dy\\
+    &=\int_{-1}^1 \frac{9}{16}(1-x^2)(1-y^2) ~dy\\
+    &=\frac{9}{16}(1-x^2)\left[y-\frac{y^3}{3}\right]_-1^1\\
+    &=\frac{3}{4}(1-x^2)
+  \end{aligned}
+$$
+  for $-1 < x < 1$.
+  Exactly similar
+$$
+\begin{aligned}
+    f(y)
+    &=\int_{-\infty}^{\infty} f(x,y) ~dx\\
+    &=\int_{-1}^1 \frac{9}{16}(1-x^2)(1-y^2) ~dx\\
+    &=\frac{9}{16}(1-y^2)\left[x-\frac{x^3}{3}\right]_-1^1\\
+    &=\frac{3}{4}(1-y^2)
+  \end{aligned}
+$$
+  for $-1 < y < 1$.
+
+c) In this case
+$$
+    f(x,y) = \frac{9}{16}(1-x^2)(1-y^2)=\left(\frac{3}{4}(1-x^2)\right)\left(\frac{3}{4}(1-y^2)\right)=f(x)f(y)
+$$
+  for all $x$ and $y$ in the support. This means that $X$ and $Y$ are independent.
+
+## Exercise 20.1
+
+a) For $f(x,y)$ to be a valid joint pdf, we require that
+$$
+\int_{-\infty}^\infty \int_{-\infty}^\infty f(x,y)~dx~dy=1.
+$$
+However, we cannot integrate the minimum directly. Instead, we need to divide the function into two pieces. Note that
+$$
+f(x,y)
+=\left\{
+\begin{array}{ll}
+cx & 0<x<y<1\\
+cy & 0<y<x<1\\
+0 & \mbox{otherwise}
+\end{array}
+\right..
+$$
+Then
+$$
+\int_{-\infty}^\infty \int_{-\infty}^\infty f(x,y)~dx~dy=\int_0^1\int_0^x cy ~dy ~dx + \int_0^1 \int_x^1 cx ~ dy dx.
+$$
+For the first integral
+$$
+\begin{aligned}
+\int_0^1\int_0^x cy ~dy ~dx
+&=\int_0^1 \frac{cx^2}{2} ~dx\\
+&=c/6.
+\end{aligned}
+$$
+Similarly
+$$
+\int_0^1 \int_x^1 cx ~ dy dx=c/6.
+$$
+Hence
+$$
+\int_{-\infty}^\infty \int_{-\infty}^\infty f(x,y)~dx~dy
+=\frac{2c}{6}=\frac{c}{3}
+$$
+so $c=3$. The complete pdf is
+$$
+f(x,y)
+=3 \min(x,y), \quad 0<x,y<1
+$$
+or
+$$
+f(x,y)=\left\{
+\begin{array}{ll}
+3x & 0<x<y<1\\
+3y & 0<y<x<1\\
+0 & \mbox{otherwise}
+\end{array}
+\right..
+$$
+
+b) 
+$$
+\begin{aligned}
+P(X>.5,Y>.5)
+&=\int_.5^1 \int_.5^1 f(x,y) ~dy ~dx\\
+&=\int_.5^1 \int .5^x y ~dy ~dx + \int_.5^1 \int x^.5 x ~dy ~dx\\
+&=.25 + .25\\
+&=.5
+\end{aligned}
+$$
+
+c) The marginal density of $x$ is
+$$
+\begin{aligned}
+f_X(x)
+&=\int_{-\infty}^\infty f(x,y) ~dy\\
+&=\int_0^1 3\min(x,y) ~ dy\\
+&=\int_0^x 3y ~dy + \int_x^1 3x ~dy\\
+&=\frac{3x^2}{2} + 3(x-x^2)\\
+&=3x\left(1-\frac{x}{2}\right).
+\end{aligned}
+$$
+By symmetry, the marginal pdf of $Y$ is
+$$
+\begin{aligned}
+f_Y(y)&=3y\left(1-\frac{y}{2}\right).
+\end{aligned}
+$$
+
+d) No, $X$ and $Y$ are not independent because
+$$
+f(x,y)=\min(x,y) \neq f_X(x)f_Y(y)=9xy\left(1-\frac{x}{2}\right)\left(1-\frac{y}{2}\right).
+$$

@@ -1,0 +1,52 @@
+---
+title: "STAT 2857A -- Lecture 3 Examples and Exercises"
+subtitle: Revised 18/09/24
+format: 
+  pdf: default
+  docx: default
+knitr: 
+  opts_chunk:
+    fig.align: center
+    echo: false
+    warning: false
+    message: false
+    digits: 2
+prefer-html: true
+---
+
+```{r}
+# Load packages
+library(tidyverse)
+library(patchwork)
+library(knitr)
+library(kableExtra)
+library(broom)
+```
+
+## Example 3.1
+
+Suppose that you roll a (fair) three-sided die three times.
+
+a) What is the probability that you never roll a three?
+b) What is the probability that the sum is greater than 4?
+c) What is the probability that the number rolled is less than three every time or the sum is greater than 4?
+
+## Example 3.2
+
+Identify whether each of the following is a permutation or a combination. What are the values?
+
+The number of:
+a) hands of 5 cards that can be dealt from a standard deck of 52 unique cards.
+b) ways for four people to line up.
+c) selections on the Lotto 6/49.
+d) teams of 10 students that are possible in a class of 150.
+e) create 2 lines of 10 from a class of 30 students.
+
+## Example 3.3
+
+A standard deck of cards contains 13 cards (A,2,3,$\ldots$,10,J,Q,K) in each of 4 suits (Clubs, Diamonds, Hearts, Spades).
+
+a) What is the probability that you are dealt a royal flush?
+b) What is the probability that you are dealt a royal flush (9, 10, J, Q, K of the same suit) in order?
+c) What is the probability that you are dealt a pair (two cards of one face value and three cards of other non-matching face values)?
+d) What is the probability of getting a full-house (two cards of one face value and three of another?

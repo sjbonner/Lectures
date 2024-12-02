@@ -1,0 +1,154 @@
+---
+title: "STAT 2857A -- Lecture 5 Examples and Exercises"
+subtitle: "Solutions -- Revised 23/09/24"
+format: 
+  pdf: 
+   include-in-header: 
+    - text: |
+        \usepackage{mathtools}
+knitr: 
+  opts_chunk:
+    fig.align: center
+    echo: false
+    warning: false
+    message: false
+    digits: 2
+---
+
+```{r}
+# Load packages
+library(tidyverse)
+library(patchwork)
+library(knitr)
+library(kableExtra)
+library(broom)
+```
+
+## Example 5.1
+
+No, the events cannot be independent. 
+
+If $A$ and $B$ are disjoint then $A\cap B=\emptyset$ which implies that $P(A\cap B)=0$. Then
+$$
+P(A|B)=P(A\cap B)/P(B)=0
+$$
+and
+$$
+P(B|A)=P(B\cap A)/P(A)=0.
+$$
+However, if $A$ and $B$ were independent, then this would imply that $P(A)=P(A|B)=0$ and $P(B)=P(B|A)=0$. This contradicts the assumption that $P(A)>0$ and $P(B)>0$. Hence, two events with positive probability cannot be both disjoint and independent.
+
+## Example 5.2
+
+a) These are likely not independent because weather patterns hold for multiple days. If you know that it rained on one day then that increases the probability that it rains on the next day. Suppose that the long-term probability of rain on a day at the start of October is $p$ so that $P(A)=P(B)=p$. If we know that $A$ occurred then we would likely conclude that $P(B|A)>p=P(B)$. 
+
+b) These are likely independent, given our current ability to model weather. The two cities are far enough apart that the weather in one is not a good predictor of weather in the other. Knowing that it rained in one London does not tell us anything more about the other London.
+
+c) This depends a bit on what we know about Jonah and Erin. If they are two randomly selected students then their scores are likely independent. Suppose that the probability any student scores above 80% is $p$ so that $P(A)=P(B)=p$. Unless there is a link between the students, $P(B|A)$ is still equal to $p$. However, this might change if we know that Jonah and Erin study together or (this is not advice) they cheat together. In that case, $P(B|A)$ would likely be greater than $p$ so that $P(B|A)>P(B)$ and the two are dependent. 
+
+d) These events are mutually exclusive so they have to be dependent. It's not possible that two different teams win the world series. 
+
+## Example 5.3
+
+By the law of total probability
+$$
+P(A')=P(A' \cap B) + P(A' \cap \textcolor{red}{B'})=.35 + .35=.70.
+$$
+and
+$$
+P(B')=P(A \cap B') + P(A' \cap B')=.15 + .35 = .50. 
+$$
+Then
+$$
+P(A)=1-P(A')=.30
+$$
+and 
+$$
+P(B)=1-P(B')=.50.
+$$
+Further
+$$
+P(A \cup B)=P((A' \cap B')')=1-P(A' \cap B')=.65
+$$
+and
+$$
+P(A \cap B)=P(A) + P(B) - P(A \cup B)=.70 + 50 - .65 = .15.
+$$
+Then
+$$
+P(A|B)=P(A \cup B)/P(B)=.15/.50=.30=P(A).
+$$
+This shows that $A$ and $B$ independent.
+
+## Example 5.4
+
+If $A'$ and $B'$ are independent then
+$$
+P(A' \cap B')=P(A')P(B')
+$$
+Then
+$$
+P(A'\cap B')=(1-P(A))(1-P(B))=1-P(A)-P(B)+P(A)P(B)
+$$
+which implies that
+$$
+P(A)P(B)=P(A) + P(B) + P(A'\cap B') - 1.
+$$
+Applying De Morgan's law
+$$
+P(A' \cap B')=P((A \cup B)')=1-P(A \cup B)=1-P(A)-P(B) +P(A \cap B).
+$$
+Combining these results yields
+$$
+P(A)P(B)=P(A \cap B)
+$$
+which implies that $A$ and $B$ are independent.
+
+## Exercise 5.1
+
+a) $H_1$ and $H_2$ are independent if knowing that outcome of toss 1 does not change the probability of heads (or tails) on toss 2. I.e., if $P(H_2)=p$ then $P(H_2|H_1)=p$ as well.
+
+b) No, independence does not mean that the coin is fair. Suppose that the coin lands heads side up 80% of the time so that $P(H_1)=P(H_2)=.80$. The tosses are still independent if $P(H_2|H_1)=.80$. It doesn't matter what the original (marginal) probability is. What matters is whether the probability changes when we condition one event on another.
+
+c) The events $H_1,\ldots,H_n$ are independent if
+$$
+P(H_{i_1} \cap \cdots \cap H_{i_k}) = P(H_{i_1})\cdots P(H_{i_k})
+$$
+for any $\{i_1,\ldots,i_k\}\subset {1,\ldots,n}$. I.e.
+$$
+P(H_i \cap H_j)=P(H_i)P(H_j)
+$$
+for any two distinct indices $i$ and $j$,
+$$
+P(H_i \cap H_j \cap H_k)=P(H_i)P(H_j)P(H_k)
+$$
+for any three distinct indices $i$, $j$, and $k$
+$$
+P(H_i \cap H_j \cap H_k \cap H_l)=P(H_i)P(H_j)P(H_k)P(H_l)
+$$
+for any four distinct indices $i$, $j$, $k$, and $l$, etc.
+
+d) The probability that the coin lands heads-side up on every one of ten tosses is
+$$
+P(H_1 \cap H_2 \cap \cdots \cap H_{10})=P(H_1)P(H_2)\cdots P(H_{10}).
+$$
+Assuming the coin is fair (as stated in the question), $P(H_j)=.5$ for all $j=1,\ldots,n$ so that
+$$
+P(H_1 \cap H_2 \cap \cdots \cap H_{10})=.5^{10}=.0009766.
+$$
+
+e) The event we are interested in is $H_1 \cap H_2' \cap H_3 \cap H_4' \cdots \cap H_{10}'$. As in the previous part, the probability is
+$$
+P(H_1 \cap H_2' \cap H_3 \cap H_4' \cdots \cap H_{10}')=.5^{10}=.0009766.
+$$
+In fact, if the coin is fair then the probability of any single outcome of 10 tosses is $.5^{10}=.0009766$.
+
+f) From the previous part, we know that the outcomes are equally likely when the coin is fair. Hence, we only need to count the outcomes. Given that there are $n=10$ tosses, the number of outcomes in which the coin lands heads-side up 5 times is
+$$
+{10 \choose 5}=252.
+$$
+The probability that the coin lands heads-side up exactly 5 times is then
+$$
+{10 \choose 5}.5^{10}=.24609.
+$$
+The probability of 5 heads on 10 tosses is .246. 

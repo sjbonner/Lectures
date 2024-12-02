@@ -1,0 +1,65 @@
+---
+title: "STAT 2857A -- Lecture 5 Examples and Exercises"
+format: 
+  pdf: default
+  docx: default
+knitr: 
+  opts_chunk:
+    fig.align: center
+    echo: false
+    warning: false
+    message: false
+    digits: 2
+prefer-html: true
+---
+
+```{r}
+# Load packages
+library(tidyverse)
+library(patchwork)
+library(knitr)
+library(kableExtra)
+library(broom)
+```
+
+## Example 5.1
+
+Suppose that $A$ and $B$ are disjoint events with positive probability ($P(A)>0$ and $P(B)>0$). Can they be independent?
+
+## Example 5.2
+
+Which pairs of events do you think are independent? Explain.
+
+a) A: It rains in London, Ontario, on October 1.\\
+  B: It rains in London, Ontario, on October 2.
+b) A: It rains in London, Ontario, on October 1.\\
+      B: It rains in London, England, on October 1.
+c) A: Erin scores $>80\%$ on an exam.\\
+    B: Jonah scores $>80\%$ on the same exam.
+d) A: The Yankees win the baseball World Series.\\
+      B: The Royals win the baseball World series.
+      
+## Example 5.3
+
+Let $A$ and $B$ be two events such that
+
+a) $P(A \cap B')=.15$
+b) $P(A' \cap B')=.35$
+c) $P(A' \cap B)=.35$
+
+Are $A$ and $B$ independent?
+
+## Example 5.4
+
+Show that if $A'$ and $B'$ are independent then $A$ and $B$ are also independent. 
+
+## Exercise 5.1
+
+Suppose that you toss a fair coin $n$ times and count the number of heads.
+
+a) Let $H_i$ be the event that the coin lands heads side up on the $i$-th toss. What does it mean for $H_1$ and $H_2$ to be independent?
+b) Does independence necessarily mean that the coin is fair?
+c) What does it mean for the events $H_1,\ldots,H_n$ to be mutually independent?
+d) What is the probability that the coin lands heads-side up on every one of $n=10$ tosses?
+e) What is the probability that the tosses alternate between landing heads-side up first then tails-side up etc if $n=10$?
+f) What is the probability that the coin lands heads-side up 5 times if $n=10$?

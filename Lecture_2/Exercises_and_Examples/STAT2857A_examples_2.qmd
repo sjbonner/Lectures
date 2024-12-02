@@ -1,0 +1,69 @@
+---
+title: "STAT 2857A -- Lecture 2 Examples and Exercises"
+format: 
+  pdf: default
+  docx: default
+knitr: 
+  opts_chunk:
+    fig.align: center
+    echo: false
+    warning: false
+    message: false
+    digits: 2
+prefer-html: true
+---
+
+```{r}
+# Load packages
+library(tidyverse)
+library(patchwork)
+library(knitr)
+library(kableExtra)
+library(broom)
+```
+
+## Example 2.1
+
+ Suppose that the sample space, $\mathcal S$, contains $N>2$ outcomes and we assign each event $A \subset \mathcal S$ probability
+  $$
+    P(A)=\left(\frac{N(A)}{N}\right)^k
+  $$
+  where $N(A)$ denotes the number of outcomes in $A$ for some positive integer $k$, i.e. $k \in \mathbb{Z}^+$.
+
+For what values of $k$ is this assignment valid?
+
+
+## Example 2.2: Happy Birthmonth! 
+
+Consider the events $E_1$, $E_2$, and $E_3$ from Example 1.1 part 2. 
+
+- $E_1=A_1 \bigcap B_1 \bigcap C_1$
+- $E_2=\bigcup_{i=1}^{12} (A_i \bigcap B_i \bigcap C_i)$
+- $E_3=\bigcup_{i=1}^{12} (A_i \bigcap B_i \bigcap C_i')$
+
+Suppose that the probability of any outcome is equally likely. 
+
+a) What is the probability of each event?
+b) What is the probability that exactly 2 of the students are born in the same month?
+c) What is the probability that at least 2 of the students are born in the same month?
+d) What does the probability in part c) mean?
+
+## Example 2.3
+
+Provide an interpretation for the following statements:
+
+a) The probability that a randomly selected number between 1 and 10 is prime is $.5$.
+b) The probability that we draw a club from a well shuffled deck of cards is $.25$.
+c) The probability that a randomly selected newborn baby is assigned to be male at birth is $.503$. 
+d) The probability that it will rain this afternoon is $.70$.
+
+## Exercise 2.1
+
+You and your friend play a game of chance. They think of a number between 1 and 10, and you try to guess it. You win if you guess the number. 
+
+Suppose that your friend choose the number at random (i.e., the numbers are equally likely). 
+
+a) Compute the probability of winning and provide an interpretation.
+b) What is the probability that your guess is exactly one number away from the number your friend chose?
+c) What is the probability that your guess is within one number of the number your friend chose?
+d) What is the probability that your guess is more than one number away from the number your friend chose?

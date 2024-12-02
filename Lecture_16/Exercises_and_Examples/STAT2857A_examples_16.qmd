@@ -1,0 +1,55 @@
+---
+title: "STAT 2857A -- Lecture 16 Examples and Exercises"
+format: 
+  pdf: default
+  docx: default
+knitr: 
+  opts_chunk:
+    fig.align: center
+    echo: false
+    warning: false
+    message: false
+    digits: 2
+prefer-html: true
+---
+
+```{r}
+# Load packages
+library(tidyverse)
+library(patchwork)
+library(knitr)
+library(kableExtra)
+library(broom)
+```
+
+## Example 16.1
+The adult heights of people assigned to be male and female at birth can be modelled amazingly well by a normal distribution. Suppose that the adult height people assigned to be female at birth is normally distributed with mean 64 inches and standard deviation 3 inches.
+$$
+      X \sim \mbox{Normal}(64,9).
+$$
+    
+
+a) What is the density of $X$? Sketch the density.
+b) What is the probability that someone assigned to be female at birth will be:
+      i) less than 5 feet tall? 
+      ii) greater than 6 feet tall?
+      iii) between 5 and 6 feet tall?
+c) Find values $l$ and $u$ such that $P(l < X < u) \approx .95$. 
+d) Repeat part b) using standardization.
+e) Repeat part c) using standardization.
+
+## Example 16.2
+
+A standard roulette wheel has 37 pockets in which the ball may land. Of these, 18 pockets are red, 18 are black, and 1 is green. Suppose that you place \$1 bets that the ball will land in a black pocket on 200 consecutive games. Let $X$ be the number of times you win.
+
+a) What is the exact probability that you win between 95 and 105 games inclusive?
+b) Approximate this probability with the normal distribution?
+
+## Exercise 16.1
+
+Suppose that the amount of time a cell phone battery lasts normally distributed with mean 28 hours and standard deviation 4 hours depending on the use.
+
+a) Sketch the probability density function.
+b) Shade the area defining the probability that the battery lasts for more than 34 hours. 
+c) What is the probability that the battery lasts for more than 34 hours? Compute the value using the calculator and by standardizing.
+d) Compute the probability that the battery lasts for more than 36 hours without using the calculator or standardizing.

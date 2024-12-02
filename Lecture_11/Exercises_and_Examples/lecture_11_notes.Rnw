@@ -1,0 +1,138 @@
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{enumerate,amsmath,graphicx,url}
+
+\usepackage{arev}
+\usepackage[T1]{fontenc}
+
+%% Initialize R
+<<setup,echo=FALSE,include=FALSE,cache=FALSE>>=
+## Load packages
+library(knitr)
+library(tidyverse)
+library(xtable)
+
+## Set chunk options
+opts_chunk$set(echo=FALSE,results="asis",warning=FALSE,message=FALSE,fig.height=4,fig.width=6,fig.show="hide")
+
+options(scipen=500)
+@
+
+\begin{document}
+\begin{center}
+  \Large{\textsc{\textbf{SS2857 Probability and Statistics I}}}\\
+  \Large{Fall 2021}
+
+  \bigskip
+
+  \large{Lecture 15 Notes: The Hypergeometric and Negative Binomial}
+
+\end{center}
+
+\section{Introduction}
+\begin{itemize}
+\item So far we have only considered the binomial distribution as an example of a probability distribution for a discrete random variable.
+\item You might have the idea that all discrete random variables follow a binomial distribution. 
+\item The binomial only arises under very set conditions.
+\item Today we are going to look at three other important distributions for discrete random variables. 
+\end{itemize}
+
+\section{Exercise 14.1: The Hypergeometric Distribution}
+
+\begin{enumerate}[a)]
+\item
+  \begin{itemize}
+  \item The random variable $Y$ follows a negative binomial distribution because:
+    \begin{enumerate}[1.]
+    \item The population consists of a finite number of individual, $N$.
+    \item $N$ individuals can be classified as successes and $N-M$ as failures.
+    \item A sample of $n$ individuals is chosen so \textit{without replacement} so that each sample is equally likely.
+    \end{enumerate}
+
+  \item Probability Mass Function\\
+    The pmf of a hypergeometric random variable, $Y$, with parameters $M$, $N$, and $n$ is
+    \[
+      P(Y=y)=h(y;n,M,N)=\frac{\binom{M}{y}{\binom{N-M}{n-y}}}{\binom{N}{n}}
+    \]
+    with support $y=0,\ldots,M$.
+    
+  \item Properties
+    \begin{itemize}
+    \item CDF: requires special functions
+    \item MGF: requires special functions
+    \item Mean: $E(Y)=nM/N$
+    \item Variance: $V(Y)=\left(\frac{N-n}{N-1}\right)\left(\frac{nM}{N}\right)\left(1-\frac{M}{N}\right)$
+    \end{itemize}
+  \end{itemize}
+
+\item
+  The probability that the accountant selects 5 accounts with errors is
+  \begin{align*}
+    P(Y=5)
+    &=h(5;20,10,100)\\
+    &=\frac{\binom{10}{5}{\binom{100-10}{10-5}}}{\binom{100}{20}}\\
+    &=\Sexpr{(p1 <- dhyper(5,10,90,20))}
+  \end{align*}
+  The probability the accountant chooses 5 accounts with errors is \Sexpr{p1}. 
+  
+\item
+  \begin{itemize}
+  \item The mean and variance of $Y$ are:
+    \begin{align*}
+      E(Y)
+      &=\frac{nM/N}=\frac{20(10)}{100}=.20\\
+      V(Y)&=\left(\frac{N-n}{N-1}\right)\left(\frac{nM}{N}\right)\left(1-\frac{M}{N}\right)
+            =\left(\frac{100-20}{100-1}\right)\left(\frac{20(10)}{100}\right)\left(1-\frac{10}{100}\right)=1.45\\
+    \end{align*}
+  \item Binomial approximation:\\
+  Let $p=M/N$ be the proportion of successes in the population. Then the mean and variance can be rewritten as
+  \begin{itemize}
+  \item Mean: $E(X)=np$
+    
+  \item Variance: $V(X)=\left(\frac{N-n}{N-1}\right)np\left(1-p\right)$
+  \end{itemize}
+
+  If $N$ is much larger than $n$ then $V(X) \approx np(1-p)$, which is the variance of a binomial distribution. In this case we can approximate the distribution of $X$ as
+  \[
+    X \overset{\cdot}{\sim} \mbox{Binomial}(n,p).
+  \]
+  The symbol $\overset{\cdot}{\sim}$ is read as ``approximately distributed as''.
+
+  This makes sense. If the population is much larger than our sample then drawing without replacement doesn't affect the ratio of the two groups very much. This means that the probability of drawing a success stays roughly constant, which is what happens with a binomial distribution.
+  \end{itemize}
+
+\end{enumerate}
+
+\section{The Negative Binomial Distribution}
+
+\begin{enumerate}[a)]
+\item We would model this with a negative binomial distribution. The negative binomial distribution models the number of failures in a binomial experiment until the $r^{th}$ success.
+  
+  \begin{enumerate}[1.]
+  \item The experiment consists of independent and identical trials.
+  \item Each trial has two outcomes (called success and failure).
+  \item The probability of success, $p$, is the same for all trials.
+  \item The experiment continues until the $r^{th}$ success occurs.
+  \end{enumerate}
+  
+\item Note that the probability that any one account sampled has errors is $10/100=.10$. The probability that the accountant samples 20 accounts without errors before reaching 5 with errors is
+  \begin{align*}
+    P(Z=5)
+    &=nb(5;5,.10)\\
+    &=\binom{20+5-1}{5-1}.1^{20}(1-.1)^5\\
+    &\Sexpr{(p2 <- dnbinom(20,5,.1))}
+  \end{align*}
+  The probability that the accountant samples 20 accounts without errors before reaching 5 with errors is \Sexpr{p2}.
+  
+\item The mean and variance are
+  \begin{align*}
+    E(Z)
+    &=\frac{5(1-.1)}{.1}=\Sexpr{5*.9/.1}\\
+    V(Z)
+    &=\frac{5(1-.1)}{.1^2}=\Sexpr{5*(1-.1)/.1^2}
+  \end{align*}
+  
+\end{enumerate}
+
+\end{document}

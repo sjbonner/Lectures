@@ -1,0 +1,121 @@
+---
+title: "STAT 2857A -- Lecture 26 Examples and Exercises"
+subtitle: "Solutions"
+format: 
+  pdf: 
+   include-in-header: 
+    - text: |
+        \usepackage{mathtools}
+knitr: 
+  opts_chunk:
+    fig.align: center
+    echo: false
+    warning: false
+    message: false
+    digits: 2
+---
+```{r}
+## Load packages
+library(tidyverse)
+library(knitr)
+library(latex2exp)
+library(xtable)
+
+## Options
+options(xtable.comment = FALSE)
+```
+
+## Example 26.1
+
+We are told in the question that the sample size is $n=15$, the observed mean is $\bar x_n=74$, and the observed standard deviation is $s_n=7$. If the heart rate of the students is distributed according to the base heart rate with a mean of 70 bpm, then 
+$$
+T=\frac{\bar X_n-70}{s_n/\sqrt{15}} \sim t_{14}. 
+$$
+The observed value of this statistic is 
+$$
+t=\frac{74 - 70}{7/\sqrt{15}}=2.213.
+$$
+Using the calculator at stattrek,
+$$
+P(T > t)=1-.978=.022.
+$$
+This is very small which tells us that a value of the statistic this large (or larger) would be unlikely if the mean was actually 70. It is more reasonable to believe that the mean is greater than 70 and the mean heart rate of the students has been increased.
+
+## Example 26.2
+
+According to the question, the variance should be $\sigma^2=.10^2=.01$. If the true variance is $\sigma^2$, then
+$$
+X^2=\frac{19S_{20}^2}{.10^2} \sim \chi^2_{19}.
+$$
+
+However, the observed sample variance from the 50 spools was $s^2_{50}=.12^2=.0144$. The observed value of the statistic is
+$$
+x^2_{obs}=\frac{19(.11^2)}{.10^2}= 22.99.
+$$
+To assess the likelihood of this outcome if the variance is truly $.01$, we can compute the probability of seeing a value of the statistic as big or bigger than what we observed:
+$$
+P(X^2 \geq x^2_{obs})=1-.762=.238.
+$$
+This means that we would expect to observed a standard deviation this large from 20 randomly selected spools almost 24% of the time. The is not unusual, and so there is no reason to believe that the true standard deviation is not $\sigma = .10$ m. 
+
+## Example 26.3
+
+If the variances for the two days were the same, then $\sigma_1^2=\sigma^2_2$. Regardless of what the true variance is, we would have that
+$$
+\frac{S_1^2}{S_2^2}=\frac{S_1^2/\sigma_1^2}{S_2^2/\sigma_2^2} \sim F_{19,19}.
+$$
+The observed value of this statistic is
+$$
+F_{obs}=\frac{.11^2}{.09^2}=1.494.
+$$
+Once again, we will assess the likelihood of this value by looking at the probability of getting a value as big or bigger:
+$$
+P(F \geq F_{obs})=.195.
+$$
+Once again, this probability is fairly large meaning that such an outcome is likely even if $\sigma_1^2=\sigma^2_2$. Based on this, there is no reason to believe that the variances are different.
+
+## Exercise 26.1
+
+a) If the maximum daily temperatures in October were mutually independent and normally distributed with mean $\mu=15$C then
+$$
+T=\frac{\bar X - \mu}{S/\sqrt{n}}=\frac{\bar X-15}{4.59/\sqrt{31}}
+$$
+would be distributed according to a $t$-distribution with $30$ degrees of freedom. The observed value of the statistic is
+$$
+t=\frac{17.76-15}{4.59/\sqrt{31}}=3.348. 
+$$
+The probability of getting a value of the test statistic this large is
+$$
+P(T \geq 3.348)=.0011.
+$$
+This is very, very small. Either this October was a one in $1/.0011=909$ year anomaly, or (more reasonably) the mean maximum daily temperature in October is no long 15C. 
+
+b) If the true variance is $\sigma^2=4^=16$, then
+$$
+X^2=\frac{(n-1)S_{31}^2}{\sigma^2}=\frac{20S_{31}^2}{16} \sim \chi^2_{30}.
+$$
+In this case, sample variance was $s^2_{31}==4.59^2=21.068$. The observed value of the statistic is
+$$
+x^2_{obs}=\frac{30(21.068)}{16}= 39.503.
+$$
+The probability of seeing a value of the statistic as big or bigger than what we observed is
+$$
+P(X^2 \geq 39.503)=1-.885=.115.
+$$
+This means that we would expect to observed a standard deviation this large October 11.5% of the time if the true standard deviation is actually 4C. This is slightly unlikely but not very unlikely. We'd expect it to happen once in every 8 to 9 years. Because of this, there is no reason to believe that standard deviation has increased.
+
+c) Let $\sigma_1^2$ be the true variance for October and $\sigma_2^2$ the true variance for September. If variances for the two days were the same, then
+$$
+\frac{S_1^2}{S_2^2}=\frac{S_1^2/\sigma_1^2}{S_2^2/\sigma_2^2} \sim F_{30,29}.
+$$
+The observed value of this statistic is
+$$
+F_{obs}=\frac{4.59^2}{3.00^2}=2.341.
+$$
+In this case, we are interested in knowing if $\sigma_1^2>\sigma_2^2$ which would lead to bigger values of the statistic. We can assess how big the observed value is by looking at the tail probability:
+$$
+P(F \geq F_{obs})=1-.988=.012.
+$$
+This is very small. If the standard deviations were equal, then we would expect a value of the statistic this large only once in every 83 years. This provides strong evidence that the standard deviation in October is greater than in September\footnote{Technically, this statement is true provided that all of the other assumptions we have made are valid. These are that the maximum daily temperature is normally distributed, that the mean and standard deviation are constant over an entire month, and that the temperatures over days in a month are mutually independent. Some of these seem questionable, and you will talk about how to assess these assumptions in STAT 2858.}
+
+

@@ -1,0 +1,377 @@
+\documentclass[12pt]{article}
+
+\usepackage[margin=2cm]{geometry}
+\usepackage{enumerate,amsmath,framed}
+
+\title{Probability and Statistics I\\
+\textsc{Lecture 18. Continuous Random Variables and Probability Distributions}}
+
+%% Initialize R
+<<setup,echo=FALSE,include=FALSE,cache=FALSE>>=
+## Load packages
+library(knitr)
+library(tidyverse)
+library(xtable)
+
+## Set chunk options
+opts_chunk$set(echo=FALSE,results="asis",warning=FALSE,message=FALSE,fig.height=4,fig.width=6,fig.show="hide")
+
+options(scipen=500)
+@
+
+\begin{document}
+
+\maketitle
+
+\section{Review Exercise}
+
+\begin{enumerate}
+\item The distribution is $\mbox{Poisson}(4)$.
+\item The distribution is $\mbox{Negative Binomial}(1,.1)$. 
+\item The distribution is $\mbox{Binomial}(15,.1)$. 
+\end{enumerate}
+
+\section{Introduction}
+
+\begin{itemize}
+\item We are now going to turn our attention to continuous random variables. 
+\item Recall that a continuous random variable satisfies two properties:
+  \begin{enumerate}
+  \item The set of possible values (the support) is a union of disjoint intervals with positive width.
+  \item No single value has positive probability.
+  \end{enumerate}
+\item We are going to spend the next few lectures revisiting everything we did for discrete random variables. The big difference is that we replace summation with integration.
+\item We'll start by looking at the probability density function (pdf) and cumulative density function (cdf) which are the continuous analogues of the pmf and cdf for discrete random variables. 
+\end{itemize}
+
+\section{Exercise 18.1}
+\label{sec:example-18.1}
+
+Consider the random variable, $X$, with probability density function (pdf)
+\[
+  f(x)=\left\{
+    \begin{array}{ll}
+      0 & x \leq 0\\
+      cx & 0 < x < 1\\
+      0 & 1 \leq x
+    \end{array}
+  \right.
+\]
+
+<<example-18-1>>=
+## Plot f(x)
+
+mydf <- tibble(x=seq(-1,2,.01)) %>%
+    mutate(y=(abs(x-.5) <= .5) * 2 * x)
+
+qplot(data=mydf,x=x,y=y,geom="line")
+
+@ 
+
+\begin{enumerate}[a)]
+
+\item Find the value of $c$ such that $f(x)$ is a proper density function.\\
+  \begin{framed}
+    To show that $f(x)$ is a proper density function we need to show that:
+    \begin{enumerate}[i)]
+    \item $f(x) \geq 0$ for all $x \in \Re$
+    \item $\int_{\infty}^\infty f(u)~du=1$
+    \end{enumerate}
+    The first criterion requires that $c \geq 0$. Then we need
+    \begin{align*}
+      \int_{\infty}^\infty f(u)~du &= 1\\
+      \int_{-\infty}^0 0~du + \int_0^1 cu^2~du + \int_1^\infty 0~du & = 1\\
+      \left[\frac{cu^2}{2}\right]_0^1& =1\\
+      c&=2
+    \end{align*}
+    Hence, the pdf is proper if $c=2$. This give us
+    \[
+  f(x)=\left\{
+    \begin{array}{ll}
+      0 \leq 0\\
+      2x & 0 < x < 1\\
+      0 & 1 \leq x
+    \end{array}
+  \right.
+  \]
+  \end{framed}
+  
+\item Find the cumulative distribution function (cdf) associated with $f(x)$.\\
+  \begin{framed}
+    By definition, the cdf is
+    \[
+      F(x)=\int_{-\infty}^x f(u)~du=
+      \left\{
+        \begin{array}{ll}
+          0 & x \leq 0\\
+          x^2 & 0 < x < 1\\
+          1 & 1 \leq x
+        \end{array}
+      \right.
+    \]
+  \end{framed}
+  
+<<example-18-2>>=
+## Plot F(x)
+
+mydf <- tibble(x=seq(-1,2,.01)) %>%
+    mutate(y=pmax(pmin(x,1),0)^2)
+
+qplot(data=mydf,x=x,y=y,geom="line")
+
+@ 
+
+ \item Compute the probabilities of the following events:
+  \begin{enumerate}[i)]
+  \item $X \leq .5$
+    \begin{framed}
+      By definition:
+      \begin{align*}
+        P(X \leq .5) 
+        &=F(.5)\\
+        &=.5^2\\
+        &=.25
+      \end{align*}
+    \end{framed}
+
+  \item $X = .5$
+    \begin{framed}
+      For any continuous random variable $P(X=x)=0$ for any $x \in \Re$. Hence, $P(X=.5)=0$. 
+    \end{framed}
+    
+  \item $X < .5$
+    \begin{framed}
+      Consider that:
+      \begin{align*}
+        P(X < .5)
+        &=P(X \leq .5) - P(X=.5)\\
+        &=F(.5) - 0\\
+        &=.5^2\\
+        &=.25
+      \end{align*}
+      In general, if $X$ is a continuous random variable then $P(X<x)=P(X\leq x)=F(x)$. 
+    \end{framed}
+    
+  \item $X < .5$
+    \begin{framed}
+      For a continuous random variable $P(X < x)=P(X \leq x)$ for any $x \in
+      \Re$ so
+      \begin{align*}
+        P(X < .5)
+        &=P(X \leq .5)\\
+        &=.25
+      \end{align*}
+    \end{framed}
+  \item $.25 \leq X \leq .75$
+    \begin{framed}
+      \begin{align*}
+        P(.25 \leq X \leq .75)
+        &=P(X \leq .75) - P(X < .25)\\
+        &=P(X \leq .75) - P(X \leq .25)\\
+        &=.75^2-.25^2\\
+        &=\Sexpr{.75^2-.25^2}
+      \end{align*}
+    \end{framed}
+  \item $(X < .25)$ or $(X > .75)$
+    \begin{framed}
+      \begin{align*}
+        P((X <.25) \cup (X >.75)
+        &=1-P(.25 \leq X \leq .75)\\
+        &=1-[F(.75)-F(.25)]\\
+        &=1-F(.75) + F(.25)\\
+        &=1-.75^2+.25^2\\
+        &=1-.5625+.0625
+      \end{align*}
+    \end{framed}
+  \end{enumerate}
+  
+\item Show that the random variable $X$ does actually satisfy the definition of a continuous random variable given by Devore and Berk.
+  \begin{framed}
+    The random variable $X$ is continuous, according to Devore and Berk, if:
+    \begin{enumerate}[i)]
+    \item the possible values (support) of $X$ is a union of (possibly one) disjoint interval in $\Re$, and
+    \item the $P(X=x)$ for any $x \in Re$. 
+    \end{enumerate}
+    
+    The first criterion is  satisfied because the support of $X$ is a single interval, $(0,1)$.
+
+    To show that the second criterion is true consider that
+    \begin{align*}
+      P(X=x)
+      &=P(X \leq x) - P(X < x)\\
+      &=P(X \leq x) - \lim_{x^- \nearrow} P(X \leq x^{-})\\
+      &=F(x) - \lim_{x^- \nearrow x} F(x^-)\\
+      &=x^2 - \lim_{x^- \nearrow x} (x^-)^2\\
+      &=0.
+    \end{align*}
+    What the second criterion really implies is that $F(x)$ is continuous. Hence a continuous random variable!
+  \end{framed}
+
+\end{enumerate}
+ 
+\section{Discussion}
+
+\subsection{Interpreting PDFs and CDFs}
+\label{sec:interpr-pdfs-cdfs}
+
+How can we interpret $f(x)$ and $F(x)$?
+\begin{enumerate}
+\item The primary interpretation for $F(x)$ and $f(x)$ is in terms of calculating probabilities. By definition
+  \[
+    P(a < X \leq b) = F(b)-F(a)=\int_a^b f(u)~du
+  \]
+  for any $a,b \in \Re$. The latter equality shows that we can interpret probabilities for events involving $X$ in terms of areas under the density curve.
+  
+\item Another way to interpret the density curve is to think of what happens if the interval $(a,b)$ is very small. Let $x=(a+b)/2$ be the mid-point of $(a,b)$ and suppose that $\epsilon=(b-a)/2$ is small. If $f(x)$ is continuous at $x$ then 
+  \[
+    \int_{x-\epsilon}^{x+\epsilon} f(u)~du \approx 2\epsilon f(x).
+  \]
+  It follows that for any $x_1,x_2 \in \Re$ at which $f(x)$ is continuous
+  \[
+    \frac{P(X \in (x_1-\epsilon,x_1+\epsilon))}{P(X \in (x_2-\epsilon,x_2+\epsilon))} \approx \frac{f(x_1)}{f(x_2)}.
+  \]
+  Hence, we can interpret $f(x)$ as the relative probability that $X$ is within a small neighborhood of $X$. Consider, for example, that $f(.25)=.5$ and $f(.75)=1.5$. Clearly, we cannot interpret $f(x)$ as the probability that $x$ is in a neighbourhood of $x$. However, it is legitimate to say that the probability that $X$ is close to .75 is approximately three times the probability that $X$ is close to .25. In fact, $P(.24 < X < .26)=.001$ and $P(.74 < X < .76)=.003$, which satisfies this exactly. 
+  
+\item We can think of $f(x)$ as a limiting histogram of values obtained by sampling $X$ from a large population.
+  
+\item Another way to think about $f(x)$ and $F(x)$ is to relate the problem to physics. Derivatives appear in physics when we think about particles moving. In particular, velocity is the first derivative of distance traveled. 
+  
+  Suppose that we have a particle moving along a straight line starting at the point 0 and moving toward the point 1. Let $F(x)$ identify the position of the particle at time $x$. If $F(x)$ is a differentiable function then $F'(x)=f(x)$ tells us how fast the point is moving when it is at the time $x$. That is, it tells us the rate of change of the particle's position at the point $x$. If $f(x)$ is big the $F(x)$ changes quickly as $t$ increases (usually we think only of time increasing). If $f(x)$ is small then $F(x)$ changes slowly. If $f(x)$ is 0 then the point doesn't move at all.
+  
+  The equivalent interpretation in probability is to think about the rate of change of probability. The pdf, $f(x)$, tells us how fast the probability changes at a point $x$. Consider, for example, the probability that $X \in (a,b)$. If $f(b)$ is big then $P(X \in (a,b))$ will change quickly as $b$ increases or decreases.  If $f(b)$ is small then $P(X \in (a,b)$ changes very little as $b$ increases or decreases. If $f(b)$ is zero then $P(X \in (a,b))$ doesn't change at all as we move $b$ a very small amount. 
+  
+\end{enumerate}
+  
+\subsection{Uniqueness of PDFs}
+\label{sec:uniqueness-pdfs-cdfs}
+
+One important thing to note is that the distribution of a continuous variable is actually defined by its CDF not its PDF. In fact, the PDF associated with a CDF is not unique. The reason is that we can change the value of $f(x)$ at any point without changing the probability calculations. Suppose, for example, that we have a random variable $Y$ with pdf
+\[
+  f_Y(y)=\left\{
+    \begin{array}{ll}
+      0 \leq 0\\
+      2y & 0 < y < .5\\
+      2 & y=.5\\
+      2y & .5 < y < 1\\
+      0 & 1 \leq y
+    \end{array}
+  \right.
+\]
+This pdf differs from the original pdf at the point $.5$, but this has no effect on the integrals and so the cdf and the probabilities of all events are the same. This means that the distributions of $X$ and $Y$ are the same. 
+
+\subsection{Proper Definition of CDFs}
+
+This argument shows that CDFs are the objects that we should really be worried about, since they uniquely define the distribution.  Formally, $F(x)$ is a CDF if
+\begin{enumerate}
+\item $\lim_{x \searrow \infty} F(x)=0$
+\item $\lim_{x \searrow \infty} F(x)=1$
+\item $F(x)$ is continuous from the right $F_{c \searrow x}(c)=F(x)$ for any $x \in \Re$. 
+\end{enumerate}
+
+A random variable with CDF $F(x)$ is said to be continuous if $F(x)$ is continuous at all $x \in \Re$. It is easy to show that $X$ then satisfies the definition given by Devore and Berk. A random variable is discrete if $F(x)$ is a step function, as we've seen before. There are many random variables whose CDFs are neither continuous nor discrete, but we won't study these.
+
+
+\section{Example 18.1}
+\label{sec:example-18.1}
+
+Consider the random variable, $X$, from Example 18.1. This random variable represents the distance that an object dropped from a height of 1~m falls in a randomly selected time between 0 and 1 second on Emperor Zurg's home planet (Planet Z) where the force of gravity is only $2/s^2$. The pdf and cdf are
+\[
+  f(x)=\left\{
+    \begin{array}{ll}
+      0 \leq 0\\
+      2x & 0 < x < 1\\
+      0 & 1 \leq x
+    \end{array}
+  \right.
+  \qquad
+  F(x)=\int_{-\infty}^x f(u)~du=
+  \left\{
+    \begin{array}{ll}
+      0 & x \leq 0\\
+      x^2 & 0 < x < 1\\
+      1 & 1 \leq x
+    \end{array}
+  \right.
+\]
+
+\begin{enumerate}[a)]
+
+\item Find the mean and variance of $X$.
+  \begin{framed}
+    The first two moments of $X$ are:
+    \begin{align*}
+      E(X)
+      &=\int_{-\infty}^{\infty}u f(u)~du\\
+      &=\int_0^1 u(2u) ~du\\
+      &=\left[\frac{2u^3}{3}\right]_0^1\\
+      &=2/3\\
+      \intertext{and}
+      E(X^2)
+      &=\int_0^1 u^2(2u) ~du\\
+      &=\left[\frac{2u^4}{4}\right]_0^1\\
+      &=1/2\\
+    \end{align*}
+    Applying the shortcut formula we get
+    \[
+      V(X)=\frac{1}{2}-\left(\frac{2}{3}\right)^2=\frac{1}{18}.
+    \]
+    The mean and variance of $X$ are $E(X)=2/3$ and $V(X)=1/18$.
+  \end{framed}
+
+
+\item Find the moment generating function of $X$ if it exists.
+  \begin{framed}
+    The moment generating function of $X$ is defined to be
+    \begin{align*}
+      M_X(t)
+      &=E(e^{tX})\\
+      &=\int_{-\infty}^{\infty} e^{tu} f(u)~du\\
+      &=\int_0^1 2ue^{tu}  ~du\\
+      &=\frac{2}{t}\int_0^1 tue^{tu}~du\\
+      &=\frac{2}{t}\int_0^t \frac{y e^y}{t} ~dy \quad \mbox{where $y=tu$ and $dy=t~du$}\\
+      &=\frac{2}{t^2}\left[(t-1)e^t\right]_0^1\\
+      &=\frac{2 (e^t (t - 1) + 1))}{t^2}
+    \end{align*}
+    using the identity
+    \[
+      \int ue^u ~ du= (u-1)e^u + c.
+    \]
+    Note that the final result is not defined at $t=0$. However, if we go back to the original defintion we find that
+    \begin{align*}
+      M_X(0)
+      &=E(1)\\
+      &=1
+    \end{align*}
+    as this is true for any distribution. We also see from the figure that the function is continuous and differentiable on all of $\Re$. Hence the MGF exists and moments can be found in exactly the usual way.
+    
+<<example-17-1>>=
+## Plot MGF
+mydf <- tibble(t=seq(-1,1,.01),
+               y=2*(exp(t)*(t-1)+1)/t^2)
+
+mydf2 <- tibble(t=0,y=1)
+
+qplot(data=mydf,x=t,y=y,geom="line") +
+    xlab("t") + ylab("MGF") +
+    geom_point(data=mydf2,aes(x=t,y=y))
+
+@
+  \end{framed}
+
+
+\item Let $Y$ be the distance travelled in inches not metres. Then $Y=39.37X$. Find the mean and variance of $Y$.
+  \begin{framed}
+    In this case, $Y$ is a linear transformation of $X$. Hence
+    \[
+      E(Y)=E(39.73 X)=39.73 E(X)=\frac{39.73(2)}{3}=26.4867\\
+    \]
+    and
+    \[
+      V(Y)=V(39.73 X)=39.73^2 V(X)=\frac{39.73^2 (1)}{18}=87.693.
+    \]
+    The mean and variance of $Y$ are $26.5$ inches and $87.7$ inches squared.
+  \end{framed}
+
+\end{enumerate}
+
+\end{document}

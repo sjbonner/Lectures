@@ -1,0 +1,63 @@
+---
+title: "STAT 2857A -- Lecture 10 Examples and Exercises"
+format: 
+  pdf: default
+  docx: default
+knitr: 
+  opts_chunk:
+    fig.align: center
+    echo: false
+    warning: false
+    message: false
+    digits: 2
+prefer-html: true
+---
+
+```{r}
+# Load packages
+library(tidyverse)
+library(patchwork)
+library(knitr)
+library(kableExtra)
+library(broom)
+```
+
+## Example 11.1
+
+An accountant is conducting a financial audit on a big, multinational company. The company has 200 accounts, of which 20 have errors. 
+
+Suppose that the accountant checks 10 randomly selected accounts. Let $Y$ be the number of accounts with errors in her sample.
+
+a) What is the distribution of $Y$?
+b) What is the probability that $Y=2$?
+c) What are the mean and variance of $Y$?
+
+## Example 11.2
+
+
+An accountant is conducting a financial audit on a big, multinational company. The company has 200 accounts, of which 20 have errors. 
+    
+Suppose that the accountant checks 10 randomly selected accounts. Let $Y$ be the number of accounts with errors in her sample.
+
+a) Is it appropriate to approximate the distribution of $Y$ by a binomial?
+b) What is the approximate distribution of $Y$?
+c) Approximate the probability that $Y=2$.
+d) Approximate the mean and variance of $Y$.
+
+## Example 11.3 
+
+An accountant is conducting a financial audit on a big, multinational company. The company has 200 accounts, of which 20 have errors. 
+
+Suppose that the accountant samples accounts \textit{with replacement} until she finds 2 with errors. Let $Z$ denote the number of accounts without errors in her sample.
+
+a) What is the distribution of $Z$?
+b) What is the probability that $Z=10$?
+d) What are the mean and variance of $Z$?
+
+## Exercise 11.1
+
+Suppose that packages of Smarties each contain 30 smarties and that there is a .25 probability that each Smartie is red. For each of the following problems: i) identify the distribution of the random variable, ii) compute the mean and variance, iii) compute the probability provided.
+  
+a) The number of red Smarties in a package and the probability that the package contains more than 10 red Smarties.
+b) The number of red Smarties you pick if you draw 5 Smarties without replacement from a pack containing exactly 8 red Smarties. The probability this number is less than 3.
+c) The number of package you must open until you find a package with no red smarties. The probability you open exactly 5000 boxes until finding one with no red candies. 

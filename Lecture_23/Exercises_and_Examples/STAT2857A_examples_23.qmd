@@ -1,0 +1,72 @@
+---
+title: "STAT 2857A -- Lecture 23 Examples and Exercises"
+format: 
+  pdf: 
+   include-in-header: 
+    - text: |
+        \usepackage{mathtools}
+knitr: 
+  opts_chunk:
+    fig.align: center
+    echo: false
+    warning: false
+    message: false
+    digits: 2
+---
+```{r}
+## Load packages
+library(tidyverse)
+library(knitr)
+library(latex2exp)
+library(kableExtra)
+library(readxl)
+
+## Data summaries
+apple_mu <- 0.1202
+apple_var <- 5.2413
+apple_sd <- 2.2984
+apple_cov <- 0.0412
+apple_cor <- apple_cov/apple_sd^2
+
+## Options
+opt_bkp <- options
+options(digits = 4)
+```
+
+```{r}
+mydata <- tibble(w = 0:3,
+                 N = pmax(w,3-w)) |> 
+  group_by(w,N) |>  
+  reframe(r = 0:N) |> 
+  mutate(`P(W=w)`=dhyper(w,18,9,3),
+         `P(R=r|W=w)`=dhyper(r,26,26,N),
+         `P(W=w,R=r)`=`P(W=w)`*`P(R=r|W=w)`) 
+```
+
+Let's play a game! 
+
+Suppose that I have 
+
+1) a bag that contains 18 white marbles and 9 black marbles, and 
+2) a standard deck of cards. 
+
+You will choose 3 marbles from the bag without replacement. Let $W$ be the number of white marbles. You will then draw $N=\max(W,3-W)$ cards from the deck without replacement. Let $R$ be the number of red cards. You win the game (and a prize) if all $N$ cards are the same colour -- i.e., if $R=N$ or $R=0$. 
+
+The joint probability mass function of $W$ and $R$ has the following values:
+```{r}
+mydata |> 
+  select(w,r,`P(W=w,R=r)`) |> 
+  complete(w,r, fill = list(`P(W=w,R=r)` = 0)) |> 
+  pivot_wider(names_from = r, values_from = `P(W=w,R=r)`) |>
+  kable(digits = 3, align = "ccccc") |> 
+  add_header_above(c("","r"=4), line = FALSE)
+```
+
+a) Show that the probability that $W=2$ and $R=1$ is .240?
+b) Find a general expression for the joint probability mass function of $W$ and $R$?
+c) What are the mean and variance of $R$?
+d) What is the probability that you win?
+e) What is the conditional pdf of $W$ given $R=2$?
+f) What is the mean of $W$ given $R=2$? Provide an interpretation for this value.
+g) What is the variance of $W$ given $R=2$?
+h) What are the covariance and correlation of $W$ and $R$?

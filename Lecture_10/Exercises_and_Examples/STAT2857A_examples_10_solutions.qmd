@@ -1,0 +1,164 @@
+---
+title: "STAT 2857A -- Lecture 10 Examples and Exercises"
+subtitle: "Solutions"
+format: 
+  pdf: 
+   include-in-header: 
+    - text: |
+        \usepackage{mathtools}
+knitr: 
+  opts_chunk:
+    fig.align: center
+    echo: false
+    warning: false
+    message: false
+    digits: 2
+---
+
+```{r}
+## Load packages
+library(tidyverse)
+library(knitr)
+library(latex2exp)
+```
+
+## Example 10.1
+
+a) Let $A$ be the event that you toss 3 heads on 5 tosses of a fair coin. There are $N=2^5=32$ possible sequences of heads and tails in the sample space. These outcomes are equally likely since the coin is fair. The number of outcomes with three heads is
+$$
+{5 \choose 3}=10.
+$$
+Hence, the probability of tossing 3 heads is
+$$
+P(A)=\frac{10}{32}=.3125.
+$$
+
+b) The logic is exactly the same as before. Hence, the probability is .3125.
+
+c) The logic is exactly the same as before. Hence, the probability is .3125.
+
+d) The logic is exactly the same as before. Hence, the probability is .3125.
+
+## Example 10.2
+
+Strictly speaking, whether on not this is considered a binomial experiment depends on how the sampling was conducted. The first two requirements are definitely satisfied: a) the number of trials is fixed ($n=5$) and b) each trial can result in two outcomes (success = brown eyes and failure = not brown eyes). However, requirements c) that the trials are only mutually independent and d) that the probability of success is constant only if the individuals are sampled with replacement.
+
+If the individuals are sampled with replacement, then we are drawing from the same pool with the same number of people with brown eyes and the same number of people with other colours of eyes on each trial. In this case, the trials will be independent and the probability each person has brown eyes will be a constant, $p=.79$.
+
+However, if the individuals are sampled without replacement, then the pool changes each time we draw an individuals. Suppose that the population of the world is $N$ so that the number of people with brown eyes is $.79N$. Then the probability that the first person sampled has brown eyes is .79. However, the probability that the second person has brown eyes depends on the eye-colour of the first person. If the first person has brown eyes, then the probability the second person has brown eyes is $(.79N-1)/(N-1)$. If the first person has eyes of another colour, then the probability is $.79N/(N-1)$. The trials are no longer independent because the conditional probability on the second draw changes depending on the first draw.
+
+That said, the change is very small. The population of the world is about 8,178,629,000. This means that the number of people with brown eyes is 6,461,116,910. The conditional probability that the second person sampled has brown eyes will then be 
+$$
+\frac{6,461,116,909}{8,178,628,999}=.7899999999256
+$$
+if the first person has brown eyes and 
+$$
+\frac{6,461,116,919}{8,178,628,999}=.7900000000966
+$$
+if the first person has eyes of another colour. The difference is so small that the trials are practically independent and the probability is practically constant. It would be reasonable to consider this a binomial experiment even if the sampling was conducted without replacement. 
+
+## Exercise 10.3
+
+a) Provided the roulette wheel is fair:
+
+    - The experiment consists of a fixed number of trials (20 games).
+    - Each trial has two outcomes (success = win, failure = lose).
+    - The trials are independent.
+    - The probability of success is constant ($p=18/37=.4865$).
+  
+b) $X$ follows a binomial distribution with parameters $n=20$ and $p=.4865$:
+$$
+X \sim \mbox{Binomial}(20,.4865).
+$$
+
+c) The pmf of $X$ is
+$$
+P(X=x)=b(x;20,.4865)={20 \choose x}.4865^x(1-.4865)^{20-x}, \quad x=0,1,2,\ldots,20.
+$$
+
+d) The probability of winning exactly half the games is
+$$
+\begin{aligned}
+P(X=10)
+&=b(10;20,.4865)\\
+&={20 \choose 10}.4865^{10}(1-.4865)^{10}\\
+&=.1749.
+\end{aligned}
+$$
+
+e) The probability of winning more than half the games is
+$$
+\begin{aligned}
+P(X> 10)
+&=1-P(X\leq 10)\\
+&=1-\sum_{x=0}^{10} P(X=x)\\
+&=1-.6349\\
+&=.3651.
+\end{aligned}
+$$
+
+f) The mean of $X$ is
+$$
+\mu_X=20(.4865)=9.73.
+$$
+The variance is
+$$
+\sigma^2_X=20(.4865)(1-.4865)=.49964.
+$$
+The standard deviation is
+$$
+\sigma_X=2.2353.
+$$
+
+g) If the game is fair then your expected winning over 20 games (or any number of games) would be 0. I.e., on average, you end up with the same amount of money you started with. Let $W$ be the amount you win over 20 games. Playing twenty games will cost you $20 dollars, and the amount you win back will be $vX$. Hence,
+$$
+W=vX - 20.
+$$
+This is a linear function of $X$ so
+$$
+\begin{aligned}
+E(W)
+&=vE(X)-20\\
+&=v(9.73)-20.\\
+\end{aligned}
+$$
+Then $E(W)=0$ if $v=20/9.73=2.06$. The game is fair if you win back \$2.06 on a \$1 bet every time the ball lands in a black pocket. 
+
+   Casinos make money by paying out slightly less than what is fair. For example, a casino might pay \$2.00 instead of \$2.06 meaning that they collect \$.06 (6 cents) per dollar on average. This doesn't sound like much, but it adds up quickly over the many, many times that people play. 
+   
+## Exercise 10.1
+
+a) It makes sense to consider this a because the number of trials is fixed ($n=200$), each shot can have 2 outcomes (success = Sam scores, failur = Sam does not score), the shots are assumed to be (approximately) independent, and the probability of scoring on any shot is assumed to be constant ($p=.245$). 
+
+b) The distribution is $S \sim \mbox{Binomial}(200,.245)$.
+
+c) The pmf of $S$ is
+$$
+P(S=x)=b(s;200,.245)={200 \choose s}.245^s (1-.245)^{200-s}, \quad s=0,1,2,\ldots,200.
+$$
+d) The expected value of $S$ is
+$$
+\mu_S=200(.245)=49.000
+$$
+The variance is
+$$
+\sigma^2_S=200(.245)(1-.245)=36.995.
+$$
+The standard deviation is
+$$
+\sigma_S=\sqrt{36.995}=6.082.
+$$
+
+e) The probability that Sam scores at least 50 goals is
+$$
+\begin{aligned}
+P(S \geq 50)
+&=1-P(S \leq 49)\\
+&=1-\sum_{s=0}^{49} b(s;200,.245)\\
+&=.46173
+\end{aligned}
+$$
+using StatTrek to compute the value from the cdf.
+
+
+

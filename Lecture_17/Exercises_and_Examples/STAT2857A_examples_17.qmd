@@ -1,0 +1,63 @@
+---
+title: "STAT 2857A -- Lecture 17 Examples and Exercises"
+format: 
+  pdf: default
+  docx: default
+knitr: 
+  opts_chunk:
+    fig.align: center
+    echo: false
+    warning: false
+    message: false
+    digits: 2
+prefer-html: true
+---
+
+```{r}
+# Load packages
+library(tidyverse)
+library(patchwork)
+library(knitr)
+library(kableExtra)
+library(broom)
+```
+
+## Example 17.1
+
+ Let $X$ denote the total amount of precipitation on a randomly selected rainy day in London. Suppose that
+$$
+      X \sim \mbox{Gamma}((0.628,8.662).
+$$
+
+a) What is the pdf of $X$?
+b) What are the mean and variance?
+c) What is the probability that the total precipitation is more than 10~mm given that it rains at all?
+    
+## Example 17.2
+
+Radioactive decay is well modelled by the exponential distribution. Uranium-235 has a half-life of 703,800,000 years. Let $T$ be time in billions of years to decay of a single atom of Uranium-235.
+
+    
+a) What is the pdf of $T$?
+b) What are the mean and variance of $T$?
+c) What is the probability that $T<1$?
+d) What is the probability that $T>2$ given $T>1$?
+e) What is the probability that $T>100,001$ given $T>100,000$?
+
+## Example 17.3
+
+Suppose that $Z \sim \mbox{Normal}(0,1)$ and $X \sim \chi^2_1$.
+
+Confirm that
+$$
+P(Z^2 \leq 2) = P(X \leq 2).
+$$
+
+## Exercise 17.1
+
+In a Poisson process with rate $\lambda$, the time from one event to the next event, $T$, is exponentially distributed with mean $1/\lambda$. Let $T_k$ denote the time from one event until the $k$-th following event. It turns out that $T_k$ follows a gamma distribution with parameters $\alpha = k$ and $\beta=1/\lambda$. 
+
+a) Suppose that $\lambda=.1$ events per second. What are the mean and variance of $T_5$?
+b) What is the probability that the $5$-th event occurs after 60 seconds?
+c) Compare the the 5-th, 50-th, and 95-th percentiles of $T_5$ and of a normal random variable with the same mean and variance.
+d) Repeat the previous step for $T_25$, $T_50$, and $T_100$. Plot the ratio of the percentiles of the two distributions vs $k$. What happens?

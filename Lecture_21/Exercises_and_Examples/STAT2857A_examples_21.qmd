@@ -1,0 +1,64 @@
+---
+title: "STAT 2857A -- Lecture 20 Examples and Exercises"
+format: 
+  pdf: default
+  docx: default
+knitr: 
+  opts_chunk:
+    fig.align: center
+    echo: false
+    warning: false
+    message: false
+    digits: 2
+prefer-html: true
+---
+
+```{r}
+# Load packages
+library(tidyverse)
+library(patchwork)
+library(knitr)
+library(kableExtra)
+library(broom)
+```
+
+## Example 21.1
+   The simplest possible joint distribution is that for two Bernoulli random variables. Suppose that $X$ and $Y$ take the values $0$ and $1$ according to the following joint pmf:
+
+\begin{center}
+\begin{tabular}{c|cccc}
+$x$ & \multicolumn{2}{c}{0} & \multicolumn{2}{c}{1}\\
+$y$ & 0 & 1 & 0 & 1\\
+\hline
+$p(x,y)$ & $p_{00}$ & $p_{01}$ & $p_{10}$ & $p_{11}$.
+\end{tabular}
+\end{center}
+
+
+a) What is the expected value of $XY$?
+b) What are the covariance and correlation of $X$ and $Y$?
+c) What are the mean and variance of $Z=2X + 4Y$?
+d) Under what conditions are $X$ and $Y$ independent? What is are the mean $XY$ in this case?
+
+## Example 21.2
+
+Each of the following plots represents the joint pmf of two random variables, $X$ and $Y$. The points, $(x,y)$ represent the possible values of $(X,Y)$. The distribution places equal probability, $1/6$, at each point.
+
+\begin{center}
+\begin{tabular}{cc}
+\includegraphics[width=.4\textwidth]{../Slides/figure/exercise-26-2-4} &
+\includegraphics[width=.4\textwidth]{../Slides/figure/exercise-26-2-2} \\
+\includegraphics[width=.4\textwidth]{../Slides/figure/exercise-26-2-1} &
+\includegraphics[width=.4\textwidth]{../Slides/figure/exercise-26-2-3} \\
+\end{tabular}
+\end{center}
+
+## Exercise 21.1
+
+Consider rolling two fair, three-sided die. Let $S$ denote the sum of the values showing on the two die and $D$ the absolute value of the difference. E.g., if one die shows the value 1 and the second shows the value 2 then $S=3$ and $D=1$, regardless of which was thrown first.
+
+a) Construct a table showing the joint pmf of $S$ and $D$. 
+b) Compute the marginal pmf of both $S$ and $D$. 
+c) Compute the expected value and variance of $S$ and $D$.
+d) Compute the covariance and correlation of $S$ and $D$. 
+e) Are $S$ and $D$ independent? Justify your answer.

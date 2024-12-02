@@ -1,0 +1,301 @@
+\documentclass{article}
+
+
+\usepackage[margin=1in]{geometry}
+\usepackage{enumerate,amsmath,graphicx,url}
+
+\usepackage{arev}
+\usepackage[T1]{fontenc}
+
+%% Initialize R
+<<setup,echo=FALSE,include=FALSE,cache=FALSE>>=
+## Load packages
+library(tidyverse)
+library(xtable)
+library(knitr)
+
+## Set chunk options
+opts_chunk$set(echo=FALSE,
+               results="asis",
+               warning=FALSE,
+               message=FALSE,
+               fig.height=4,
+               fig.width=6,
+               fig.show="hide")
+
+options(digits=5)
+@
+
+\begin{document}
+\begin{center}
+  \Large{\textsc{\textbf{SS2857 Probability and Statistics I}}}\\
+  \Large{Fall 2021}
+
+  \bigskip
+  
+  \large{\sc{Lecture \#12} \\
+    Random Variables and Discrete Probability Distributions}
+\end{center}
+
+
+
+\section*{Exercise 12.1}
+<<example-12-1-1>>=
+## Compute pmf
+prob <- .79
+
+mydf <- tibble(x=-1:5,
+               p=dbinom(x,5,prob),
+               xp=x*p,
+               x2p=x^2*p,
+               devx=x-sum(xp),
+               devx2p=devx^2*p,
+               y=2*x + 10,
+               yp=y*p,
+               devy=y-sum(yp),
+               devy2p=devy^2*p,
+               z=y^2,
+               zp = z*p,
+               devz=z-sum(zp),
+               devz2p = devz^2 * p)
+@
+
+\subsection*{Excise 12.1 a)}
+\begin{itemize}
+\item Definition: Expected Value:\\
+  The expected value (or mean) and variance of a discrete random variable, $X$, with pmf $p(x)$ are
+  \begin{align*}
+    E(X)&=\mu_X=\sum_{x \in D} x p(x)\\
+    V(X)&=\sigma^2_X=E(X-\mu_X)^2=\sum_{x \in D} (x-\mu_X)^2 p(x)
+  \end{align*}
+  where $D$ is the support of $X$.
+\item Calculation:\\
+  <<example-12-1-2>>=
+  ## PMF
+  tab1 <- xtable(mydf[-1,c("x","p","xp")], digits = 5)
+  
+  names(tab1) <- c("$x$","$p(x)$","$xp(x)$")
+  
+  print.xtable(tab1,include.rownames = FALSE, sanitize.text.function=function(x){x})
+  @
+  The expected value is $\Sexpr{(ex <- sum(mydf[,"x"] * mydf[,"p"]))}$.
+
+\item Interpretation:\\
+  We can think of the mean of random variable as
+  \begin{enumerate}[1)]
+  \item the mean of the same variable in a \textit{conceptual} population in which the relative frequency of the values is given by the pmf. 
+  \item the long-run sample mean that occur when the same experiment is repeated many, many times.
+  \end{enumerate}
+   Note that the expected value does not have to be within the support of the random variable. People often interpret the expected value as the value that is most likely to occur. This is incorrect. In fact, the expected value for a discrete random variable is rarely within the support of the random value.
+
+    As with probability, we need to interpret the expected value as a long-term average. It is the average of the values we would observe if we repeated the experiment over and over and over again.
+
+    For this reason, it is better to refer to this value as the mean. 
+
+\end{itemize}
+
+\subsection*{Exercise 12.1 b)}
+\begin{itemize}
+  
+\item Definition: Variance:\\
+  The variance of a discrete random variable, $X$, with pmf $p(x)$ are
+  \begin{align*}
+    V(X)&=\sigma^2_X=E(X-\mu_X)^2=\sum_{x \in D} (x-\mu_X)^2 p(x)
+  \end{align*}
+  where $D$ is the support of $X$.
+  
+\item Calculation:\\
+  <<example-12-1-3>>=
+  ## PMF
+  tab2 <- xtable(mydf[-1,c("x","p","devx","devx2p")], digits = 5)
+  
+  names(tab2) <- c("$x$","$p(x)$","$x-E(X)$","$(x-E(X))^2 p(x))$")
+  
+  print.xtable(tab2,include.rownames = FALSE, sanitize.text.function=function(x){x},
+               table.placement = "h")
+  @
+   
+  The variance is $\Sexpr{(varx <- sum(mydf[,"devx2p"]))}$.
+  
+\item Alternative Calculation:\\
+  Another way to compute the variance is to apply the shortcut formula.
+
+  \begin{itemize}
+  \item Shortcut formula:\\
+    The variance of $X$ can also be computed from the shortcut formula
+    \[
+      V(X)=\sigma^2_Y=E(X^2)-E(X)^2.
+    \]
+    This is called the shortcut formula because it can be computed with a single pass through the support.
+  \item
+    <<example-12-1-4>>=
+    mydf <- mydf %>%
+      mutate(x2 = x^2)
+    
+    tab2 <- xtable(mydf[-1,c("x","x2","p","x2p")], digits = 5)
+  
+    names(tab2) <- c("$x$","$x^2$","$p(x)$","$x^2 p(x)$")
+  
+    print.xtable(tab2,include.rownames = FALSE, sanitize.text.function=function(x){x},
+                 table.placement = "h")
+    @
+    From this table we find that
+    \begin{itemize}
+    \item $E(X)=\Sexpr{ex}$
+    \item $E(X^2)=\Sexpr{(ex2 <- sum(pull(mydf,p) * pull(mydf,x2)))}$
+    \end{itemize}
+    so that $\mbox{Var}(X)=\Sexpr{ex2}-\Sexpr{ex}^2=\Sexpr{ex2}-\Sexpr{ex^2}=\Sexpr{ex2-ex^2}$ exactly as above. 
+  \end{itemize}
+  
+\item Interpretation:\\
+    We can think of the variance of random variable as
+    \begin{enumerate}[1)]
+    \item the variance of the same variable in a \textit{conceptual} population in which the relative frequency of the values is given by the pmf. 
+    \item the long-run sample variance that occur when the same experiment is repeated many, many times.
+    \end{enumerate}
+\end{itemize}
+
+\subsection*{Exercise 12.1 c)}
+The standard deviation is $SD(X)=\sqrt{\Sexpr{varx}}=\Sexpr{sqrt(varx)}$.
+
+\section*{Exercise 12.2}
+\label{sec:exercise-12.2}
+
+Note that the random variable $Y$ is a function of $X$:
+\[
+  Y=2X + 10.
+\]
+
+\begin{itemize}
+\item Proposition: Mean of a linear combination\\
+  Let $X$ be any random variable and $a,b \in \Re$. The mean of $Y=aX + b$ is
+  \[
+    E(Y)=E(aX + b)=aE(X) + b.
+  \]
+\item We say that the mean is a linear operator.
+  
+\item Proposition: Variance of a linear combination\\
+  Let $a,b \in \Re$. The variance of $aX + b$ is
+  \[
+    V(a X + b)=a^2 V(X).
+  \]
+  The standard deviation of $a X + b$ is
+  \[
+    \sigma_{aX+b}=|a| \sigma_X.
+  \]
+\item Note that the variance and standard deviation are \textbf{not} linear operators.
+\item To show that this property holds I will first do the calculation by hand and then use the formulas.
+\end{itemize}  
+
+\subsection*{Direct Calculation}
+
+\subsubsection*{Exercise 12.2 a)}
+
+\begin{itemize}
+\item Calculation:\\
+  <<example-12-2-1>>=
+  ## PMF
+  tab1 <- xtable(mydf[-1,c("x","p","y","yp")], digits = 5)
+  
+  names(tab1) <- c("$x$","$p(x)$","$y$","$yp(x)$")
+  
+  print.xtable(tab1,include.rownames = FALSE, sanitize.text.function=function(x){x})
+  @
+  The expected value is $\Sexpr{sum(mydf[,"yp"])}$.
+
+\end{itemize}
+
+\newpage
+
+\subsubsection*{Exercise 12.2 b)}
+
+\begin{itemize}
+\item Calculation:\\
+  <<example-12-2-2>>=
+  ## PMF
+  tab2 <- xtable(mydf[-1,c("x","p","y","devy","devy2p")], digits = 5)
+  
+  names(tab2) <- c("x","$p(x)$","$y$","$y-E(Y)$","$(y-E(Y))^2 p(x)$")
+  
+  print.xtable(tab2,include.rownames = FALSE, sanitize.text.function=function(x){x},
+               table.placement = "h")
+  @
+\end{itemize}
+The variance value is $\Sexpr{(vary <- sum(mydf[,"devy2p"]))}$.
+
+\subsubsection*{Exercise 12.2 c)}
+The standard deviation is $SD(Y)=\sqrt{\Sexpr{vary}}=\Sexpr{sqrt(vary)}$.
+  
+\subsection*{Linear Combinations}
+
+\begin{itemize}
+  
+\item In this case, we could actually have computed the mean and variance of $Y$ much faster.
+  
+\item Re-calculation:\\
+  Applying these rules in the above problem, we immediately find that
+  \[
+    E(Y)=E(2X +10)2E(X)+10=\Sexpr{sum(mydf[,"yp"])}
+  \]
+  the variance is
+  \[
+    \mbox{Var}(Y)=4\mbox{Var}(X)=4 (\Sexpr{varx})=\Sexpr{4*varx}
+  \]
+  and the standard deviation is
+  \[
+    \mbox{SD}(Y)=|2|\mbox{SD}(X)=2 (\Sexpr{sqrt(varx)})=\Sexpr{2*sqrt(varx)}
+  \]
+\end{itemize}
+
+\section*{Exercise 12.3}
+
+
+\begin{itemize}
+\item Proposition: Mean and variance of a function\\
+  The mean and variance of a function, $h(X)$, of a random variable, $X$, are
+  \begin{align*}
+    E(X)&=\mu_X=\sum_{x \in D} h(x) p(x)\\
+    V(X)&=\sigma^2_X=E\left(h(X)-E[h(X)]\right)^2=\sum_{x \in D} \left(h(x)-E[h(X)]\right)^2 p(x)
+  \end{align*}
+  where $D$ is the set of possible values of $X$.
+  
+  These exist provided that $\sum_{x \in D} |h(x)|p(x)$ is finite.
+\end{itemize}
+
+\subsubsection*{Exercise 12.3 a}
+
+\begin{itemize}
+\item Calculation:\\
+  <<example-12-3-1>>=
+  ## PMF
+  tab1 <- xtable(mydf[-1,c("x","p","z","zp")], digits = 5)
+  
+  names(tab1) <- c("x","$p(x)$","$z$","$zp(x)$")
+  
+  print.xtable(tab1,include.rownames = FALSE, sanitize.text.function=function(x){x})
+  @
+  The expected value is $\Sexpr{sum(mydf[,"zp"])}$.
+
+\end{itemize}
+
+\subsubsection*{Exercise 12.3 b)}
+
+\begin{itemize}
+\item Calculation:\\
+  <<example-12-3-2>>=
+  ## PMF
+  tab2 <- xtable(mydf[-1,c("x","p","z","devz","devz2p")], digits = 5)
+  
+  names(tab2) <- c("$x$","$p(x)$","$z$","$z-E(z)$","$(z-E(z))^2 p(x)$")
+  
+  print.xtable(tab2,include.rownames = FALSE, sanitize.text.function=function(x){x},
+               table.placement = "h")
+  @
+\end{itemize}
+The variance value is $\Sexpr{(varz <- sum(mydf[,"devz2p"]))}$.
+
+\subsubsection*{Exercise 12.2 c)}
+The standard deviation is $SD(Z)=\sqrt{\Sexpr{varz}}=\Sexpr{sqrt(varz)}$.
+  
+\end{document}
+

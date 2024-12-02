@@ -1,0 +1,240 @@
+\input{../../slide_template.tex}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  filecolor=magenta,      
+  urlcolor=blue,
+}
+  
+\newcommand{\lecturenum}{23}
+
+\title[SS2857]{Probability and Statistics I}
+\subtitle{\lecturenum.~Statistics and their Distributions}
+
+\date{}
+
+%% Add logo
+%% \titlegraphic{\includegraphics[height=2cm]{../uwo_logo_reversed}}
+
+%% Initialize R
+<<setup,echo=FALSE,include=FALSE,cache=FALSE>>=
+## Load packages
+library(tidyverse)
+library(xtable)
+library(knitr)
+library(readxl)
+
+## Set chunk options
+opts_chunk$set(echo=FALSE,results="asis",warning=FALSE,message=FALSE,fig.height=4,fig.width=6,fig.show="hide")
+
+options(scipen=500)
+@
+
+\begin{document}
+
+{
+\setbeamertemplate{footline}{}
+\setbeamercolor{background canvas}{bg=western}
+
+\begin{frame}
+  \addtocounter{framenumber}{-1}
+
+  \maketitle
+\end{frame}
+}
+
+\begin{frame}
+  \frametitle{\invisible{Hello}}
+  
+  \begin{center}
+    \Large{\textbf{Chapter 5 Summary Exercise}}
+
+    \bigskip
+
+    % \begin{center}
+    %   \includegraphics[height=.5\textheight]{nestle-smarties-candies}
+    % \end{center}
+  \end{center}
+  
+\end{frame}
+
+<<data>>=
+## Load data
+## Obtained from https://finance.yahoo.com/quote/AAPL/history?p=AAPL
+apple <- read_xlsx("../Exercises_and_Examples/apple_stock_prices_2020_2024.xlsx")
+
+## Compute gains
+apple <- apple %>%
+  arrange(Date) %>%
+  mutate(prev = lag(Close, order_by = Date),
+         Change = Close - prev,
+         AbsChange = abs(Change)) |> 
+  filter(!is.na(Change)) |> 
+  select(-prev)
+@
+
+<<plot1>>=
+## Traceplot of closing values
+ggplot(apple,aes(x=Date,y=Close)) +
+  geom_line() +
+  xlab("Date") +
+  ylab("Closing Price (Euros)")
+
+@
+
+\begin{frame}
+    \begin{center}
+       \includegraphics[height=.5\textheight]{Apple_gray_logo}
+    \end{center}
+\end{frame}
+
+\begin{frame}
+  \begin{block}{Daily Closing Price Nov 2019 -- Nov 2024}
+    \begin{center}
+       \includegraphics[height=.7\textheight]{figure/plot1-1}
+    \end{center}
+  \end{block}
+\end{frame}
+
+<<plot2>>=
+## Traceplot of daily changes
+ggplot(apple, aes(x = Date, y = Change)) +
+  geom_line() +
+  ylab("Daily Change")
+
+@
+
+\begin{frame}
+  \begin{block}{Daily Change in Closing Price Nov 2019 -- Nov 2024}
+    \begin{center}
+       \includegraphics[height=.7\textheight]{figure/plot2-1}
+    \end{center}
+  \end{block}
+\end{frame}
+
+<<plot3>>=
+## Normal qq-plot of change
+ggplot(apple,aes(sample = Change)) +
+  geom_qq() +
+  geom_qq_line() + 
+  xlab("Population Percentiles") + ylab("Sample Percentiles")
+@
+
+\begin{frame}
+  \begin{block}{Daily Change in Closing Price Nov 2019 -- Nov 2024}
+    \begin{center}
+       \includegraphics[height=.7\textheight]{figure/plot3-1}
+    \end{center}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+  \begin{block}{Daily Change in Closing Price Nov 2019 -- Nov 2024}
+    
+    Summary statistics:
+    \begin{itemize}
+    \item Mean: \Sexpr{round(mean(apple$Change),4)}
+    \item Variance: \Sexpr{round(var(apple$Change),4)}
+    \item Std.~Deviation: \Sexpr{round(sd(apple$Change),4)}
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+
+  \begin{block}{\example}
+    Suppose that the change in the stock price per day is normal with constant mean and variance.  
+    \begin{enumerate}[a)]
+    \item What is the probability that the stock price increases on a randomly selected day?
+    \item What is the probability that the stock price decreases on a randomly selected day?
+    \item Suppose that you buy stock on 10 randomly selected days and sell them back one day later each time.
+     \begin{enumerate}[i)]
+        \item What is your expected profit/loss?
+        \item What is the probability that you make a profit on at least half of the days?
+        \item What is the probability that you lose money on at least half of the days?
+      \end{enumerate}
+    \end{enumerate}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+
+  \begin{center}
+  {\Large Can you beat the system?}
+  
+  \pause
+  
+  \bigskip
+  
+  Suppose that you buy stock only on the day after an increase. 
+  
+  Does this increase your chance of making a profit?
+  \end{center}
+  
+\end{frame}
+
+<<plot4>>=
+apple <- apple |> 
+  mutate(Prev = lag(Change, order_by = Date)) |> 
+  filter(!is.na(Change),!is.na(Prev)) 
+
+apple |> 
+  ggplot(aes(x = Prev, y = Change)) + 
+  geom_point() +
+  geom_hline(yintercept = 0) + 
+  geom_vline(xintercept = 0) +
+  xlab("Change in Price on day i (Euros)") +
+  ylab("Change in Price on day i+1 (Euros)")
+@
+
+\begin{frame}
+  \begin{block}{Daily Change in Closing Price Nov 2019 -- Nov 2024}
+    \begin{center}
+       \includegraphics[height=.7\textheight]{figure/plot4-1}
+    \end{center}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+  \begin{block}{Daily Change in Closing Price Nov 2019 -- Nov 2024}
+    
+    Summary statistics:
+    \begin{itemize}
+    \item Mean: \Sexpr{round(mean(apple$Change),4)}
+    \item Variance: \Sexpr{round(var(apple$Change),4)}
+    \item Std.~Deviation: \Sexpr{round(sd(apple$Change),4)}
+    \item Covariance: \Sexpr{round(cov(apple$Change,apple$Prev),4)}
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+
+  \begin{block}{\example}
+     Suppose that the changes in the stock price for one day and the next are bivariate normal with constant mean, variance, and correlation.  
+ 
+    \begin{enumerate}[a)]
+    \item What is the distribution of the stock price on a on a randomly selected day \textit{given that the price increased the day before}
+    \item What is the probability that the stock price increases on a randomly selected day \textit{given that the price increased the day before}?
+    \item What is the probability that the stock price decreases on a randomly selected day \textit{given that the price increased the day before}?
+    \end{enumerate}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+
+  \begin{block}{\examplectd}
+     Suppose that the changes in the stock price for one day and the next are bivariate normal with constant mean, variance, and correlation.  
+ 
+    \begin{enumerate}[d)]
+    \item Suppose that you buy stock on 10 days selected at random from the days \textit{given that the price increased the day before} and sell them back one day later each time.
+     \begin{enumerate}[i)]
+        \item What is your expected profit/loss?
+        \item What is the probability that you make a profit on at least half of the days?
+        \item What is the probability that you lose money on at least half of the days?
+      \end{enumerate}
+    \end{enumerate}
+  \end{block}
+\end{frame}
+\end{document}

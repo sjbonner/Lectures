@@ -1,0 +1,74 @@
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{enumerate,amsmath,graphicx,url}
+
+\usepackage{arev}
+\usepackage[T1]{fontenc}
+
+%% Initialize R
+<<setup,echo=FALSE,include=FALSE,cache=FALSE>>=
+## Load packages
+library(knitr)
+library(tidyverse)
+library(xtable)
+
+## Set chunk options
+opts_chunk$set(echo=FALSE,results="asis",warning=FALSE,message=FALSE,fig.height=4,fig.width=6,fig.show="hide")
+
+options(scipen=500)
+@
+
+\begin{document}
+\begin{center}
+  \Large{\textsc{\textbf{SS2857 Probability and Statistics I}}}\\
+  \Large{Fall 2021}
+
+  \bigskip
+
+  \large{Lecture 16 Notes: The Poisson}
+
+\end{center}
+
+\section{The Poisson Distribution}
+
+\subsection{Exercise 16.1}
+
+Let $X$ be the number of times an event occurs within time period $\Delta t$. Then $X$ follows a Poisson process if:
+\begin{enumerate}
+\item If for some $\alpha > 0$ and $\Delta t$ small enough:
+  \[
+    P(X=0)\approx 1-\alpha \Delta t,\quad P(X=1)\approx \alpha \Delta t, \mbox{ and } P(X > 0) \approx 0.
+  \]
+\item The number of events in disjoint intervals are independent.
+\end{enumerate}
+
+Under these conditions, the number of events in an interval of length $t$ has a Poisson distribution with parameter $\alpha t$
+\[
+  X \sim \mbox{Poisson}(\alpha t).
+\]
+
+\subsection{Exercise 14.3ctd}
+\begin{enumerate}
+\item The distribution of $X$ is Poisson with mean $495t$:
+  \[
+    X \sim Poisson(495t).
+  \]
+\item The pmf of $X$ is
+  \[
+    p(x)=P(X=x)=\frac{e^{495t}(495t)^x}{x!},\quad x=0,1,2,3,\ldots
+  \]
+\item The mean and variance of $X$ are
+  \begin{align*}
+    E(X)&=495t \\
+    V(X)&=495t
+  \end{align*}
+
+\item Consider that for this problem the skewness and excess kurtosis are
+  \[
+    \gamma_1=\frac{1}{495t}\mbox{ and } \gamma_2=\frac{1}{495t}
+  \]
+  If we look at the skewness and excess kurtosis we can see that both tend to 0 as $t$ increases. 
+\end{enumerate}
+
+\end{document}

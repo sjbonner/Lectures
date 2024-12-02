@@ -1,0 +1,93 @@
+\input{../../slide_template.tex}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  filecolor=magenta,      
+  urlcolor=blue,
+}
+  
+\newcommand{\lecturenum}{23a}
+
+\title[SS2857]{Probability and Statistics I}
+\subtitle{\lecturenum.~Statistics and their Distributions}
+
+\date{}
+
+%% Add logo
+%% \titlegraphic{\includegraphics[height=2cm]{../uwo_logo_reversed}}
+
+%% Initialize R
+
+
+\begin{document}
+
+{
+\setbeamertemplate{footline}{}
+\setbeamercolor{background canvas}{bg=western}
+
+\begin{frame}
+  \addtocounter{framenumber}{-1}
+
+  \maketitle
+\end{frame}
+}
+
+\begin{frame}
+  \frametitle{\invisible{Hello}}
+  
+  \begin{center}
+    \Large{\textbf{Chapter 5 Summary Exercise B}}
+
+    \bigskip
+
+    % \begin{center}
+    %   \includegraphics[height=.5\textheight]{nestle-smarties-candies}
+    % \end{center}
+  \end{center}
+  
+\end{frame}
+
+\begin{frame}
+
+\begin{block}{\example}
+Suppose that $X$ and $Y$ are random variables with joint pdf:
+$$
+f(x,y)=c(1-(x+y)), \quad  0< x <1, 0<y<1, x+y<1.
+$$
+\end{block}
+\end{frame}
+
+
+
+\begin{frame}
+\begin{block}{\examplectd}
+The contours of the pdf look like this:
+
+\begin{center}
+\includegraphics[height=.7\textheight]{figure/contour-1}
+\end{center}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\begin{block}{\examplectd}
+
+\begin{enumerate}[a)]
+\item Find the value of $c$.
+\item Find the marginal pdf of $X$ and $Y$.
+\item Find the conditional pdf of $X|Y=y$. 
+\item Find the conditional mean and variance of $X|Y=y$.
+\item It can be shown that
+$$
+E(X)=E(Y)=1/4
+$$
+and
+$$
+V(X)=V(Y)=3/80.
+$$
+What are the covariance and correlation of $X$ and $Y$?
+\end{enumerate}
+\end{block}
+\end{frame}
+\end{document}

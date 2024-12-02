@@ -1,0 +1,48 @@
+---
+title: "STAT 2857A -- Lecture 7 Examples and Exercises"
+subtitle: "Solutions"
+format: 
+  pdf: 
+   include-in-header: 
+    - text: |
+        \usepackage{mathtools}
+knitr: 
+  opts_chunk:
+    fig.align: center
+    echo: false
+    warning: false
+    message: false
+    digits: 2
+---
+
+```{r}
+# Load packages
+library(tidyverse)
+library(patchwork)
+library(knitr)
+library(kableExtra)
+library(broom)
+```
+
+## Example 7.1
+
+a) The possible outcomes are all quintuples (lists of length 5) of elements belonging to the set $\{\mbox{Brown},\mbox{Not brown}\}$. Examples include (Brown, Brown, Brown, Brown, Brown) (the outcome that all 5 people have brown eyes), (Not brown, Brown, Brown, Brown, Brown) (the outcome that all but the first person has brown eyes), and (Not brown, Not brown, Not brown, Not brown,Not brown) (the outcome that none of the selected people have brown eyes). There are $5^2=32$ possible outcomes. 
+
+b) The possible outcomes include all quintuples in which Brown appears three times and Not brown appears twice. Examples are (Brown, Brown, Brown, Not brown, Not brown), (Brown, Brown, Not brown, Brown, Not brown), etc. There are ${5 \choose 3}=10$ in total. In terms of $X$, the event is simply $X=3$.
+
+c) The possible outcomes include all quintuples in which Brown appears up to three times. Examples include those given in part b) plus (Not brown, Not brown, Not brown, Not brown,Not brown), (Brown, Not brown, Not brown, Not brown,Not brown), etc. There are ${5 \choose 0} + {5 \choose 1} + {5 \choose2} + {5 \choose 3}=21$ in total. In terms of $X$, the event is simply $X\leq3$.
+
+## Example 7.2
+
+a) The year of birth is a discrete random variable.
+b) The time it takes a randomly selected student to drive to school is a continuous random variable.
+c) The number of blue candies in a box of Smarties is a discrete random variable.
+d) This is neither! It is important to note that some random variables are neither continuous nor discrete.  We can still discuss probabilities for these random variables, but the math is more complicated. We will not consider these types of random variables in this class. 
+
+## Exercise 7.1
+
+a) This is discrete and Bernoulli. The random variable has only two outcomes which are explicitly mapped to 0 and 1.
+b) This is continuous. The wavelength of light can, in theory, be any positive real number.
+c) This is discrete and Bernoulli. There are only 2 possible outcomes. Even though it isn't specified explicitly, we can map these to the values 0 and 1 in the obvious way: 0 = you do not live past 80, 1 = you do live past 80. 
+d) Continuous.
+e) Discrete. The point of these last two parts is to highlight that you cannot know whether a random variable is continuous or discrete without knowing the units of measurement. Defining a random variable to be the height of a building is ambiguous. Age is another example. We tend to measure age on a discrete scale, but it could be measured continuously. 

@@ -1,0 +1,113 @@
+\input{../../slide_template.tex}
+
+\newcommand{\lecturenum}{13}
+
+\title[SS2857]{Probability and Statistics I}
+\subtitle{\lecturenum. Discrete Distributions: Summary Exercise}
+
+\date{}
+
+%% Add logo
+% \titlegraphic{\includegraphics[height=2cm]{../uwo_logo_reversed}}
+
+%% Initialize R
+<<setup,echo=FALSE,include=FALSE,cache=FALSE>>=
+## Load packages
+library(knitr)
+library(tidyverse)
+library(xtable)
+
+## Set chunk options
+opts_chunk$set(echo=FALSE,
+               results="asis",
+               warning=FALSE,
+               message=FALSE,
+               fig.height=4,
+               fig.width=6,
+               fig.show = "hide")
+
+options(scipen=500)
+
+## Data ** Supply this value ** 
+x <- 4
+  
+## Parameters
+N <- 140 ## Total number of candies
+n <- 20 ## Sample size
+thresh <- .05 ## Probability threshold
+@
+
+\begin{document}
+
+{
+\setbeamertemplate{footline}{}
+\setbeamercolor{background canvas}{bg=western}
+
+\begin{frame}
+  \addtocounter{framenumber}{-1}
+
+  \maketitle
+\end{frame}
+}
+
+<<plot1, fig.width=6>>=
+
+## Plotting data
+mydat <- tibble(M=seq(x,N),
+                Hypergeometric = dhyper(x, M, N - M, n),
+                Biomial = dbinom(x, n, M/N)) |> 
+  pivot_longer(-M, names_to = "Sampling", values_to = "P")
+
+## Plot 1
+plot1 <- mydat |> 
+  filter(Sampling == "Hypergeometric") |> 
+  ggplot(aes(x = M, y = P)) +
+  geom_line() + 
+  geom_point() +
+  ylab(paste0("P(X=",x,"|M)"))
+
+print(plot1)
+
+## Plot 2
+plot2 <- plot1 + 
+  geom_hline(yintercept = .05, lty = 2)
+
+print(plot2)
+
+## Plot 3
+plot3 <- mydat |> 
+  ggplot(aes(x = M, y = P, colour = Sampling)) +
+  geom_line() + 
+  geom_point() +
+  ylab(paste0("P(X=",x,"|M)")) + 
+  geom_hline(yintercept = .05, lty = 2)
+
+print(plot3)
+@
+
+\begin{frame}
+
+\begin{center}
+\includegraphics[height = .8\textheight]{figure/plot1-1}
+\end{center}
+
+\end{frame}
+
+\begin{frame}
+
+\begin{center}
+\includegraphics[height = .8\textheight]{figure/plot1-2}
+\end{center}
+
+\end{frame}
+
+\begin{frame}
+
+\begin{center}
+\includegraphics[height = .8\textheight]{figure/plot1-3}
+\end{center}
+
+\end{frame}
+
+\end{document}
+

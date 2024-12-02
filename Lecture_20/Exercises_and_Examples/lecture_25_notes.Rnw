@@ -1,0 +1,158 @@
+\documentclass[12pt]{article}
+
+\usepackage[margin=2cm]{geometry}
+\usepackage{enumerate,amsmath,framed}
+
+\title{Probability and Statistics I\\
+\textsc{Lecture 25. Jointly Distributed Random Variables}}
+
+%% Initialize R
+<<setup,echo=FALSE,include=FALSE,cache=FALSE>>=
+## Load packages
+library(tidyverse)
+library(xtable)
+library(knitr)
+
+## Set chunk options
+opts_chunk$set(echo=FALSE,results="asis",warning=FALSE,message=FALSE,fig.height=4,fig.width=6,fig.show="hide")
+
+options(scipen=500)
+@
+
+\begin{document}
+
+\maketitle
+
+\section{Exercise 23.1: Berkeley Admissions}
+
+\begin{enumerate}[a)]
+\item We can estimate the joint pmf of $X$ and $Y$ by
+  \[
+    P(X=x,Y=y = \frac{N(X=x,Y=x)}{N}
+  \]
+  for all possible pairs of $x=0,1$ and $y=1,\ldots,6$.
+
+  For example
+  \begin{align*}
+    P(X=0,Y=1)
+    &\approx \frac{825}{4526}\\
+    &=.182\\
+    P(X=0,Y=2)
+    &\approx \frac{560}{4526}\\
+    &=.124\\
+  \end{align*}
+  etcetera.
+
+  The complete pmf for all 12 possibilities can be displayed in a table.
+  
+\item For discrete random variables the marginal distribution of one random variable is computed by summing the joint pmf across the all possible values of the other random variables. I.e.:
+  \[
+    P(X=x)=\sum_{y=1}^6 P(X=x,Y=y).
+  \]
+  The marginal distribution for $X$ is given by
+  \begin{align*}
+    P(X=0)
+    &=P(X=0,Y=1) + \ldots + P(X=0,Y=6)\\
+    &=.182 + .124 + .072 + .092  +.042 + .082\\
+    &=.594\\
+    \intertext{and}
+    P(X=1)
+    &=P(X=1,Y=1) + \ldots + P(X=1,Y=6)\\
+    &=.024 + .006 + .131 + .083 + .087  +.075\\
+    &=.406.
+  \end{align*}
+  The marginal distribution for $Y$ is given by
+  \begin{align*}
+    P(Y=1)
+    &=P(X=0,Y=1) + P(X=1,Y=1)\\
+    &=.182 + .024\\
+    &=.206,\\
+    P(Y=2)
+     &=P(X=0,Y=1) + P(X=1,Y=1)\\
+    &=.124 + .006\\
+    &=.130\\
+    &\mbox{etc}
+  \end{align*}
+  
+\item If $X$ and $Y$ were independent then we would find that
+  \[
+    P(X=x,Y=x) = P(X=x)P(Y=y)
+  \]
+  for all $x$ and $y$. There is some random error since we estimated the probabilities from data so we wouldn't expect this to be exactly true, but it should be approximately true. However, consider the probability that $X=0$ and $Y=2$. Our estimated probability is $P(X=0,Y=2)=.124$ but
+  \begin{align*}
+    P(X=1) P(Y=2)
+    &=.594(.130)\\
+    &=.077.
+  \end{align*}
+  Similarly $P(X=1,Y=3)\approx .131$ but $P(X=1)P(Y=3)\approx .082$. This is strong evidence that the random variables are not independent.
+
+  What does this mean? It can be interpreted in two exactly equivalent ways
+  \begin{enumerate}
+  \item The ratio of men and women is not the same in all majors.
+  \item The distribution of students across the majors is not the same for men and women. 
+  \end{enumerate}
+
+  What would this plot look like if the two variables were independent?
+  \begin{itemize}
+  \item If $X$ and $Y$ were independent then the ratio of men to women in one degree would be constant. 
+  \item That might look something like this...
+  \end{itemize}
+  
+\end{enumerate}
+
+\section{Exercise 21.2}
+
+\begin{enumerate}[a)]
+\item As with univariate problems we require that the pdf integrate to 1. However, we must now integrate over both $X$ and $Y$. We need
+  \begin{align*}
+    \int_{-\infty}^{\infty}\int_{-\infty}^{\infty}f(x,y) ~dxdy &= 1\\
+    \int_{-1}^1\int_{-1}^1 c(1-x^2)(1-y^2)~dxdy &=1\\
+    c\int_{-1}^1c(1-x^2)~dx \int_{-1}^1 (1-y^2)~dy&=1\\
+    c\left(\left[x-\frac{x^3}{3}\right]_-1^1\right)^2&=1\\
+    c\left(\frac{4}{3}\right)^2&=1\\
+  \end{align*}
+  which implies that $c=9/16$.
+
+  The complete pdf is
+  \[
+    f(x,y)=\frac{9}{16}(1-x^2)(1-y^2)
+  \]
+  for $-1<x<1$ and $-1<y<1$.
+  
+\item The marginal distributions are found in the same way as for discrete random variables except that we need to integrate instead of summing. E.g.,
+  \begin{align*}
+    f(x)
+    &=\int_{-\infty}^{\infty} f(x,y) ~dy\\
+    &=\int_{-1}^1 \frac{9}{16}(1-x^2)(1-y^2) ~dy\\
+    &=\frac{9}{16}(1-x^2)\left[y-\frac{y^3}{3}\right]_-1^1\\
+    &=\frac{3}{4}(1-x^2)
+  \end{align*}
+  for $-1 < x < 1$.
+  Exactly similar
+  \begin{align*}
+    f(y)
+    &=\int_{-\infty}^{\infty} f(x,y) ~dx\\
+    &=\int_{-1}^1 \frac{9}{16}(1-x^2)(1-y^2) ~dx\\
+    &=\frac{9}{16}(1-y^2)\left[x-\frac{x^3}{3}\right]_-1^1\\
+    &=\frac{3}{4}(1-y^2)
+  \end{align*}
+  for $-1 < y < 1$.
+
+\item In this case
+  \[
+    f(x,y) = \frac{9}{16}(1-x^2)(1-y^2)=\left(\frac{3}{4}(1-x^2)\right)\left(\frac{3}{4}(1-y^2)\right)=f(x)f(y)
+  \]
+  for all $x$ and $y$ in the support. This means that $X$ and $Y$ are independent.
+
+  Graphically:\\
+  \begin{enumerate}
+  \item This (first plot) shows the joint pdf of $X$ and $Y$ as contours.
+  \item Now I will take three slices through the distribution at $x=-.5,0,.5$. 
+  \item This (second plot) shows the values of the joint pdf $f(x,y)$ along these slices. Clearly these are not the same, but they are not normalized. In order to normalize them we have to scale the curves so that the total area under each of the curves is 1. 
+  \item When we do that the picture becomes like this (third plot). The dotted lines represent the original curves and the solid lines represent the normalized curves. The fact that the normalized curves are the same for all values of $y$ implies that the two random variables are independent. No matter what value of $y$ I choose the pdf of $X|Y$ is the same -- that is the definition of Independence. 
+  \end{enumerate}
+\end{enumerate}
+
+
+
+\end{document}

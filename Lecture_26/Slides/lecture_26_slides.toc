@@ -1,0 +1,2 @@
+\beamer@sectionintoc {1}{Assessing the Mean of a Distribution}{4}{0}{1}
+\beamer@sectionintoc {2}{Assessing the Variance of a Distribution}{14}{0}{2}
