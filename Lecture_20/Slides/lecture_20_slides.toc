@@ -1,4 +1,0 @@
-\beamer@sectionintoc {1}{Review Exercise}{2}{0}{1}
-\beamer@sectionintoc {2}{Review: Conditional Probabilities}{3}{0}{2}
-\beamer@sectionintoc {3}{Discrete Random Variables}{4}{0}{3}
-\beamer@sectionintoc {4}{Continuous Random Variables}{16}{0}{4}

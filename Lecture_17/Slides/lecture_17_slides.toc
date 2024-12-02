@@ -1,8 +1,0 @@
-\beamer@sectionintoc {1}{Review}{2}{0}{1}
-\beamer@sectionintoc {3}{The Gamma Distribution}{5}{0}{2}
-\beamer@sectionintoc {4}{\invisible {Hello}}{11}{0}{3}
-\beamer@sectionintoc {5}{The Exponential Distribution}{12}{0}{4}
-\beamer@sectionintoc {6}{\invisible {Hello}}{17}{0}{5}
-\beamer@sectionintoc {7}{The Chi-Squared Distribution}{18}{0}{6}
-\beamer@sectionintoc {8}{\invisible {Hello}}{23}{0}{7}
-\beamer@sectionintoc {9}{Final Comments}{24}{0}{8}

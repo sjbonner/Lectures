@@ -1,3 +1,0 @@
-\beamer@sectionintoc {1}{The Hypergeometric Distribution}{4}{0}{1}
-\beamer@sectionintoc {2}{The Negative Binomial Distribution}{10}{0}{2}
-\beamer@sectionintoc {3}{The Geometric Distribution}{14}{0}{3}

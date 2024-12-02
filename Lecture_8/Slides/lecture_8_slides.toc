@@ -1,1 +1,0 @@
-\beamer@sectionintoc {1}{Probability Distributions for Discrete RVs}{2}{0}{1}
